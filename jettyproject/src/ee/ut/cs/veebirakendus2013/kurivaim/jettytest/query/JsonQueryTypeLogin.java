@@ -8,9 +8,6 @@ import com.google.gson.annotations.SerializedName;
 public class JsonQueryTypeLogin implements JsonQueryInterface {
 	public static final String realQueryType = "login";
 	
-	@SerializedName("queryType")
-	public String queryType;
-	
 	@SerializedName("username")
 	public String userName;
 	
