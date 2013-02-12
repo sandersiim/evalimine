@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.annotations.SerializedName;
 
 public class JsonQueryTypeLogin implements JsonQueryInterface {
-	public static final int realQueryId = 1;
+	public static final String realQueryType = "login";
 	
-	@SerializedName("queryId")
-	public int queryId;
+	@SerializedName("queryType")
+	public String queryType;
 	
 	@SerializedName("username")
 	public String userName;
@@ -22,9 +22,9 @@ public class JsonQueryTypeLogin implements JsonQueryInterface {
 		if(userName.equals("testuser") && password.equals("testpass")) {
 			request.getSession().setAttribute("username", userName);
 			
-			return new JsonResponseTypeText("Login successful.");
+			return new JsonResponseTypeStatus(2, "loginAction", "Successfully logged in.");
 		}
 		
-		return new JsonResponseTypeText("Wrong username or password.");
+		return new JsonResponseTypeStatus(1, "loginAction", "Login failed - wrong username or password.");
 	}
 }

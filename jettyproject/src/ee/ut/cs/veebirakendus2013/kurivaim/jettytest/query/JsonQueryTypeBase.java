@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.annotations.SerializedName;
 
 public class JsonQueryTypeBase implements JsonQueryInterface {
-	public static final int realQueryId = -1;
+	public static final String realQueryType = "base";
 	
-	@SerializedName("queryId")
-	public int queryId;
+	@SerializedName("queryType")
+	public String queryType;
 
 	@Override
 	public JsonResponseInterface processQuery(HttpServletRequest request, HttpServletResponse response) {

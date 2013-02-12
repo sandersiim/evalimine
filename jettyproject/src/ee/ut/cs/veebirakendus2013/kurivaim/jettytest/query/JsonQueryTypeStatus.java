@@ -6,20 +6,20 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.annotations.SerializedName;
 
 public class JsonQueryTypeStatus implements JsonQueryInterface {
-	public static final int realQueryId = 3;
+	public static final String realQueryType = "status";
 	
-	@SerializedName("queryId")
-	public int queryId;
+	@SerializedName("queryType")
+	public String queryType;
 
 	@Override
 	public JsonResponseInterface processQuery(HttpServletRequest request, HttpServletResponse response) {
 		Object userName = request.getSession().getAttribute("username");
 		
 		if(userName != null && userName instanceof String) {
-			return new JsonResponseTypeText("Logged in as '" + ((String)userName) + "'.");
+			return new JsonResponseTypeStatus(2, "loginStatus", "Logged in as '" + ((String)userName) + "'.");
 		}
 		else {
-			return new JsonResponseTypeText("Not logged in.");
+			return new JsonResponseTypeStatus(1, "loginStatus", "Not logged in");
 		}
 	}
 }

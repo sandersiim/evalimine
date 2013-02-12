@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 public class JsonQueryHandler {
-	Map<Integer, Class<? extends JsonQueryInterface>> queryClassList;
+	Map<String, Class<? extends JsonQueryInterface>> queryClassList;
 	
 	public JsonQueryHandler() {
-		queryClassList = new HashMap<Integer, Class<? extends JsonQueryInterface>>();
+		queryClassList = new HashMap<String, Class<? extends JsonQueryInterface>>();
 		
 		addQueryType(JsonQueryTypeLogin.class);
 		addQueryType(JsonQueryTypeStatus.class);
@@ -22,10 +22,10 @@ public class JsonQueryHandler {
 	
 	public void addQueryType(Class<? extends JsonQueryInterface> classToAdd) {
 		try {
-			int queryId = classToAdd.getDeclaredField("realQueryId").getInt(null);
+			Object queryType = classToAdd.getDeclaredField("realQueryType").get(null);
 			
-			if(queryId > 0) {
-				queryClassList.put(queryId, classToAdd);
+			if(queryType instanceof String && ((String)queryType).length() > 0) {
+				queryClassList.put((String)queryType, classToAdd);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,7 +50,7 @@ public class JsonQueryHandler {
 					throw new IOException("Unable to parse into base query.");
 				}
 				
-				Class<? extends JsonQueryInterface> classToParse = queryClassList.get(queryBase.queryId);
+				Class<? extends JsonQueryInterface> classToParse = queryClassList.get(queryBase.queryType);
 				
 				if(classToParse == null) {
 					throw new IOException("Unknown query ID.");
