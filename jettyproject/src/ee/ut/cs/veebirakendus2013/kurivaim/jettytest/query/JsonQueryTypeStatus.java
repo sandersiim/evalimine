@@ -4,8 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class JsonQueryTypeStatus implements JsonQueryInterface {
-	public static final String realQueryType = "status";
-
+	
 	@Override
 	public JsonResponseInterface processQuery(HttpServletRequest request, HttpServletResponse response) {
 		Object userName = request.getSession().getAttribute("username");
@@ -17,4 +16,5 @@ public class JsonQueryTypeStatus implements JsonQueryInterface {
 			return new JsonResponseTypeStatus(1, "loginStatus", "Not logged in");
 		}
 	}
+	
 }

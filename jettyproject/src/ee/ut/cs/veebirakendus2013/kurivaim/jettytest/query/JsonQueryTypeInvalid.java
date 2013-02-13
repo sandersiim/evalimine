@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class JsonQueryTypeInvalid implements JsonQueryInterface {
-	public static final String realQueryType = "invalid";
 	
 	public int errorId;
 	public String errorString;
@@ -18,4 +17,5 @@ public class JsonQueryTypeInvalid implements JsonQueryInterface {
 	public JsonResponseInterface processQuery(HttpServletRequest request, HttpServletResponse response) {
 		return new JsonResponseTypeStatus(-errorId, "generic", errorString);
 	}
+	
 }

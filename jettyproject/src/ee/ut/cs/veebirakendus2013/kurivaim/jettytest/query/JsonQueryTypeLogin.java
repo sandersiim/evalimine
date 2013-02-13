@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.annotations.SerializedName;
 
 public class JsonQueryTypeLogin implements JsonQueryInterface {
-	public static final String realQueryType = "login";
 	
 	@SerializedName("username")
 	public String userName;
@@ -24,4 +23,5 @@ public class JsonQueryTypeLogin implements JsonQueryInterface {
 		
 		return new JsonResponseTypeStatus(1, "loginAction", "Login failed - wrong username or password.");
 	}
+	
 }

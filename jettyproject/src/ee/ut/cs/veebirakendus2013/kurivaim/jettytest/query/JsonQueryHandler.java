@@ -4,26 +4,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JsonQueryHandler {
-	Map<String, Class<? extends JsonQueryInterface>> queryClassesForGet;
-	Map<String, Class<? extends JsonQueryInterface>> queryClassesForPost;
+	
+	private Map<String, Class<? extends JsonQueryInterface>> queryClassesForGet;
+	private Map<String, Class<? extends JsonQueryInterface>> queryClassesForPost;
 	
 	public JsonQueryHandler() {
 		queryClassesForGet = new HashMap<String, Class<? extends JsonQueryInterface>>();
 		queryClassesForPost = new HashMap<String, Class<? extends JsonQueryInterface>>();
 		
 		//GET queries
-		addQueryType(false, JsonQueryTypeStatus.realQueryType, JsonQueryTypeStatus.class);
+		addQueryType(false, JsonQueryTypes.STATUS);
 		
 		//POST queries (first argument to true to set them in POST mode)
-		addQueryType(false, JsonQueryTypeLogin.realQueryType, JsonQueryTypeLogin.class);
+		addQueryType(false, JsonQueryTypes.LOGIN);
 	}
 	
-	public void addQueryType(boolean isPostQuery, String queryName, Class<? extends JsonQueryInterface> classToAdd) {
+	
+	public void addQueryType(boolean isPostQuery, JsonQueryTypes queryType) {
 		if(isPostQuery) {
-			queryClassesForGet.put((String)queryName, classToAdd);
+			queryClassesForPost.put(queryType.getName(), queryType.getImplClass());
 		}
 		else {
-			queryClassesForGet.put((String)queryName, classToAdd);
+			queryClassesForGet.put(queryType.getName(), queryType.getImplClass());
 		}
 	}
 	

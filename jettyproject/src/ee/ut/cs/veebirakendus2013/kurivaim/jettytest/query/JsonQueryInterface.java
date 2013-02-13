@@ -4,5 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public interface JsonQueryInterface {
-	public abstract JsonResponseInterface processQuery(HttpServletRequest request, HttpServletResponse response);
+	
+	public JsonResponseInterface processQuery(HttpServletRequest request, HttpServletResponse response);
+
 }

@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.annotations.SerializedName;
 
 public class JsonQueryTypeBase implements JsonQueryInterface {
-	public static final String realQueryType = "base";
 	
 	@SerializedName("queryType")
 	public String queryType;
@@ -15,4 +14,5 @@ public class JsonQueryTypeBase implements JsonQueryInterface {
 	public JsonResponseInterface processQuery(HttpServletRequest request, HttpServletResponse response) {
 		return new JsonResponseTypeText("Base class!?");
 	}
+	
 }
