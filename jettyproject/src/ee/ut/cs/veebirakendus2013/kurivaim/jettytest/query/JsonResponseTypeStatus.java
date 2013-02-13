@@ -4,16 +4,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class JsonResponseTypeStatus implements JsonResponseInterface {
 	@SerializedName("responseType")
-	public final String responseType = "status";
+	private final String responseType = "status";
 	
 	@SerializedName("statusCode")
-	public int statusCode;
+	private int statusCode;
 	
 	@SerializedName("statusComponent")
-	public String statusComponent;
+	private String statusComponent;
 	
 	@SerializedName("statusMessage")
-	public String statusMessage;
+	private String statusMessage;
 	
 	public JsonResponseTypeStatus(int statusCode, String statusComponent, String statusMessage) {
 		this.statusCode = statusCode;

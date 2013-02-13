@@ -5,8 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class JsonQueryTypeInvalid implements JsonQueryInterface {
 	
-	public int errorId;
-	public String errorString;
+	private final int errorId;
+	private final String errorString;
 	
 	public JsonQueryTypeInvalid(int errorId, String errorString) {
 		this.errorId = errorId;

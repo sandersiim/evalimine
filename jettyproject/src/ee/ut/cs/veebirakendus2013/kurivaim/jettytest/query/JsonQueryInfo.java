@@ -9,12 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 public class JsonQueryInfo {
-	private String jsonString;
-	private String queryTypeName;
-	private HttpServletRequest request;
-	private HttpServletResponse response;
-	private JsonQueryHandler queryHandler;
-	private boolean isPostQuery;
+	
+	private final String jsonString;
+	private final String queryTypeName;
+	private final HttpServletRequest request;
+	private final HttpServletResponse response;
+	private final JsonQueryHandler queryHandler;
+	private final boolean isPostQuery;
 	
 	public JsonQueryInfo(HttpServletRequest request, HttpServletResponse response, JsonQueryHandler queryHandler) {
 		this.request = request;

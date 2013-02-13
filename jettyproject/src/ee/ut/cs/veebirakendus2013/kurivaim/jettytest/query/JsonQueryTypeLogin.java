@@ -8,10 +8,10 @@ import com.google.gson.annotations.SerializedName;
 public class JsonQueryTypeLogin implements JsonQueryInterface {
 	
 	@SerializedName("username")
-	public String userName;
+	private String userName;
 	
 	@SerializedName("password")
-	public String password;
+	private String password;
 
 	@Override
 	public JsonResponseInterface processQuery(HttpServletRequest request, HttpServletResponse response) {

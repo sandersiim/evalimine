@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class JsonResponseTypeText implements JsonResponseInterface {
 	@SerializedName("responseType")
-	public final String responseType = "text";
+	private final String responseType = "text";
 	
 	@SerializedName("responseText")
-	public String responseText;
+	private String responseText;
 	
 	public JsonResponseTypeText(String responseText) {
 		this.responseText = responseText;

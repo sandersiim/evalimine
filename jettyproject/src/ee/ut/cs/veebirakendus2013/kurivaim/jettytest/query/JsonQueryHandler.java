@@ -12,10 +12,15 @@ public class JsonQueryHandler {
 		queryClassesForGet = new HashMap<String, Class<? extends JsonQueryInterface>>();
 		queryClassesForPost = new HashMap<String, Class<? extends JsonQueryInterface>>();
 		
+		initQueries();
+	}
+	
+	
+	private void initQueries() {
 		//GET queries
 		addQueryType(false, JsonQueryTypes.STATUS);
 		
-		//POST queries (first argument to true to set them in POST mode)
+		// POST queries (first argument to true to set them in POST mode)
 		addQueryType(false, JsonQueryTypes.LOGIN);
 	}
 	
