@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
+
 public class JsonQueryInfo {
 	
 	private final String jsonString;
@@ -15,12 +17,14 @@ public class JsonQueryInfo {
 	private final HttpServletRequest request;
 	private final HttpServletResponse response;
 	private final JsonQueryHandler queryHandler;
+	private final MysqlConnectionHandler sqlHandler;
 	private final boolean isPostQuery;
 	
-	public JsonQueryInfo(HttpServletRequest request, HttpServletResponse response, JsonQueryHandler queryHandler) {
+	public JsonQueryInfo(HttpServletRequest request, HttpServletResponse response, JsonQueryHandler queryHandler, MysqlConnectionHandler sqlHandler) {
 		this.request = request;
 		this.response = response;
 		this.queryHandler = queryHandler;
+		this.sqlHandler = sqlHandler;
 		
 		isPostQuery = request.getMethod().equals("POST");
 		
@@ -65,9 +69,21 @@ public class JsonQueryInfo {
 			jsonQuery = new JsonQueryTypeInvalid(errorIndex, errorString);
 		}
 		
-		JsonResponseInterface responseData = jsonQuery.processQuery(request, response);
+		JsonResponseInterface responseData = jsonQuery.processQuery(this);
 		String outputJson = gson.toJson(responseData);
 		
 		response.getWriter().println(outputJson);
+	}
+	
+	public HttpServletRequest getRequest() {
+		return request;
+	}
+
+	public HttpServletResponse getResponse() {
+		return response;
+	}
+	
+	public MysqlConnectionHandler getSqlHandler() {
+		return sqlHandler;
 	}
 }
