@@ -69,7 +69,7 @@ public class MysqlConnectionHandler {
 		catch(NoSuchAlgorithmException e) {
 			e.printStackTrace();
 			
-			return "INVALID";
+			return null;
 		}
 		
 		byte[] hashBytes = md.digest(inputString.getBytes());
