@@ -9,6 +9,8 @@ public class JsonQueryTypeCandidates implements JsonQueryInterface {
 	private int partyId;
 	private String namePrefix;
 	private int orderId;
+	private int startIndex;
+	private int count;
 
 	@Override
 	public JsonResponseInterface processQuery(JsonQueryInfo queryInfo) {
@@ -19,7 +21,7 @@ public class JsonQueryTypeCandidates implements JsonQueryInterface {
 				return new JsonResponseTypeStatus(-1, "candidateList", "Fetching candidate list failed - no database connection.");
 			}
 			
-			return new JsonResponseTypeCandidates(new MysqlQueryCandidateInfo(sqlHandler).queryAllByFilter(regionId, partyId, namePrefix, orderId));
+			return new JsonResponseTypeCandidates(new MysqlQueryCandidateInfo(sqlHandler).queryAllByFilter(regionId, partyId, namePrefix, orderId, startIndex, count));
 		}
 		catch(Exception e) {
 			//TODO: when logging system is present, log this error

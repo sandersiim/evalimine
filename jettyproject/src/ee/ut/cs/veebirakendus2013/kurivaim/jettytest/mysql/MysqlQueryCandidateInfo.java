@@ -36,14 +36,18 @@ public class MysqlQueryCandidateInfo {
 		return null;
 	}
 	
-	public List<MysqlQueryCandidateInfo> queryAllByFilter(int queryRegionId, int queryPartyId, String namePrefix, int orderingMethod) {
+	public List<MysqlQueryCandidateInfo> queryAllByFilter(int queryRegionId, int queryPartyId, String namePrefix, int orderingMethod, int startIndex, int count) {
 		try {
+			if(count <= 0) count = 50;
+			
+			String limitString = (startIndex > 0) ? " LIMIT " + startIndex + ", " + count : " LIMIT " + count;
+			
 			String orderingString = (orderingMethod == 0) ? " ORDER BY voteCount DESC" : " ORDER BY realName ASC";
 			String regionFilter = (queryRegionId > 0) ? " AND regionId = " + queryRegionId : "";
 			String partyFilter = (queryPartyId > 0) ? " AND partyId = " + queryPartyId : "";
 			String nameFilter = (namePrefix != null && namePrefix.length() > 0) ? " AND realName LIKE ?" : "";
 			
-			PreparedStatement statement = sqlHandler.getConnection().prepareStatement("SELECT * FROM ev_candidates WHERE 1" + regionFilter + partyFilter + nameFilter + orderingString);
+			PreparedStatement statement = sqlHandler.getConnection().prepareStatement("SELECT * FROM ev_candidates WHERE 1" + regionFilter + partyFilter + nameFilter + orderingString + limitString);
 			if(namePrefix != null && namePrefix.length() > 0) statement.setString(1, namePrefix + "%");
 			
 			return fillMultiDataFromResults(statement.executeQuery());
