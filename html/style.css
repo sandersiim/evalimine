@@ -1,0 +1,56 @@
+body {
+	text-align: center;
+}
+
+#mainblock {
+	width: 900px;
+	margin: 0 auto;
+	border: 2px solid black;
+	height: 700px;
+}
+
+#header {
+	height: 50px;
+	text-align: left;
+}
+
+#header h1 {
+	margin: 0;
+	padding: 20px 45px;
+	font: bold 40px 'Verdana';
+}
+
+#header span {
+	font: normal 20px 'Verdana';
+	color: #acacac;
+}
+
+#sitetitle {
+	font: normal 20px 'Tahoma';
+}
+
+.menubar {
+	width: 802px;
+	margin: 0 auto;
+}
+
+.menubar .menuitem {
+	width: 198px;
+	height: 20px;
+	float: left;
+	text-align: center;
+	border: 2px solid black;
+	border-left: 0;
+}
+
+.menubar .menuitem:first-of-type {
+	border-left: 2px solid black;
+}
+
+.menuselected {
+	background: #A0C0F5;
+}
+
+.clear {
+	clear: both;
+}

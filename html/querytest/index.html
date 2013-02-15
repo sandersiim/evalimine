@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Base site</title>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="jsontester.js"></script>
+		<link rel="stylesheet" media="screen" href="style.css" />
+		<link rel="stylesheet" media="print" href="style_print.css" />
+	</head>
+	<body>
+		<form method="GET" action="#" id="testerForm">
+			Type: <input type="text" name="queryType" id="testerQueryType" value="login" />
+			JSON: <input type="text" name="jsonData" id="testerQueryContents" value="{username:&quot;testuser&quot;,password=&quot;testpass&quot;}" />
+			<input type="submit" value="Run" /> <br />
+			
+			<span id="testerResult">No results yet.</span>
+		</form>
+	</body>
+</html>

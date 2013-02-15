@@ -1,0 +1,13 @@
+With phpMyAdmin, root privileges:
+
+To create user and database:
+Home -> SQL tab -> Paste from 'import_dbanduser.sql' -> Go
+
+(Refresh after creating database)
+
+To import database tables and data:
+Home -> evalimised DB -> SQL tab -> Paste from 'import_db_evalimised.sql' -> Go
+
+
+
+The sample user 'testuser' has password 'testpass'. Jetty project uses SHA1 with salt prefix 'evalimised_'.
