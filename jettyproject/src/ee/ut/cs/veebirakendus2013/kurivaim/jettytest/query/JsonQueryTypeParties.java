@@ -1,13 +1,11 @@
 package ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
-import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryCandidateInfo;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryPartyInfo;
 
-public class JsonQueryTypeCandidates implements JsonQueryInterface {
+public class JsonQueryTypeParties implements JsonQueryInterface {
 	
 	private int regionId;
-	private int partyId;
-	private String namePrefix;
 	private int orderId;
 
 	@Override
@@ -19,7 +17,7 @@ public class JsonQueryTypeCandidates implements JsonQueryInterface {
 				return new JsonResponseTypeStatus(-1, "candidateList", "Fetching candidate list failed - no database connection.");
 			}
 			
-			return new JsonResponseTypeCandidates(new MysqlQueryCandidateInfo(sqlHandler).queryAllByFilter(regionId, partyId, namePrefix, orderId));
+			return new JsonResponseTypeParties(new MysqlQueryPartyInfo(sqlHandler).queryAllByFilter(regionId, orderId));
 		}
 		catch(Exception e) {
 			//TODO: when logging system is present, log this error

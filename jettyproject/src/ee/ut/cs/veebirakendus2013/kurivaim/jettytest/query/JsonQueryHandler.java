@@ -20,6 +20,7 @@ public class JsonQueryHandler {
 		//GET queries
 		addQueryType(false, JsonQueryTypes.STATUS);
 		addQueryType(false, JsonQueryTypes.CANDIDATES);
+		addQueryType(false, JsonQueryTypes.PARTIES);
 		
 		// POST queries (first argument to true to set them in POST mode)
 		addQueryType(false, JsonQueryTypes.LOGIN);
