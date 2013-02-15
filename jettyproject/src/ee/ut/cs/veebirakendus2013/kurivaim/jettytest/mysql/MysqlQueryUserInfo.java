@@ -9,7 +9,7 @@ public class MysqlQueryUserInfo {
 	private int userId;
 	private String username;
 	private int voteRegionId;
-	private Integer votedCandidateId;
+	private int votedCandidateId;
 	
 	private final MysqlConnectionHandler sqlHandler;
 	
