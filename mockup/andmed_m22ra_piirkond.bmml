@@ -1,0 +1,53 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1405" measuredH="748" mockupW="1000" mockupH="705">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="405" y="43" w="1000" h="705" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1"/>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="455" y="155" w="900" h="538" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1"/>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::ButtonBar" x="491" y="181" w="828" h="27" measuredW="326" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <hrefs>haaletamine_vaja_piirkonda%26bm%3Bhaaletamine_vaja_piirkonda.bmml%26bm%3Bhaaletamine_vaja_piirkonda.bmml%26bm%3Bhaaletamine_vaja_piirkonda.bmml%2C%2C%2Candmed_vaja_piirkonda%26bm%3Bandmed_vaja_piirkonda.bmml%26bm%3Bandmed_vaja_piirkonda.bmml%26bm%3Bandmed_vaja_piirkonda.bmml</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2286%2C138%2C329%2C165%22%20href%3D%22haaletamine_vaja_piirkonda.bmml%22%20alt%3D%22haaletamine_vaja_piirkonda%22%20id%3D%222%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22643%2C138%2C912%2C165%22%20href%3D%22andmed_vaja_piirkonda.bmml%22%20alt%3D%22andmed_vaja_piirkonda%22%20id%3D%222%22/%3E%0A</map>
+        <selectedIndex>3</selectedIndex>
+        <text>H%E4%E4letamine%2C%20Statistika%2C%20Abi%2C%20Minu%20andmed</text>
+      </controlProperties>
+    </control>
+    <control controlID="70" controlTypeID="com.balsamiq.mockups::Button" x="1016" y="621" w="100" h="48" measuredW="79" measuredH="27" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <menuIcon>false</menuIcon>
+        <size>14</size>
+        <state>disabled</state>
+        <text>Salvesta</text>
+      </controlProperties>
+    </control>
+    <control controlID="71" controlTypeID="com.balsamiq.mockups::Button" x="1181" y="621" w="100" h="48" measuredW="69" measuredH="27" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>andmed_vaja_piirkonda%26bm%3Bandmed_vaja_piirkonda.bmml%26bm%3Bandmed_vaja_piirkonda.bmml%26bm%3Bandmed_vaja_piirkonda.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22776%2C578%2C876%2C626%22%20href%3D%22andmed_vaja_piirkonda.bmml%22%20alt%3D%22andmed_vaja_piirkonda%22%20id%3D%2271%22/%3E</map>
+        <size>14</size>
+        <text>T%FChista</text>
+      </controlProperties>
+    </control>
+    <control controlID="79" controlTypeID="com.balsamiq.mockups::BreadCrumbs" x="491" y="223" w="-1" h="-1" measuredW="315" measuredH="35" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <hrefs>andmed_vaja_piirkonda%26bm%3Bandmed_vaja_piirkonda.bmml%26bm%3Bandmed_vaja_piirkonda.bmml%26bm%3Bandmed_vaja_piirkonda.bmml%2C</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2286%2C185.5%2C235%2C209.5%22%20href%3D%22andmed_vaja_piirkonda.bmml%22%20alt%3D%22andmed_vaja_piirkonda%22%20id%3D%2279%22/%3E%0A</map>
+        <size>24</size>
+        <text>Minu%20andmed%2C%20M%E4%E4ra%20piirkond</text>
+      </controlProperties>
+    </control>
+    <control controlID="80" controlTypeID="com.balsamiq.mockups::Label" x="559" y="382" w="-1" h="-1" measuredW="442" measuredH="26" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>18</size>
+        <text>Vali%20piirkond%2C%20kus%20soovid%20h%E4%E4letada%20ja/v%F5i%20kandideerida%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="81" controlTypeID="com.balsamiq.mockups::ComboBox" x="1030" y="383" w="151" h="-1" measuredW="105" measuredH="99" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>andmed_m22ra_piirkond_valitud%26bm%3Bandmed_m22ra_piirkond_valitud.bmml%26bm%3Bandmed_m22ra_piirkond_valitud.bmml%26bm%3Bandmed_m22ra_piirkond_valitud.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22625%2C340%2C776%2C439%22%20href%3D%22andmed_m22ra_piirkond_valitud.bmml%22%20alt%3D%22andmed_m22ra_piirkond_valitud%22%20id%3D%2281%22/%3E</map>
+        <size>14</size>
+        <state>up</state>
+        <text>Vali%20piirkond%0ATallinna%20linn%0AHarjumaa%20maakond%0AJ%E4rvamaa%20maakond%0AP%E4rnu%20linn</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

@@ -1,0 +1,33 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1405" measuredH="748" mockupW="1000" mockupH="705">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="405" y="43" w="1000" h="705" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1"/>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="465" y="155" w="900" h="538" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1"/>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::ButtonBar" x="491" y="181" w="828" h="27" measuredW="307" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <hrefs>haaletamine_vaja_siseneda%26bm%3Bhaaletamine_vaja_siseneda.bmml%26bm%3Bhaaletamine_vaja_siseneda.bmml%26bm%3Bhaaletamine_vaja_siseneda.bmml%2Cstatistika_piirkonnad%26bm%3Bstatistika_piirkonnad.bmml%26bm%3Bstatistika_piirkonnad.bmml%26bm%3Bstatistika_piirkonnad.bmml%2Cabi%26bm%3Babi.bmml%26bm%3Babi.bmml%26bm%3Babi.bmml%2Candmed_logisisse%26bm%3Bandmed_logisisse.bmml%26bm%3Bandmed_logisisse.bmml%26bm%3Bandmed_logisisse.bmml</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2286%2C138%2C344%2C165%22%20href%3D%22haaletamine_vaja_siseneda.bmml%22%20alt%3D%22haaletamine_vaja_siseneda%22%20id%3D%222%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22344%2C138%2C562%2C165%22%20href%3D%22statistika_piirkonnad.bmml%22%20alt%3D%22statistika_piirkonnad%22%20id%3D%222%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22562%2C138%2C677%2C165%22%20href%3D%22abi.bmml%22%20alt%3D%22abi%22%20id%3D%222%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22677%2C138%2C911%2C165%22%20href%3D%22andmed_logisisse.bmml%22%20alt%3D%22andmed_logisisse%22%20id%3D%222%22/%3E%0A</map>
+        <selectedIndex>1</selectedIndex>
+        <text>H%E4%E4letamine%2C%20Statistika%2C%20Abi%2C%20Logi%20sisse</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::LinkBar" x="499" y="229" w="-1" h="-1" measuredW="795" measuredH="24" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>2848996</color>
+        <hrefs>statistika_piirkonnad%26bm%3Bstatistika_piirkonnad.bmml%26bm%3Bstatistika_piirkonnad.bmml%26bm%3Bstatistika_piirkonnad.bmml%2Cstatistika_kandidaatide_jargi%26bm%3Bstatistika_kandidaatide_jargi.bmml%26bm%3Bstatistika_kandidaatide_jargi.bmml%26bm%3Bstatistika_kandidaatide_jargi.bmml%2Cstatistika_parteide_jargi%26bm%3Bstatistika_parteide_jargi.bmml%26bm%3Bstatistika_parteide_jargi.bmml%26bm%3Bstatistika_parteide_jargi.bmml%2Cstatistika_kaart%26bm%3Bstatistika_kaart.bmml%26bm%3Bstatistika_kaart.bmml%26bm%3Bstatistika_kaart.bmml</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2294%2C188%2C257%2C206%22%20href%3D%22statistika_piirkonnad.bmml%22%20alt%3D%22statistika_piirkonnad%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22275%2C188%2C513%2C206%22%20href%3D%22statistika_kandidaatide_jargi.bmml%22%20alt%3D%22statistika_kandidaatide_jargi%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22531%2C188%2C733%2C206%22%20href%3D%22statistika_parteide_jargi.bmml%22%20alt%3D%22statistika_parteide_jargi%22%20id%3D%225%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22751%2C188%2C889%2C206%22%20href%3D%22statistika_kaart.bmml%22%20alt%3D%22statistika_kaart%22%20id%3D%225%22/%3E%0A</map>
+        <selectedIndex>3</selectedIndex>
+        <size>18</size>
+        <text>Piirkondade%20nimekiri%2C%20Statistika%20kandidaatide%20l%F5ikes%2C%20Statistika%20parteide%20l%F5ikes%2C%20Statistika%20kaardil</text>
+      </controlProperties>
+    </control>
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::Image" x="601" y="268" w="629" h="403" measuredW="768" measuredH="493" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./kaart.gif</src>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::PieChart" x="838" y="292" w="84" h="56" measuredW="180" measuredH="180" zOrder="5" locked="false" isInGroup="-1"/>
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::PieChart" x="1063" y="542" w="65" h="50" measuredW="180" measuredH="180" zOrder="6" locked="false" isInGroup="-1"/>
+    <control controlID="30" controlTypeID="com.balsamiq.mockups::PieChart" x="652" y="481" w="45" h="35" measuredW="180" measuredH="180" zOrder="7" locked="false" isInGroup="-1"/>
+  </controls>
+</mockup>

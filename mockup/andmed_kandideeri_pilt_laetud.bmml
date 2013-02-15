@@ -1,0 +1,92 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1405" measuredH="748" mockupW="1000" mockupH="705">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="405" y="43" w="1000" h="705" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1"/>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="455" y="155" w="900" h="538" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1"/>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::ButtonBar" x="491" y="181" w="828" h="27" measuredW="326" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <hrefs>haaletamine_tuhista%26bm%3Bhaaletamine_tuhista.bmml%26bm%3Bhaaletamine_tuhista.bmml%26bm%3Bhaaletamine_tuhista.bmml%2C%2C%2Candmed_saab_kandideerida%26bm%3Bandmed_saab_kandideerida.bmml%26bm%3Bandmed_saab_kandideerida.bmml%26bm%3Bandmed_saab_kandideerida.bmml</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2286%2C138%2C329%2C165%22%20href%3D%22haaletamine_tuhista.bmml%22%20alt%3D%22haaletamine_tuhista%22%20id%3D%222%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22643%2C138%2C912%2C165%22%20href%3D%22andmed_saab_kandideerida.bmml%22%20alt%3D%22andmed_saab_kandideerida%22%20id%3D%222%22/%3E%0A</map>
+        <selectedIndex>3</selectedIndex>
+        <text>H%E4%E4letamine%2C%20Statistika%2C%20Abi%2C%20Minu%20andmed</text>
+      </controlProperties>
+    </control>
+    <control controlID="63" controlTypeID="com.balsamiq.mockups::Label" x="720" y="272" w="-1" h="-1" measuredW="113" measuredH="26" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <size>18</size>
+        <state>up</state>
+        <text>Teie%20piirkond%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="64" controlTypeID="com.balsamiq.mockups::Label" x="720" y="311" w="-1" h="-1" measuredW="209" measuredH="26" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <size>18</size>
+        <text>Palun%20sisetage%20oma%20nimi%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="67" controlTypeID="com.balsamiq.mockups::Link" x="557" y="433" w="-1" h="-1" measuredW="100" measuredH="19" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>andmed_kandideeri_lae_pilt%26bm%3Bandmed_kandideeri_lae_pilt.bmml%26bm%3Bandmed_kandideeri_lae_pilt.bmml%26bm%3Bandmed_kandideeri_lae_pilt.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22152%2C390%2C252%2C409%22%20href%3D%22andmed_kandideeri_lae_pilt.bmml%22%20alt%3D%22andmed_kandideeri_lae_pilt%22%20id%3D%2267%22/%3E</map>
+        <text>Lae%20oma%20pilt%20%FCles</text>
+      </controlProperties>
+    </control>
+    <control controlID="70" controlTypeID="com.balsamiq.mockups::Button" x="1016" y="621" w="100" h="48" measuredW="90" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>andmed_kandideeri_kinnita%26bm%3Bandmed_kandideeri_kinnita.bmml%26bm%3Bandmed_kandideeri_kinnita.bmml%26bm%3Bandmed_kandideeri_kinnita.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22611%2C578%2C711%2C626%22%20href%3D%22andmed_kandideeri_kinnita.bmml%22%20alt%3D%22andmed_kandideeri_kinnita%22%20id%3D%2270%22/%3E</map>
+        <menuIcon>false</menuIcon>
+        <size>14</size>
+        <state>up</state>
+        <text>Kandideeri</text>
+      </controlProperties>
+    </control>
+    <control controlID="71" controlTypeID="com.balsamiq.mockups::Button" x="1181" y="621" w="100" h="48" measuredW="69" measuredH="27" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>andmed_saab_kandideerida%26bm%3Bandmed_saab_kandideerida.bmml%26bm%3Bandmed_saab_kandideerida.bmml%26bm%3Bandmed_saab_kandideerida.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22776%2C578%2C876%2C626%22%20href%3D%22andmed_saab_kandideerida.bmml%22%20alt%3D%22andmed_saab_kandideerida%22%20id%3D%2271%22/%3E</map>
+        <size>14</size>
+        <text>T%FChista</text>
+      </controlProperties>
+    </control>
+    <control controlID="84" controlTypeID="com.balsamiq.mockups::Label" x="858" y="272" w="-1" h="-1" measuredW="84" measuredH="26" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <size>18</size>
+        <text>P%E4rnu%20linn</text>
+      </controlProperties>
+    </control>
+    <control controlID="94" controlTypeID="com.balsamiq.mockups::BreadCrumbs" x="497" y="222" w="-1" h="-1" measuredW="329" measuredH="35" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <hrefs>andmed_saab_kandideerida%26bm%3Bandmed_saab_kandideerida.bmml%26bm%3Bandmed_saab_kandideerida.bmml%26bm%3Bandmed_saab_kandideerida.bmml%2C</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2292%2C184.5%2C241%2C208.5%22%20href%3D%22andmed_saab_kandideerida.bmml%22%20alt%3D%22andmed_saab_kandideerida%22%20id%3D%2294%22/%3E%0A</map>
+        <size>24</size>
+        <text>Minu%20andmed%2C%20Kandideerimine</text>
+      </controlProperties>
+    </control>
+    <control controlID="96" controlTypeID="com.balsamiq.mockups::TextInput" x="792" y="351" w="165" h="-1" measuredW="45" measuredH="27" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Aadu</text>
+      </controlProperties>
+    </control>
+    <control controlID="98" controlTypeID="com.balsamiq.mockups::Label" x="720" y="352" w="-1" h="-1" measuredW="57" measuredH="24" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>Eesnimi</text>
+      </controlProperties>
+    </control>
+    <control controlID="99" controlTypeID="com.balsamiq.mockups::Label" x="720" y="397" w="-1" h="-1" measuredW="62" measuredH="24" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>Perenimi</text>
+      </controlProperties>
+    </control>
+    <control controlID="100" controlTypeID="com.balsamiq.mockups::TextInput" x="792" y="396" w="165" h="-1" measuredW="72" measuredH="27" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Paakspuu</text>
+      </controlProperties>
+    </control>
+    <control controlID="102" controlTypeID="com.balsamiq.mockups::Webcam" x="519" y="272" w="-1" h="-1" measuredW="177" measuredH="146" zOrder="14" locked="false" isInGroup="-1"/>
+  </controls>
+</mockup>
