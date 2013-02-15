@@ -1,13 +1,11 @@
 package ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.annotations.SerializedName;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryUserInfo;
 
 public class JsonQueryTypeLogin implements JsonQueryInterface {
 	
@@ -24,23 +22,13 @@ public class JsonQueryTypeLogin implements JsonQueryInterface {
 			HttpSession session = queryInfo.getRequest().getSession();
 			
 			if(!sqlHandler.validateConnection()) {
-				//for testing purposes
-				if(userName.equals("offlinelogin") && password.equals("testpass")) {
-					session.setAttribute("username", userName);
-					
-					return new JsonResponseTypeStatus(2, "loginAction", "Successfully logged in.");
-				}
-				
 				return new JsonResponseTypeStatus(-1, "loginAction", "Login failed - no database connection.");
 			}
 			
-			PreparedStatement statement = sqlHandler.getConnection().prepareStatement("SELECT username FROM ev_users WHERE username = ? AND password = ?");
-			statement.setString(1, userName);
-			statement.setString(2, sqlHandler.getPasswordHash(password));
-			ResultSet results = statement.executeQuery();
+			MysqlQueryUserInfo userInfo = new MysqlQueryUserInfo(queryInfo.getSqlHandler()).querySingleByUserAndPass(userName, password);
 			
-			if(results.next()) {
-				session.setAttribute("username", userName);
+			if(userInfo != null) {
+				session.setAttribute("username", userInfo.getUsername());
 	
 				return new JsonResponseTypeStatus(2, "loginAction", "Successfully logged in.");
 			}
