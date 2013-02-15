@@ -13,7 +13,10 @@ public class JsonResponseTypeCandidates implements JsonResponseInterface {
 	@SerializedName("candidateList")
 	private List<MysqlQueryCandidateInfo> candidateList;
 	
-	public JsonResponseTypeCandidates(List<MysqlQueryCandidateInfo> candidateList) {
+	public JsonResponseTypeCandidates(List<MysqlQueryCandidateInfo> candidateList) throws NullPointerException {
 		this.candidateList = candidateList;
+		
+		//argument must not be null
+		if(candidateList == null) throw new NullPointerException();
 	}
 }

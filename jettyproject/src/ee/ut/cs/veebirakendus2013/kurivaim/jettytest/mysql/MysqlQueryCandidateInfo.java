@@ -40,7 +40,7 @@ public class MysqlQueryCandidateInfo {
 		try {
 			String orderingString = (orderingMethod == 0) ? " ORDER BY voteCount DESC" : " ORDER BY realName ASC";
 			String regionFilter = (queryRegionId > 0) ? " AND regionId = " + queryRegionId : "";
-			String partyFilter = (queryPartyId > 0) ? " AND partyId = ?" + queryPartyId : "";
+			String partyFilter = (queryPartyId > 0) ? " AND partyId = " + queryPartyId : "";
 			String nameFilter = (namePrefix != null && namePrefix.length() > 0) ? " AND realName LIKE ?" : "";
 			
 			PreparedStatement statement = sqlHandler.getConnection().prepareStatement("SELECT * FROM ev_candidates WHERE 1" + regionFilter + partyFilter + nameFilter + orderingString);
