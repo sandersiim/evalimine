@@ -100,6 +100,14 @@ public class JsonQueryInfo {
 		return 0;
 	}
 	
+	public void setLoggedInUserId(int userId) {
+		request.getSession().setAttribute("userId", userId);
+	}
+	
+	public void removeLoggedInUserId() {
+		request.getSession().removeAttribute("userId");
+	}
+	
 	public MysqlQueryUserInfo getLoggedInUserInfo() {
 		int userId = getLoggedInUserId();
 		

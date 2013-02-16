@@ -4,6 +4,7 @@ package ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query;
 public enum JsonQueryTypes {
 	INVALID("invalid", JsonQueryTypeInvalid.class),
 	LOGIN("login", JsonQueryTypeLogin.class),
+	LOGOUT("logout", JsonQueryTypeLogout.class),
 	STATUS("status", JsonQueryTypeStatus.class),
 	CANDIDATES("candidates", JsonQueryTypeCandidates.class),
 	PARTIES("parties", JsonQueryTypeParties.class),

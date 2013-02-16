@@ -1,7 +1,5 @@
 package ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query;
 
-import javax.servlet.http.HttpSession;
-
 import com.google.gson.annotations.SerializedName;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
@@ -19,7 +17,6 @@ public class JsonQueryTypeLogin implements JsonQueryInterface {
 	public JsonResponseInterface processQuery(JsonQueryInfo queryInfo) {
 		try {
 			MysqlConnectionHandler sqlHandler = queryInfo.getSqlHandler();
-			HttpSession session = queryInfo.getRequest().getSession();
 			
 			if(!sqlHandler.validateConnection()) {
 				return new JsonResponseTypeStatus(-1, "loginAction", "Login failed - no database connection.");
@@ -28,8 +25,7 @@ public class JsonQueryTypeLogin implements JsonQueryInterface {
 			MysqlQueryUserInfo userInfo = new MysqlQueryUserInfo(queryInfo.getSqlHandler()).querySingleByUserAndPass(userName, password);
 			
 			if(userInfo != null) {
-				session.setAttribute("username", userInfo.getUsername());
-				session.setAttribute("userId", userInfo.getUserId());
+				queryInfo.setLoggedInUserId(userInfo.getUserId());
 	
 				return new JsonResponseTypeStatus(2, "loginAction", "Successfully logged in.");
 			}
