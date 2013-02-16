@@ -57,7 +57,7 @@ public class MysqlQueryPartyInfo {
 			
 			statement = sqlHandler.getConnection().prepareStatement(
 					"SELECT a.id AS id, a.keyword AS keyword, a.displayName AS displayName, COALESCE(SUM(b.voteCount), 0) AS voteCount FROM ev_parties AS a " +
-					"LEFT JOIN ev_candidates AS b ON a.id = b.partyId WHERE 1" + regionFilter + " GROUP BY a.id" + orderingString);
+					"LEFT JOIN ev_candidates AS b ON a.id = b.partyId" + regionFilter + " GROUP BY a.id" + orderingString);
 			
 			return fillMultiDataFromResults(statement.executeQuery());
 		} catch (SQLException e) {
