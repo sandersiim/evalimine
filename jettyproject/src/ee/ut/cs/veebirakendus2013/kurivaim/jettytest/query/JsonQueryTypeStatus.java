@@ -1,17 +1,17 @@
 package ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query;
 
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
+
 public class JsonQueryTypeStatus implements JsonQueryInterface {
 	
 	@Override
 	public JsonResponseInterface processQuery(JsonQueryInfo queryInfo) {
-		int userId = queryInfo.getLoggedInUserId();
+		MysqlConnectionHandler sqlHandler = queryInfo.getSqlHandler();
 		
-		if(userId > 0) {
-			return new JsonResponseTypeStatus(2, "loginStatus", "Logged in with user ID " + userId + ".");
+		if(!sqlHandler.validateConnection()) {
+			return new JsonResponseTypeStatus(-1, "infoAction", "Getting status info failed - no database connection.");
 		}
-		else {
-			return new JsonResponseTypeStatus(1, "loginStatus", "Not logged in");
-		}
+		
+		return new JsonResponseTypeUserInfo("infoAction", queryInfo.getLoggedInUserInfo(), queryInfo.getLoggedInCandidateInfo());
 	}
-	
 }

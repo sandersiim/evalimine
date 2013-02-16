@@ -26,6 +26,7 @@ public class JsonQueryHandler {
 		addQueryType(false, JsonQueryTypes.LOGIN);
 		addQueryType(false, JsonQueryTypes.LOGOUT);
 		addQueryType(false, JsonQueryTypes.VOTE);
+		addQueryType(false, JsonQueryTypes.APPLICATION);
 	}
 	
 	

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 15, 2013 at 02:10 PM
+-- Generation Time: Feb 16, 2013 at 11:27 PM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -31,17 +31,18 @@ CREATE TABLE IF NOT EXISTS `ev_candidates` (
   `userId` int(11) NOT NULL,
   `regionId` int(11) NOT NULL,
   `partyId` int(11) NOT NULL,
-  `voteCount` int(11) NOT NULL,
-  `realName` varchar(127) NOT NULL,
+  `voteCount` int(11) NOT NULL DEFAULT '0',
+  `firstName` varchar(63) NOT NULL,
+  `lastName` varchar(63) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `ev_candidates`
 --
 
-INSERT INTO `ev_candidates` (`id`, `userId`, `regionId`, `partyId`, `voteCount`, `realName`) VALUES
-(2, 1, 1, 1, 0, 'Mikk Kukk');
+INSERT INTO `ev_candidates` (`id`, `userId`, `regionId`, `partyId`, `voteCount`, `firstName`, `lastName`) VALUES
+(2, 1, 1, 1, 0, 'Mikk', 'Kukk');
 
 -- --------------------------------------------------------
 
@@ -100,14 +101,15 @@ CREATE TABLE IF NOT EXISTS `ev_users` (
   `voteRegionId` int(11) NOT NULL,
   `votedCandidateId` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `ev_users`
 --
 
 INSERT INTO `ev_users` (`id`, `username`, `password`, `voteRegionId`, `votedCandidateId`) VALUES
-(1, 'testuser', 'A114489FB19F59AB059B6CCB20134187D516C08C', 1, 0);
+(1, '39010101234', 'A114489FB19F59AB059B6CCB20134187D516C08C', 1, 0),
+(2, '48902114321', 'A114489FB19F59AB059B6CCB20134187D516C08C', 1, 0);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

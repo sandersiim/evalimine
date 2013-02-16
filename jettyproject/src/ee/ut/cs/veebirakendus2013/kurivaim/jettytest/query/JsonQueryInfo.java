@@ -2,13 +2,14 @@ package ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryCandidateInfo;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryUserInfo;
 
 public class JsonQueryInfo {
@@ -41,7 +42,7 @@ public class JsonQueryInfo {
 		queryTypeName = request.getPathInfo().substring(1);
 	}
 	
-	public void processQuery() throws ServletException, IOException {
+	public void processQuery() {
 		response.setContentType("application/json");
 		response.setStatus(HttpServletResponse.SC_OK);
 		
@@ -49,7 +50,7 @@ public class JsonQueryInfo {
 		int errorIndex = 1;
 		String errorString = "Malformed query.";
 		
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().serializeNulls().create();
 		
 		if(jsonString != null) {
 			try {
@@ -73,7 +74,12 @@ public class JsonQueryInfo {
 		JsonResponseInterface responseData = jsonQuery.processQuery(this);
 		String outputJson = gson.toJson(responseData);
 		
-		response.getWriter().println(outputJson);
+		try {
+			response.getWriter().println(outputJson);
+		}
+		catch(IOException e) {
+			e.printStackTrace(); //TODO: log this error
+		}
 	}
 	
 	public HttpServletRequest getRequest() {
@@ -111,6 +117,12 @@ public class JsonQueryInfo {
 	public MysqlQueryUserInfo getLoggedInUserInfo() {
 		int userId = getLoggedInUserId();
 		
-		return new MysqlQueryUserInfo(sqlHandler).querySingleById(userId);
+		return (userId > 0) ? new MysqlQueryUserInfo(sqlHandler).querySingleById(userId) : null;
+	}
+	
+	public MysqlQueryCandidateInfo getLoggedInCandidateInfo() {
+		int userId = getLoggedInUserId();
+		
+		return (userId > 0) ? new MysqlQueryCandidateInfo(sqlHandler).querySingleByUserId(userId) : null;
 	}
 }

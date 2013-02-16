@@ -14,7 +14,7 @@ public class MysqlQueryPartyInfo {
 	private String displayName;
 	private int voteCount;
 	
-	private final MysqlConnectionHandler sqlHandler;
+	private transient final MysqlConnectionHandler sqlHandler;
 	
 	public MysqlQueryPartyInfo(MysqlConnectionHandler sqlHandler) {
 		this.sqlHandler = sqlHandler;

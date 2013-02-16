@@ -26,15 +26,14 @@ public class JsonQueryTypeLogin implements JsonQueryInterface {
 			
 			if(userInfo != null) {
 				queryInfo.setLoggedInUserId(userInfo.getUserId());
-	
-				return new JsonResponseTypeStatus(2, "loginAction", "Successfully logged in.");
+				
+				return new JsonResponseTypeUserInfo("loginAction", userInfo, queryInfo.getLoggedInCandidateInfo());
 			}
 		
 			return new JsonResponseTypeStatus(1, "loginAction", "Login failed - wrong username or password.");
 		}
 		catch(Exception e) {
-			//TODO: when logging system is present, log this error
-			e.printStackTrace();
+			e.printStackTrace(); //TODO: when logging system is present, log this error
 			
 			return new JsonResponseTypeStatus(-1, "loginAction", "Login failed - unknown error.");
 		}

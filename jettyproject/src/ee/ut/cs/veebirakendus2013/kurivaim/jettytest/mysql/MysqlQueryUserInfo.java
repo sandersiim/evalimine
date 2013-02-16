@@ -5,13 +5,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MysqlQueryUserInfo {
-	private boolean isLoaded = false;
+	private transient boolean isLoaded = false;
+	
 	private int userId;
 	private String username;
 	private int voteRegionId;
 	private int votedCandidateId;
 	
-	private final MysqlConnectionHandler sqlHandler;
+	private transient final MysqlConnectionHandler sqlHandler;
 	
 	public MysqlQueryUserInfo(MysqlConnectionHandler sqlHandler) {
 		this.sqlHandler = sqlHandler;

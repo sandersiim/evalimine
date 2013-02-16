@@ -9,13 +9,6 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.TestServlet;
 
-//how to query this: localhost:8080/dyn/querytype/json={}
-//sample JSON queries:
-//status, json: {}
-//full path: localhost:8080/dyn/status
-//login, json: {"username":"testuser", "password":"testpass"}
-//full path: localhost:8080/dyn/login?json=%7B%22username%22%3A%22testuser%22%2C%20%22password%22%3A%22testpass%22%7D
-
 public class MainTest {
 	public static void main(String[] args) throws Exception {
 		Server server = new Server(8080);

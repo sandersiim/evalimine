@@ -9,19 +9,21 @@
 		<link rel="stylesheet" media="print" href="style_print.css" />
 	</head>
 	<body>
-		<a href="#" class="sampleData"><span>login</span> - <span>{username:&quot;testuser&quot;, password:&quot;testpass&quot;}</span></a><br />
+		<a href="#" class="sampleData"><span>login</span> - <span>{username:&quot;39010101234&quot;, password:&quot;testpass&quot;}</span></a><br />
+		<a href="#" class="sampleData"><span>login</span> - <span>{username:&quot;48902114321&quot;, password:&quot;testpass&quot;}</span></a><br />
 		<a href="#" class="sampleData"><span>logout</span> - <span>{}</span></a><br />
 		<a href="#" class="sampleData"><span>status</span> - <span>{}</span></a><br />
 		<a href="#" class="sampleData"><span>vote</span> - <span>{voteCandidateId:2}</span></a><br />
 		<a href="#" class="sampleData"><span>vote</span> - <span>{voteCandidateId:0}</span></a><br />
 		<a href="#" class="sampleData"><span>candidates</span> - <span>{regionId:0, partyId:0, namePrefix:&quot;&quot;, orderId:0, startIndex:0, count:1000}</span></a><br />
 		<a href="#" class="sampleData"><span>parties</span> - <span>{regionId:0, orderId:0}</span></a><br />
+		<a href="#" class="sampleData"><span>application</span> - <span>{firstName:&quot;Toomas&quot;, lastName:&quot;Tamm&quot;, partyId: 1}</span></a><br />
 		
 		<br />
 	
 		<form method="GET" action="#" id="testerForm">
-			Type: <input type="text" name="queryType" id="testerQueryType" value="login" />
-			JSON: <input type="text" name="jsonData" id="testerQueryContents" value="{username:&quot;testuser&quot;,password:&quot;testpass&quot;}" />
+			Type: <input type="text" name="queryType" id="testerQueryType" value="" />
+			JSON: <input type="text" name="jsonData" id="testerQueryContents" value="" />
 			<input type="submit" value="Run" /> <br />
 			
 			<span id="testerResult">No results yet.</span>

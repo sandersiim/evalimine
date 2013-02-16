@@ -8,7 +8,8 @@ public enum JsonQueryTypes {
 	STATUS("status", JsonQueryTypeStatus.class),
 	CANDIDATES("candidates", JsonQueryTypeCandidates.class),
 	PARTIES("parties", JsonQueryTypeParties.class),
-	VOTE("vote", JsonQueryTypeVote.class);
+	VOTE("vote", JsonQueryTypeVote.class),
+	APPLICATION("application", JsonQueryTypeApplication.class);
 	
 	private final String typeName;
 	private final Class<? extends JsonQueryInterface> typeClass;

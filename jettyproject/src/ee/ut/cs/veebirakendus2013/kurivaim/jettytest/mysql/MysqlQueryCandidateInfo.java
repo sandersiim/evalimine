@@ -14,9 +14,10 @@ public class MysqlQueryCandidateInfo {
 	private int regionId;
 	private int partyId;
 	private int voteCount;
-	private String realName;
+	private String firstName;
+	private String lastName;
 	
-	private final MysqlConnectionHandler sqlHandler;
+	private transient final MysqlConnectionHandler sqlHandler;
 	
 	public MysqlQueryCandidateInfo(MysqlConnectionHandler sqlHandler) {
 		this.sqlHandler = sqlHandler;
@@ -77,9 +78,16 @@ public class MysqlQueryCandidateInfo {
 			
 			String regionFilter = (queryRegionId > 0) ? " AND regionId = " + queryRegionId : "";
 			String partyFilter = (queryPartyId > 0) ? " AND partyId = " + queryPartyId : "";
-			String nameFilter = (namePrefix != null && namePrefix.length() > 0) ? " AND realName LIKE ?" : "";
 			
-			statement = sqlHandler.getConnection().prepareStatement("SELECT * FROM ev_candidates WHERE 1" + regionFilter + partyFilter + nameFilter + orderingString + limitString);
+			String nameFilter = "", nameField = "";
+			
+			if(namePrefix != null && namePrefix.length() > 0) {
+				nameFilter = " HAVING realName LIKE ?";
+				nameField = ", CONCAT(lastName, ', ', firstName) AS realName";
+			}
+			
+			statement = sqlHandler.getConnection().prepareStatement("SELECT *" + nameField + " FROM ev_candidates WHERE 1" + regionFilter + partyFilter + nameFilter + orderingString + limitString);
+			System.out.println("SELECT *" + nameField + " FROM ev_candidates WHERE 1" + regionFilter + partyFilter + nameFilter + orderingString + limitString);
 			if(namePrefix != null && namePrefix.length() > 0) statement.setString(1, namePrefix + "%");
 			
 			return fillMultiDataFromResults(statement.executeQuery());
@@ -119,7 +127,8 @@ public class MysqlQueryCandidateInfo {
 		regionId = results.getInt("regionId");
 		partyId = results.getInt("partyId");
 		voteCount = results.getInt("voteCount");
-		realName = results.getString("realName");
+		firstName = results.getString("firstName");
+		lastName = results.getString("lastName");
 		
 		return this;
 	}
@@ -148,7 +157,11 @@ public class MysqlQueryCandidateInfo {
 		return voteCount;
 	}
 	
-	public String getRealName() {
-		return realName;
+	public String getFirstName() {
+		return firstName;
+	}
+	
+	public String getLastName() {
+		return lastName;
 	}
 }
