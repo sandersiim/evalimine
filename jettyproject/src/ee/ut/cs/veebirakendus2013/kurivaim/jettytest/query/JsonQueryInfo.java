@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryUserInfo;
 
 public class JsonQueryInfo {
 	
@@ -85,5 +86,23 @@ public class JsonQueryInfo {
 	
 	public MysqlConnectionHandler getSqlHandler() {
 		return sqlHandler;
+	}
+	
+	public int getLoggedInUserId() {
+		Object idObject = request.getSession().getAttribute("userId");
+		
+		if(idObject != null && idObject instanceof Integer) {
+			Integer id = (Integer)idObject;
+			
+			return (id > 0) ? id : 0;
+		}
+		
+		return 0;
+	}
+	
+	public MysqlQueryUserInfo getLoggedInUserInfo() {
+		int userId = getLoggedInUserId();
+		
+		return new MysqlQueryUserInfo(sqlHandler).querySingleById(userId);
 	}
 }

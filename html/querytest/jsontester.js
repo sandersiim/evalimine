@@ -11,4 +11,14 @@ $(document).ready(function() {
 		
 		return false;
 	});
+	
+	$(".sampleData").each(function(index, element) {
+		$(element).click(function(event) {
+			var items = $(this).children("span");
+			$("#testerQueryType").val($(items[0]).text());
+			$("#testerQueryContents").val($(items[1]).text());
+			
+			return false;
+		});
+	});
 });

@@ -24,9 +24,7 @@ public class MysqlConnectionHandler {
 			try {
 				return connect();
 			} catch (Exception e) {
-				//TODO: when logging system is present, log this error
-				e.printStackTrace();
-				
+				e.printStackTrace(); //TODO: when logging system is present, log this error
 				return false;
 			}
 		}
@@ -43,11 +41,27 @@ public class MysqlConnectionHandler {
 		try {
 			sqlConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/evalimised", "evalimised_user", "PaSsWoRd123");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			e.printStackTrace(); //TODO: when logging system is present, log this error
 			return false;
 		}
 		
 		return true;
+	}
+	
+	public int simpleUpdateQuery(String queryString) {
+		Statement statement = null;
+		
+		try {
+			statement = sqlConnection.createStatement();
+			int affectedRows = statement.executeUpdate(queryString);
+	    	
+	        return affectedRows;
+		} catch(Exception e) {
+			e.printStackTrace(); //TODO: when logging system is present, log this error
+			return -1;
+		} finally {
+			statementCloser(statement);
+		}
 	}
 	
 	public void statementCloser(Statement statement) {
@@ -56,8 +70,7 @@ public class MysqlConnectionHandler {
 				statement.close();
 			}
 		} catch (SQLException e) {
-			//TODO: log this error?
-			e.printStackTrace();
+			e.printStackTrace(); //TODO: log this error?
 		}
 	}
 	

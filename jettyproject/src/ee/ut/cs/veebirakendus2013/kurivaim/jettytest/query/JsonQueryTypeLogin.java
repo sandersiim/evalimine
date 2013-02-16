@@ -29,6 +29,7 @@ public class JsonQueryTypeLogin implements JsonQueryInterface {
 			
 			if(userInfo != null) {
 				session.setAttribute("username", userInfo.getUsername());
+				session.setAttribute("userId", userInfo.getUserId());
 	
 				return new JsonResponseTypeStatus(2, "loginAction", "Successfully logged in.");
 			}

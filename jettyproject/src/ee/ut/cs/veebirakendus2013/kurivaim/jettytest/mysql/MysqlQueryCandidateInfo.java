@@ -40,6 +40,24 @@ public class MysqlQueryCandidateInfo {
 		return null;
 	}
 	
+	public MysqlQueryCandidateInfo querySingleByCandidateId(int queryCandidateId) {
+		PreparedStatement statement = null;
+		
+		try {
+			statement = sqlHandler.getConnection().prepareStatement("SELECT * FROM ev_candidates WHERE id = ?");
+			statement.setInt(1, queryCandidateId);
+			
+			return fillSingleDataFromResults(statement.executeQuery());
+		} catch (SQLException e) {
+			//TODO: log this error somewhere
+			e.printStackTrace();
+		} finally {
+			sqlHandler.statementCloser(statement);
+		}
+		
+		return null;
+	}
+	
 	public List<MysqlQueryCandidateInfo> queryAllByFilter(int queryRegionId, int queryPartyId, String namePrefix, int orderingMethod, int startIndex, int count) {
 		PreparedStatement statement = null;
 		
