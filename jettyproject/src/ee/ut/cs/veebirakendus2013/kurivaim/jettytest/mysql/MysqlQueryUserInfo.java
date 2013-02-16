@@ -18,36 +18,46 @@ public class MysqlQueryUserInfo {
 	}
 	
 	public MysqlQueryUserInfo querySingleById(int queryUserId) {
+		PreparedStatement statement = null;
+		
 		try {
-			PreparedStatement statement = sqlHandler.getConnection().prepareStatement("SELECT id, username, voteRegionId, votedCandidateId FROM ev_users WHERE id = ?");
+			statement = sqlHandler.getConnection().prepareStatement("SELECT id, username, voteRegionId, votedCandidateId FROM ev_users WHERE id = ?");
 			statement.setInt(1, queryUserId);
 			
 			return fillSingleDataFromResults(statement.executeQuery());
 		} catch (SQLException e) {
 			//TODO: log this error somewhere
 			e.printStackTrace();
+		} finally {
+			sqlHandler.statementCloser(statement);
 		}
 		
 		return null;
 	}
 	
 	public MysqlQueryUserInfo querySingleByUsername(String queryUsername) {
+		PreparedStatement statement = null;
+		
 		try {
-			PreparedStatement statement = sqlHandler.getConnection().prepareStatement("SELECT id, username, voteRegionId, votedCandidateId FROM ev_users WHERE username = ?");
+			statement = sqlHandler.getConnection().prepareStatement("SELECT id, username, voteRegionId, votedCandidateId FROM ev_users WHERE username = ?");
 			statement.setString(1, queryUsername);
 			
 			return fillSingleDataFromResults(statement.executeQuery());
 		} catch (SQLException e) {
 			//TODO: log this error somewhere
 			e.printStackTrace();
+		} finally {
+			sqlHandler.statementCloser(statement);
 		}
 		
 		return null;
 	}
 	
 	public MysqlQueryUserInfo querySingleByUserAndPass(String queryUsername, String queryPassword) {
+		PreparedStatement statement = null;
+		
 		try {
-			PreparedStatement statement = sqlHandler.getConnection().prepareStatement("SELECT id, username, voteRegionId, votedCandidateId FROM ev_users WHERE username = ? AND password = ?");
+			statement = sqlHandler.getConnection().prepareStatement("SELECT id, username, voteRegionId, votedCandidateId FROM ev_users WHERE username = ? AND password = ?");
 			statement.setString(1, queryUsername);
 			statement.setString(2, sqlHandler.getPasswordHash(queryPassword));
 			
@@ -55,6 +65,8 @@ public class MysqlQueryUserInfo {
 		} catch (SQLException e) {
 			//TODO: log this error somewhere
 			e.printStackTrace();
+		} finally {
+			sqlHandler.statementCloser(statement);
 		}
 		
 		return null;

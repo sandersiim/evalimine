@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.TestServlet;
 
 //how to query this: localhost:8080/dyn/querytype/json={}
@@ -18,10 +19,12 @@ import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.TestServlet;
 public class MainTest {
     public static void main(String[] args) throws Exception {
     	Server server = new Server(8080);
+    	
+    	MysqlConnectionHandler sqlHandler = new MysqlConnectionHandler();
  
     	ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
     	contextHandler.setContextPath("/dyn");
-		contextHandler.addServlet(new ServletHolder(new TestServlet()), "/*");
+		contextHandler.addServlet(new ServletHolder(new TestServlet(sqlHandler)), "/*");
 		
 		ResourceHandler resourceHandler = new ResourceHandler();
 		resourceHandler.setResourceBase("../html/");
@@ -34,5 +37,7 @@ public class MainTest {
 		
 		server.start();
 		server.join();
+		
+		sqlHandler.disconnect();
     }
 }

@@ -21,8 +21,10 @@ public class MysqlQueryPartyInfo {
 	}
 	
 	public MysqlQueryPartyInfo querySingleByPartyId(int queryPartyId) {
+		PreparedStatement statement = null;
+		
 		try {
-			PreparedStatement statement = sqlHandler.getConnection().prepareStatement(
+			statement = sqlHandler.getConnection().prepareStatement(
 					"SELECT a.id AS id, a.keyword AS keyword, a.displayName AS displayName, COALESCE(SUM(b.voteCount), 0) AS voteCount FROM ev_parties AS a" +
 					"LEFT JOIN ev_candidates AS b ON a.id = b.partyId WHERE a.id = ? GROUP BY a.id LIMIT 1");
 			statement.setInt(1, queryPartyId);
@@ -31,17 +33,29 @@ public class MysqlQueryPartyInfo {
 		} catch (SQLException e) {
 			//TODO: log this error somewhere
 			e.printStackTrace();
+		} finally {
+			sqlHandler.statementCloser(statement);
 		}
 		
 		return null;
 	}
 	
 	public List<MysqlQueryPartyInfo> queryAllByFilter(int queryRegionId, int orderingMethod) {
+		PreparedStatement statement = null;
+		
 		try {
-			String orderingString = (orderingMethod == 0) ? " ORDER BY voteCount DESC" : " ORDER BY displayName ASC";
+			String orderingString = "";
+			
+			if(orderingMethod == 1) orderingString = " ORDER BY id ASC";
+			else if(orderingMethod == 2) orderingString = " ORDER BY id DESC";
+			else if(orderingMethod == 3) orderingString = " ORDER BY voteCount ASC";
+			else if(orderingMethod == 4) orderingString = " ORDER BY voteCount DESC";
+			else if(orderingMethod == 5) orderingString = " ORDER BY displayName ASC";
+			else if(orderingMethod == 6) orderingString = " ORDER BY displayName DESC";
+			
 			String regionFilter = (queryRegionId > 0) ? " AND b.regionId = " + queryRegionId : "";
 			
-			PreparedStatement statement = sqlHandler.getConnection().prepareStatement(
+			statement = sqlHandler.getConnection().prepareStatement(
 					"SELECT a.id AS id, a.keyword AS keyword, a.displayName AS displayName, COALESCE(SUM(b.voteCount), 0) AS voteCount FROM ev_parties AS a " +
 					"LEFT JOIN ev_candidates AS b ON a.id = b.partyId WHERE 1" + regionFilter + " GROUP BY a.id" + orderingString);
 			
@@ -49,6 +63,8 @@ public class MysqlQueryPartyInfo {
 		} catch (SQLException e) {
 			//TODO: log this error somewhere
 			e.printStackTrace();
+		} finally {
+			sqlHandler.statementCloser(statement);
 		}
 		
 		return null;

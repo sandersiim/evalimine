@@ -17,9 +17,9 @@ public class TestServlet extends HttpServlet {
 	private final JsonQueryHandler queryHandler;
 	private final MysqlConnectionHandler sqlHandler;
 	
-	public TestServlet() {
+	public TestServlet(MysqlConnectionHandler sqlHandler) {
 		queryHandler = new JsonQueryHandler();
-		sqlHandler = new MysqlConnectionHandler();
+		this.sqlHandler = sqlHandler;
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

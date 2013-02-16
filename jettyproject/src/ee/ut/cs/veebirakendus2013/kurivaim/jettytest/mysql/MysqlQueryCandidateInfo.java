@@ -23,37 +23,53 @@ public class MysqlQueryCandidateInfo {
 	}
 	
 	public MysqlQueryCandidateInfo querySingleByUserId(int queryUserId) {
+		PreparedStatement statement = null;
+		
 		try {
-			PreparedStatement statement = sqlHandler.getConnection().prepareStatement("SELECT * FROM ev_candidates WHERE userId = ?");
+			statement = sqlHandler.getConnection().prepareStatement("SELECT * FROM ev_candidates WHERE userId = ?");
 			statement.setInt(1, queryUserId);
 			
 			return fillSingleDataFromResults(statement.executeQuery());
 		} catch (SQLException e) {
 			//TODO: log this error somewhere
 			e.printStackTrace();
+		} finally {
+			sqlHandler.statementCloser(statement);
 		}
 		
 		return null;
 	}
 	
 	public List<MysqlQueryCandidateInfo> queryAllByFilter(int queryRegionId, int queryPartyId, String namePrefix, int orderingMethod, int startIndex, int count) {
+		PreparedStatement statement = null;
+		
 		try {
 			if(count <= 0) count = 50;
 			
 			String limitString = (startIndex > 0) ? " LIMIT " + startIndex + ", " + count : " LIMIT " + count;
 			
-			String orderingString = (orderingMethod == 0) ? " ORDER BY voteCount DESC" : " ORDER BY realName ASC";
+			String orderingString = "";
+			
+			if(orderingMethod == 1) orderingString = " ORDER BY id ASC";
+			else if(orderingMethod == 2) orderingString = " ORDER BY id DESC";
+			else if(orderingMethod == 3) orderingString = " ORDER BY voteCount ASC";
+			else if(orderingMethod == 4) orderingString = " ORDER BY voteCount DESC";
+			else if(orderingMethod == 5) orderingString = " ORDER BY realName ASC";
+			else if(orderingMethod == 6) orderingString = " ORDER BY realName DESC";
+			
 			String regionFilter = (queryRegionId > 0) ? " AND regionId = " + queryRegionId : "";
 			String partyFilter = (queryPartyId > 0) ? " AND partyId = " + queryPartyId : "";
 			String nameFilter = (namePrefix != null && namePrefix.length() > 0) ? " AND realName LIKE ?" : "";
 			
-			PreparedStatement statement = sqlHandler.getConnection().prepareStatement("SELECT * FROM ev_candidates WHERE 1" + regionFilter + partyFilter + nameFilter + orderingString + limitString);
+			statement = sqlHandler.getConnection().prepareStatement("SELECT * FROM ev_candidates WHERE 1" + regionFilter + partyFilter + nameFilter + orderingString + limitString);
 			if(namePrefix != null && namePrefix.length() > 0) statement.setString(1, namePrefix + "%");
 			
 			return fillMultiDataFromResults(statement.executeQuery());
 		} catch (SQLException e) {
 			//TODO: log this error somewhere
 			e.printStackTrace();
+		} finally {
+			sqlHandler.statementCloser(statement);
 		}
 		
 		return null;

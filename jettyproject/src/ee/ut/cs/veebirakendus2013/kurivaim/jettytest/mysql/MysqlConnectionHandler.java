@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class MysqlConnectionHandler {
 	private Connection sqlConnection = null;
@@ -47,6 +48,17 @@ public class MysqlConnectionHandler {
 		}
 		
 		return true;
+	}
+	
+	public void statementCloser(Statement statement) {
+		try {
+			if(statement != null) {
+				statement.close();
+			}
+		} catch (SQLException e) {
+			//TODO: log this error?
+			e.printStackTrace();
+		}
 	}
 	
 	public void disconnect() {
