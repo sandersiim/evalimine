@@ -18,7 +18,7 @@ $(document).ready(function() {
 		var formData = new FormData();
 		
 		for(var i = 0; i < this.files.length; i++) {
-			if (!this.files[i].type != "image/jpeg")) {
+			if (this.files[i].type != "image/jpeg") {
 				$("#uploadResult").text("Not an image file.");
 			}
 			else if(this.files[i].size > 262144) {

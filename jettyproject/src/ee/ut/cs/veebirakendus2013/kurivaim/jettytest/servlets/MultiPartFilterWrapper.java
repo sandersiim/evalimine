@@ -12,22 +12,20 @@ import org.eclipse.jetty.servlets.MultiPartFilter;
 public class MultiPartFilterWrapper extends MultiPartFilter {
 	
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		try {
 			super.doFilter(request, response, chain);
 		}
 		catch(IllegalStateException e) {
 			request.setAttribute("multiPartError", new Integer(1));
+			
+			chain.doFilter(request, response);
 		}
 		catch (IOException e) {
-			request.setAttribute("multiPartError", new Integer(2));
-			
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		catch (ServletException e) {
-			request.setAttribute("multiPartError", new Integer(3));
-			
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
