@@ -18,11 +18,11 @@ $(document).ready(function() {
 		var formData = new FormData();
 		
 		for(var i = 0; i < this.files.length; i++) {
-			if (!this.files[i].type.match(/image.*/)) {
+			if (!this.files[i].type != "image/jpeg")) {
 				$("#uploadResult").text("Not an image file.");
 			}
-			else if(this.files[i].size > 1048576) {
-				$("#uploadResult").text("Size larger than 1MB.");
+			else if(this.files[i].size > 262144) {
+				$("#uploadResult").text("Size larger than 256KB.");
 			}
 			else {
 				$("#uploadResult").text("Uploading...");

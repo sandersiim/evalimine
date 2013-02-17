@@ -14,9 +14,9 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.MultiPartFilter;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
-import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.TestServlet;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.VoteServlet;
 
-public class MainTest {
+public class VoteServerMain {
 	public static void main(String[] args) throws Exception {
 		Server server = new Server(8080);
 		
@@ -24,10 +24,12 @@ public class MainTest {
 		
 		FilterHolder filterHolder = new FilterHolder(new MultiPartFilter());
 		filterHolder.setInitParameter("deleteFiles", "true");
+		filterHolder.setInitParameter("maxFileSize", "262144");
+		filterHolder.setInitParameter("maxRequestSize", "524288");
 		
 		ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		contextHandler.setContextPath("/dyn");
-		contextHandler.addServlet(new ServletHolder(new TestServlet(sqlHandler)), "/*");
+		contextHandler.addServlet(new ServletHolder(new VoteServlet(sqlHandler)), "/*");
 		contextHandler.setAttribute("javax.servlet.context.tempdir", new File("../temp"));
 		contextHandler.addFilter(filterHolder, "/photo", EnumSet.of(DispatcherType.REQUEST));
 		
