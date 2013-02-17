@@ -24,6 +24,17 @@ public class JsonQueryTypePhoto implements JsonQueryInterface {
 		try {
 			int userId = queryInfo.getLoggedInUserId();
 			
+			Object multiPartError = queryInfo.getRequest().getAttribute("multiPartError");
+			
+			if(multiPartError != null && multiPartError instanceof Integer) {
+				if(((Integer)multiPartError) == 1) {
+					return new JsonResponseTypeStatus(6, "photoAction", "Photo upload failed - upload request/file too large.");
+				}
+				else {
+					return new JsonResponseTypeStatus(7, "photoAction", "Photo upload failed - multipart request error.");
+				}
+			}
+			
 			if(userId == 0) {
 				return new JsonResponseTypeStatus(1, "photoAction", "Photo upload failed - not logged in.");
 			}
@@ -43,13 +54,19 @@ public class JsonQueryTypePhoto implements JsonQueryInterface {
 						BufferedImage image = getJpegImage(imageFile);
 						
 						if(image == null) {
-							return new JsonResponseTypeStatus(3, "photoAction", "Photo upload failed - not a valid JPEG image.");
+							return new JsonResponseTypeStatus(4, "photoAction", "Photo upload failed - not a valid JPEG image.");
 						}
 						else if(image.getHeight() < 100 || image.getWidth() < 100) {
-							return new JsonResponseTypeStatus(3, "photoAction", "Photo upload failed - dimensions must be at least 100x100.");
+							return new JsonResponseTypeStatus(5, "photoAction", "Photo upload failed - dimensions must be at least 100x100.");
 						}
 						else {
-							imageFile.renameTo(new File("../html/userimg/" + userId + ".jpg"));
+							File destinationName = new File("../html/userimg/" + userId + ".jpg");
+							
+							if(destinationName.exists()) {
+								destinationName.delete();
+							}
+							
+							imageFile.renameTo(destinationName);
 							
 							return new JsonResponseTypeStatus(10, "photoAction", "Photo successfully uploaded.");
 						}

@@ -87,7 +87,6 @@ public class MysqlQueryCandidateInfo {
 			}
 			
 			statement = sqlHandler.getConnection().prepareStatement("SELECT *" + nameField + " FROM ev_candidates WHERE 1" + regionFilter + partyFilter + nameFilter + orderingString + limitString);
-			System.out.println("SELECT *" + nameField + " FROM ev_candidates WHERE 1" + regionFilter + partyFilter + nameFilter + orderingString + limitString);
 			if(namePrefix != null && namePrefix.length() > 0) statement.setString(1, namePrefix + "%");
 			
 			return fillMultiDataFromResults(statement.executeQuery());

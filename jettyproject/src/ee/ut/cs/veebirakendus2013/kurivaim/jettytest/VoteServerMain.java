@@ -11,9 +11,9 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.servlets.MultiPartFilter;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.MultiPartFilterWrapper;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.VoteServlet;
 
 public class VoteServerMain {
@@ -22,7 +22,7 @@ public class VoteServerMain {
 		
 		MysqlConnectionHandler sqlHandler = new MysqlConnectionHandler();
 		
-		FilterHolder filterHolder = new FilterHolder(new MultiPartFilter());
+		FilterHolder filterHolder = new FilterHolder(new MultiPartFilterWrapper());
 		filterHolder.setInitParameter("deleteFiles", "true");
 		filterHolder.setInitParameter("maxFileSize", "262144");
 		filterHolder.setInitParameter("maxRequestSize", "524288");
