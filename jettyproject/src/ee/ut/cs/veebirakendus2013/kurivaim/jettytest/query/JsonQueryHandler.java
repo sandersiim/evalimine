@@ -27,6 +27,7 @@ public class JsonQueryHandler {
 		addQueryType(false, JsonQueryTypes.LOGOUT);
 		addQueryType(false, JsonQueryTypes.VOTE);
 		addQueryType(false, JsonQueryTypes.APPLICATION);
+		addQueryType(true, JsonQueryTypes.PHOTO);
 	}
 	
 	
