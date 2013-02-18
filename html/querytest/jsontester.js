@@ -1,4 +1,28 @@
+function fileUpload(file) {
+	if(!window.FormData) return;
+	
+	var formData = new FormData();
+	
+	if (file.type != "image/jpeg") {
+		$("#uploadResult").text("Not an image file.");
+	}
+	else if(file.size > 262144) {
+		$("#uploadResult").text("Size larger than 256KB.");
+	}
+	else {
+		$("#uploadResult").text("Uploading...");
+		
+		formData.append("imageFile", file);
+		
+		$.ajax("../dyn/photo", {type: "POST", data: formData, processData: false, contentType: false, dataType: "text"}).done(function(data) {
+			$("#uploadResult").text(data);
+		});
+	}
+}
+
 $(document).ready(function() {
+	jQuery.event.props.push("dataTransfer");
+	
 	$("#testerForm").submit(function(event) {
 		var queryType = $("#testerQueryType").val();
 		var queryData = $("#testerQueryContents").val();
@@ -12,27 +36,21 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	$("#uploaderDragDrop").on("drop", function(event) {
+		if(event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+			fileUpload(event.dataTransfer.files[0]);
+		}
+		
+		return false;
+	});
+	
+	$("#uploaderDragDrop").click(function(event) {
+		$("#uploaderFile").click();
+	});
+	
 	$("#uploaderFile").change(function(event) {
-		if(!window.FormData || !window.FileReader) return;
-		
-		var formData = new FormData();
-		
-		for(var i = 0; i < this.files.length; i++) {
-			if (this.files[i].type != "image/jpeg") {
-				$("#uploadResult").text("Not an image file.");
-			}
-			else if(this.files[i].size > 262144) {
-				$("#uploadResult").text("Size larger than 256KB.");
-			}
-			else {
-				$("#uploadResult").text("Uploading...");
-				
-				formData.append("imageFile", this.files[i]);
-				
-				$.ajax("../dyn/photo", {type: "POST", data: formData, processData: false, contentType: false, dataType: "text"}).done(function(data) {
-					$("#uploadResult").text(data);
-				});
-			}
+		if(this.files.length > 0) {
+			fileUpload(this.files[0]);
 		}
 	});
 	
