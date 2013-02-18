@@ -22,6 +22,8 @@ public class JsonQueryHandler {
 		addQueryType(false, JsonQueryTypes.CANDIDATES);
 		addQueryType(false, JsonQueryTypes.PARTIES);
 		
+		addQueryType(false, JsonQueryTypes.ADMINUSERS);
+		
 		// POST queries (first argument to true to set them in POST mode)
 		addQueryType(false, JsonQueryTypes.LOGIN);
 		addQueryType(false, JsonQueryTypes.LOGOUT);
@@ -29,6 +31,8 @@ public class JsonQueryHandler {
 		addQueryType(false, JsonQueryTypes.APPLICATION);
 		addQueryType(false, JsonQueryTypes.SETREGION);
 		addQueryType(true, JsonQueryTypes.PHOTO);
+		
+		addQueryType(false, JsonQueryTypes.ADMINLOGIN);
 	}
 	
 	

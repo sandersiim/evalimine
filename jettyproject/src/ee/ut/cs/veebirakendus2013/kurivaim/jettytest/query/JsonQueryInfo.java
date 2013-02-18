@@ -94,6 +94,18 @@ public class JsonQueryInfo {
 		return sqlHandler;
 	}
 	
+	public boolean isLoggedInAsAdmin() {
+		Object idObject = request.getSession().getAttribute("userId");
+		
+		if(idObject != null && idObject instanceof Integer) {
+			Integer id = (Integer)idObject;
+			
+			return (id == -1);
+		}
+		
+		return false;
+	}
+	
 	public int getLoggedInUserId() {
 		Object idObject = request.getSession().getAttribute("userId");
 		

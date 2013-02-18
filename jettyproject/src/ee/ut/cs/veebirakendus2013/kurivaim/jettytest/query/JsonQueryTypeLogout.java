@@ -4,7 +4,7 @@ public class JsonQueryTypeLogout implements JsonQueryInterface {
 	
 	@Override
 	public JsonResponseInterface processQuery(JsonQueryInfo queryInfo) {
-		if(queryInfo.getLoggedInUserId() == 0) {
+		if(queryInfo.getLoggedInUserId() == 0 && !queryInfo.isLoggedInAsAdmin()) {
 			return new JsonResponseTypeStatus(2, "logoutAction", "Logout failed - not logged in.");
 		}
 		else {

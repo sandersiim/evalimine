@@ -11,7 +11,9 @@ public enum JsonQueryTypes {
 	VOTE("vote", JsonQueryTypeVote.class),
 	APPLICATION("application", JsonQueryTypeApplication.class),
 	PHOTO("photo", JsonQueryTypePhoto.class),
-	SETREGION("setregion", JsonQueryTypeSetRegion.class);
+	SETREGION("setregion", JsonQueryTypeSetRegion.class),
+	ADMINLOGIN("adminlogin", JsonQueryTypeAdminLogin.class),
+	ADMINUSERS("adminusers", JsonQueryTypeAdminUsers.class);
 	
 	private final String typeName;
 	private final Class<? extends JsonQueryInterface> typeClass;

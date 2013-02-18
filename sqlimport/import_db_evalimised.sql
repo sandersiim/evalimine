@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.5
+-- version 3.5.0
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 16, 2013 at 11:27 PM
--- Server version: 5.5.16
--- PHP Version: 5.3.8
+-- Generation Time: Feb 18, 2013 at 03:10 PM
+-- Server version: 5.1.61-0+squeeze1
+-- PHP Version: 5.3.15-1~dotdeb.0
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,6 +19,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `evalimised`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ev_admins`
+--
+
+CREATE TABLE IF NOT EXISTS `ev_admins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(63) NOT NULL,
+  `password` varchar(63) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `ev_admins`
+--
+
+INSERT INTO `ev_admins` (`id`, `username`, `password`) VALUES
+(1, 'mainadmin', 'A114489FB19F59AB059B6CCB20134187D516C08C');
 
 -- --------------------------------------------------------
 
