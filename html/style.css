@@ -1,54 +1,104 @@
 body {
 	text-align: center;
+	font-family: "Century Schoolbook", Georgia, Times, serif;
+	color: #333;
+	margin: 0;
 }
 
 #mainblock {
 	width: 900px;
-	margin: 0 auto;
+	margin: 5px auto;
 	border: 2px solid black;
 	height: 700px;
 }
 
 #header {
-	height: 50px;
-	text-align: left;
-}
-
-#header h1 {
-	margin: 0;
-	padding: 20px 45px;
-	font: bold 40px 'Verdana';
-}
-
-#header span {
-	font: normal 20px 'Verdana';
-	color: #acacac;
+	text-align: left;	
+	padding-bottom: 20px;
 }
 
 #sitetitle {
-	font: normal 20px 'Tahoma';
+	float: left;
+	padding: 20px 44px 15px 44px;	
+}
+
+#sitetitle h1 {
+	margin: 0;
+	float: left;
+	font-weight: bold;
+	font-size: 38px;
+	letter-spacing: -2px;	
+}
+
+#sitetitle span {
+	font-weight: bold;
+	font-size: 24px;
+	letter-spacing: -1px;
+	color: #8c8c8c;
+	padding-left: 15px;
 }
 
 .menubar {
-	width: 802px;
+	width: 812px;
 	margin: 0 auto;
+	text-shadow:2px 2px 2px #cfcfcf;
+	font-weight: bold;
 }
 
 .menubar .menuitem {
-	width: 198px;
+	width: 203px;
 	height: 20px;
 	float: left;
 	text-align: center;
-	border: 2px solid black;
-	border-left: 0;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	-moz-box-shadow:inset 0px 0px 2px 2px #c7c3c7;
+	-webkit-box-shadow:inset 0px 0px 2px 2px #c7c3c7;
+	box-shadow:inset 0px 0px 2px 2px #c7c3c7;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	background-color:#ededed;
+	padding: 6px 0;
 }
 
-.menubar .menuitem:first-of-type {
-	border-left: 2px solid black;
+.menubar .menuitem:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+	background-color:#79bbff;
 }
 
-.menuselected {
-	background: #A0C0F5;
+.menubar .menuitem:active {
+	position: relative;
+	top: 1px;
+}
+
+.menubar .menuselected {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+	background-color:#79bbff;
+}
+
+#content {
+	margin: 0 auto;
+	height: 500px;
+	width: 810px;
+	border: 1px solid black;	
+}
+
+#footer {
+	padding: 7px 0;
+	margin: 0 auto;
+	height: 20px;
+	width: 810px;
+}
+
+.tab {
+	display: none;
+}
+
+.visible {
+	display: block;
 }
 
 .clear {

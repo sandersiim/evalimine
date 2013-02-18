@@ -3,21 +3,51 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>E-valimised</title>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="test.js"></script>
 		<link rel="stylesheet" media="screen" href="style.css" />
 		<link rel="stylesheet" media="print" href="style_print.css" />
 	</head>
 	<body>
 		<div id="mainblock">
 			<div id="header">
-				<div id="sitetitle"><h1>E-valimised <span>Eesti kohalike valimiste h&auml;&auml;letamise s&uuml;steem</span></h1></div>
+				<div id="sitetitle"><h1>E-valimised<span>Eesti kohalike valimiste h&auml;&auml;letamise s&uuml;steem</span></h1></div>
+				<div class="clear"></div>
 				<div class="menubar">
-					<div id="menu_voting" class="menuitem menuselected">H&auml;&auml;letamine</div>
+					<div id="menu_voting" class="menuitem">H&auml;&auml;letamine</div>
 					<div id="menu_statistics" class="menuitem">Statistika</div>
 					<div id="menu_help" class="menuitem">Abi</div>
-					<div id="menu_mydata" class="menuitem">Logi sisse</div>
+					<div id="menu_mydata" class="menuitem menuselected">Logi sisse</div>
 					<div class="clear"></div>
 				</div>
+				<div id="testtext"></div>
+			</div>		
+			<div class="clear"></div>
+			<div id="content">
+				<div id="tab_statistics" class="tab">
+					STATISTICS
+				</div>
+				<div id="tab_voting" class="tab">
+					VOTING
+				</div>
+				<div id="tab_help" class="tab">
+					HELP
+				</div>
+				<div id="tab_mydata" class="tab">
+					MYDATA
+				</div>
+				<div id="tab_login" class="tab visible">
+					LOGIN
+				</div>
+				<div id="tab_application" class="tab">
+					APPLICATION
+				</div>
+
 			</div>
+			<div class="clear"></div>
+			<div id="footer">
+				<span>© KuriVaim 2013</span>
+			</div>	
 		</div>
 	</body>
 </html>
