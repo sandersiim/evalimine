@@ -175,5 +175,18 @@
         <text>Logi%20v%E4lja</text>
       </controlProperties>
     </control>
+    <control controlID="98" controlTypeID="com.balsamiq.mockups::Label" x="858" y="438" w="-1" h="-1" measuredW="96" measuredH="24" zOrder="29" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>Teie%20erakond%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="99" controlTypeID="com.balsamiq.mockups::Label" x="964" y="438" w="-1" h="-1" measuredW="142" measuredH="24" zOrder="30" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <size>16</size>
+        <text>Raske%20t%F6%F6%20erakond</text>
+      </controlProperties>
+    </control>
   </controls>
 </mockup>

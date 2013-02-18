@@ -88,5 +88,18 @@
       </controlProperties>
     </control>
     <control controlID="102" controlTypeID="com.balsamiq.mockups::Webcam" x="519" y="272" w="-1" h="-1" measuredW="177" measuredH="146" zOrder="14" locked="false" isInGroup="-1"/>
+    <control controlID="103" controlTypeID="com.balsamiq.mockups::Label" x="720" y="438" w="-1" h="-1" measuredW="203" measuredH="26" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <size>18</size>
+        <text>Palun%20valige%20oma%20partei%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="104" controlTypeID="com.balsamiq.mockups::ComboBox" x="720" y="479" w="-1" h="-1" measuredW="147" measuredH="25" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>14</size>
+        <text>Raske%20t%F6%F6%20erakond</text>
+      </controlProperties>
+    </control>
   </controls>
 </mockup>
