@@ -5,22 +5,40 @@ import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 
+import org.eclipse.jetty.http.HttpVersion;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.IdCardServlet;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.MultiPartFilterWrapper;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.VoteServlet;
 
 public class VoteServerMain {
 	public static void main(String[] args) throws Exception {
-		Server server = new Server(8080);
-		
 		MysqlConnectionHandler sqlHandler = new MysqlConnectionHandler();
+		
+		Server mainServer = createMainServer(sqlHandler);
+		//Server idCheckServer = createIdCheckServer(sqlHandler);
+		
+		mainServer.join();
+		//idCheckServer.join();
+		
+		sqlHandler.disconnect();
+	}
+	
+	private static Server createMainServer(MysqlConnectionHandler sqlHandler) throws Exception {
+		Server server = new Server(8080);
 		
 		FilterHolder filterHolder = new FilterHolder(new MultiPartFilterWrapper());
 		filterHolder.setInitParameter("deleteFiles", "true");
@@ -41,10 +59,48 @@ public class VoteServerMain {
 		handlers.addHandler(resourceHandler);
 		
 		server.setHandler(handlers);
-		
 		server.start();
-		server.join();
 		
-		sqlHandler.disconnect();
+		return server;
+	}
+	
+	//works with Jetty 9.0.0.M4, but not with 9.0.0.M5 or 9.0.0.R0 (current)
+	public static Server createIdCheckServer(MysqlConnectionHandler sqlHandler) throws Exception {
+		Server server = new Server();
+		
+		SslContextFactory contextFactory = new SslContextFactory();
+		contextFactory.setKeyStorePath("../certs/serverCertificate.jks");
+		contextFactory.setKeyStorePassword("testpass");
+		contextFactory.setTrustStorePath("../certs/idCardCertificates.jks");
+		contextFactory.setTrustStorePassword("certPass123");
+		contextFactory.setNeedClientAuth(true);
+		contextFactory.setEnableOCSP(true);
+		contextFactory.setOcspResponderURL("http://ocsp.sk.ee");
+		
+		SslConnectionFactory sslConnectionFactory = new SslConnectionFactory(contextFactory, HttpVersion.HTTP_1_1.toString());
+		
+		HttpConfiguration config = new HttpConfiguration();
+		config.setSecureScheme("https");
+		config.setSecurePort(8443);
+		
+		HttpConfiguration sslConfiguration = new HttpConfiguration(config);
+		sslConfiguration.addCustomizer(new SecureRequestCustomizer());
+		HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(sslConfiguration);
+		
+		ServerConnector connector = new ServerConnector(server, sslConnectionFactory, httpConnectionFactory);
+		connector.setPort(8443);
+		server.addConnector(connector);
+		
+		ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+		contextHandler.setContextPath("/");
+		contextHandler.addServlet(new ServletHolder(new IdCardServlet()), "/*");
+		
+		HandlerList handlers = new HandlerList();
+		handlers.addHandler(contextHandler);
+		
+		server.setHandler(handlers);
+		server.start();
+		
+		return server;
 	}
 }
