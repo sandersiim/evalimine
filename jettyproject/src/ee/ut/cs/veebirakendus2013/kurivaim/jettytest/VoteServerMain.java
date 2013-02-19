@@ -29,10 +29,10 @@ public class VoteServerMain {
 		MysqlConnectionHandler sqlHandler = new MysqlConnectionHandler();
 		
 		Server mainServer = createMainServer(sqlHandler);
-		//Server idCheckServer = createIdCheckServer(sqlHandler);
+		Server idCheckServer = createIdCheckServer(sqlHandler);
 		
 		mainServer.join();
-		//idCheckServer.join();
+		idCheckServer.join();
 		
 		sqlHandler.disconnect();
 	}
@@ -68,7 +68,7 @@ public class VoteServerMain {
 	public static Server createIdCheckServer(MysqlConnectionHandler sqlHandler) throws Exception {
 		Server server = new Server();
 		
-		SslContextFactory contextFactory = new SslContextFactory();
+		SslContextFactory contextFactory = new SslContextFactoryWrapper();
 		contextFactory.setKeyStorePath("../certs/serverCertificate.jks");
 		contextFactory.setKeyStorePassword("testpass");
 		contextFactory.setTrustStorePath("../certs/idCardCertificates.jks");
