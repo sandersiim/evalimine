@@ -119,11 +119,16 @@ public class JsonQueryInfo {
 	}
 	
 	public void setLoggedInUserId(int userId) {
+		removeLoggedInUserId();
+		
 		request.getSession().setAttribute("userId", userId);
 	}
 	
 	public void removeLoggedInUserId() {
 		request.getSession().removeAttribute("userId");
+		request.getSession().removeAttribute("firstName");
+		request.getSession().removeAttribute("lastName");
+		request.getSession().removeAttribute("authStatus");
 	}
 	
 	public MysqlQueryUserInfo getLoggedInUserInfo() {
@@ -136,5 +141,15 @@ public class JsonQueryInfo {
 		int userId = getLoggedInUserId();
 		
 		return (userId > 0) ? new MysqlQueryCandidateInfo(sqlHandler).querySingleByUserId(userId) : null;
+	}
+	
+	public String getAuthStatus() {
+		Object authStatusObject = request.getSession().getAttribute("authStatus");
+		
+		if(authStatusObject != null && authStatusObject instanceof String) {
+			return (String)authStatusObject;
+		}
+		
+		return null;
 	}
 }

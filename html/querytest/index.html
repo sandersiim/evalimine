@@ -13,6 +13,8 @@
 		<a href="#" class="sampleData"><span>login</span> - <span>{username:&quot;48902114321&quot;, password:&quot;testpass&quot;}</span></a><br />
 		<a href="#" class="sampleData"><span>logout</span> - <span>{}</span></a><br />
 		<a href="#" class="sampleData"><span>status</span> - <span>{}</span></a><br />
+		<a href="#" class="sampleData"><span>status</span> - <span>{statusType:&quot;authStatus&quot;}</span></a><br />
+		<a href="#" class="sampleData"><span>sessionid</span> - <span>{}</span></a><br />
 		<a href="#" class="sampleData"><span>vote</span> - <span>{voteCandidateId:2}</span></a><br />
 		<a href="#" class="sampleData"><span>vote</span> - <span>{voteCandidateId:0}</span></a><br />
 		<a href="#" class="sampleData"><span>candidates</span> - <span>{regionId:0, partyId:0, namePrefix:&quot;&quot;, orderId:0, startIndex:0, count:1000}</span></a><br />
@@ -39,6 +41,13 @@
 			<div id="uploaderDragDrop" ondragover="return false">Drop or click</div>
 			
 			<span id="uploadResult">No results yet.</span>
+		</form>
+		
+		<form method="GET" enctype="multipart/form-data" action="#" id="authenticationForm">
+			<input type="hidden" name="authSessionId" id="authSessionId" value="" />
+			<input type="submit" value="ID card authentication" /> <br />
+			
+			<span id="authenticationResult">No results yet.</span>
 		</form>
 	</body>
 </html>

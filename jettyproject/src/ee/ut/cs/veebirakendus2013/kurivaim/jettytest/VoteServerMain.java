@@ -11,6 +11,7 @@ import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SessionManager;
 import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -29,7 +30,7 @@ public class VoteServerMain {
 		MysqlConnectionHandler sqlHandler = new MysqlConnectionHandler();
 		
 		Server mainServer = createMainServer(sqlHandler);
-		Server idCheckServer = createIdCheckServer(sqlHandler);
+		Server idCheckServer = createIdCheckServer(sqlHandler, (SessionManager)mainServer.getAttribute("sessionManager"));
 		
 		mainServer.join();
 		idCheckServer.join();
@@ -51,6 +52,8 @@ public class VoteServerMain {
 		contextHandler.setAttribute("javax.servlet.context.tempdir", new File("../temp"));
 		contextHandler.addFilter(filterHolder, "/photo", EnumSet.of(DispatcherType.REQUEST));
 		
+		server.setAttribute("sessionManager", contextHandler.getSessionHandler().getSessionManager());
+		
 		ResourceHandler resourceHandler = new ResourceHandler();
 		resourceHandler.setResourceBase("../html/");
 		
@@ -65,7 +68,7 @@ public class VoteServerMain {
 	}
 	
 	//works with Jetty 9.0.0.M4, but not with 9.0.0.M5 or 9.0.0.R0 (current)
-	public static Server createIdCheckServer(MysqlConnectionHandler sqlHandler) throws Exception {
+	public static Server createIdCheckServer(MysqlConnectionHandler sqlHandler, SessionManager mainSessionManager) throws Exception {
 		Server server = new Server();
 		
 		SslContextFactory contextFactory = new SslContextFactoryWrapper();
@@ -93,7 +96,7 @@ public class VoteServerMain {
 		
 		ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		contextHandler.setContextPath("/");
-		contextHandler.addServlet(new ServletHolder(new IdCardServlet()), "/*");
+		contextHandler.addServlet(new ServletHolder(new IdCardServlet(sqlHandler, mainSessionManager)), "/*");
 		
 		HandlerList handlers = new HandlerList();
 		handlers.addHandler(contextHandler);

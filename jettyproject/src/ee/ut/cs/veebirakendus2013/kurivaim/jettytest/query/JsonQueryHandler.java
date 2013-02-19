@@ -21,6 +21,7 @@ public class JsonQueryHandler {
 		addQueryType(false, JsonQueryTypes.STATUS);
 		addQueryType(false, JsonQueryTypes.CANDIDATES);
 		addQueryType(false, JsonQueryTypes.PARTIES);
+		addQueryType(false, JsonQueryTypes.SESSIONID);
 		
 		addQueryType(false, JsonQueryTypes.ADMINUSERS);
 		

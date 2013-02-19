@@ -49,11 +49,15 @@ public class MysqlConnectionHandler {
 	}
 	
 	public int simpleUpdateQuery(String queryString) {
+		return simpleQuery(queryString, false);
+	}
+	
+	public int simpleQuery(String queryString, boolean returnKey) {
 		Statement statement = null;
 		
 		try {
 			statement = sqlConnection.createStatement();
-			int affectedRows = statement.executeUpdate(queryString);
+			int affectedRows = returnKey ? statement.executeUpdate(queryString, Statement.RETURN_GENERATED_KEYS) : statement.executeUpdate(queryString);
 	    	
 	        return affectedRows;
 		} catch(Exception e) {

@@ -13,7 +13,8 @@ public enum JsonQueryTypes {
 	PHOTO("photo", JsonQueryTypePhoto.class),
 	SETREGION("setregion", JsonQueryTypeSetRegion.class),
 	ADMINLOGIN("adminlogin", JsonQueryTypeAdminLogin.class),
-	ADMINUSERS("adminusers", JsonQueryTypeAdminUsers.class);
+	ADMINUSERS("adminusers", JsonQueryTypeAdminUsers.class),
+	SESSIONID("sessionid", JsonQueryTypeSessionId.class);
 	
 	private final String typeName;
 	private final Class<? extends JsonQueryInterface> typeClass;
