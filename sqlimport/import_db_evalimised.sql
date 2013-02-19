@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 18, 2013 at 03:10 PM
+-- Generation Time: Feb 20, 2013 at 12:46 AM
 -- Server version: 5.1.61-0+squeeze1
--- PHP Version: 5.3.15-1~dotdeb.0
+-- PHP Version: 5.3.21-1~dotdeb.0
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -118,9 +118,10 @@ CREATE TABLE IF NOT EXISTS `ev_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(63) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `voteRegionId` int(11) NOT NULL,
-  `votedCandidateId` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `voteRegionId` int(11) NOT NULL DEFAULT '0',
+  `votedCandidateId` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --

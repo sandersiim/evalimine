@@ -21,8 +21,6 @@ import org.eclipse.jetty.server.SessionManager;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryUserInfo;
-import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query.JsonResponseTypeStatus;
-import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query.JsonResponseTypeUserInfo;
 
 public class IdCardServlet extends HttpServlet {
 	private static final long serialVersionUID = 4822041841146535386L;
