@@ -38,11 +38,22 @@
 				</div>
 				<div id="tab_login" class="tab visible">
 					<div id="login_pswd">
-						Salakoodiga
-						<form id="loginByPassword">
-							<div class="inputBoxWithLabel">Isikukood <input type="text" name="" id="" value=""/></div>
-							<div class="inputBoxWithLabel">Salasõna <input type="text" name="" id="" value=""/></div>
-							<input type="submit" value="Logi sisse" />			
+						<h2>Salakoodiga</h2>
+						<form method="GET" action="#" id="loginByPassword">
+							<div class="inputBoxWithLabel"> 
+								<label class="label" for="username">Isikukood</label> <input type="text" name="" id="username" value=""/>
+							</div>
+							<div class="inputBoxWithLabel"> 
+								<label class="label" for="password">Salasõna</label> <input type="password" name="" id="password" value=""/>
+							</div>
+							<input class="submitButton" type="submit" value="Logi sisse"/>		
+						</form>
+					</div>
+					<div id="login_idcard">
+						<h2>Id-kaardiga</h2>
+						<form method="GET" enctype="multipart/form-data" action="#" id="loginByIdCard">
+							<input type="hidden" ame="authSessionId" id="authSessionId" value=""/>		
+							<input id="idCardPic" type="submit" value=""/>					
 						</form>
 					</div>					
 				</div>
