@@ -143,11 +143,11 @@ public class JsonQueryInfo {
 		return (userId > 0) ? new MysqlQueryCandidateInfo(sqlHandler).querySingleByUserId(userId) : null;
 	}
 	
-	public String getAuthStatus() {
-		Object authStatusObject = request.getSession().getAttribute("authStatus");
+	public String getSessionStringParameter(String parameterName) {
+		Object paramObject = request.getSession().getAttribute(parameterName);
 		
-		if(authStatusObject != null && authStatusObject instanceof String) {
-			return (String)authStatusObject;
+		if(paramObject != null && paramObject instanceof String) {
+			return (String)paramObject;
 		}
 		
 		return null;

@@ -11,7 +11,7 @@ public class JsonQueryTypeStatus implements JsonQueryInterface {
 		MysqlConnectionHandler sqlHandler = queryInfo.getSqlHandler();
 		
 		if(statusType != null && statusType.equals("authStatus")) {
-			return new JsonResponseTypeStatus(1, "authStatus", queryInfo.getAuthStatus());
+			return new JsonResponseTypeStatus(1, "authStatus", queryInfo.getSessionStringParameter("authStatus"));
 		}
 		else {
 			

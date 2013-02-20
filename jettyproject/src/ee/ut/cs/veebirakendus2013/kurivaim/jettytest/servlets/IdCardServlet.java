@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.eclipse.jetty.server.SessionManager;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
@@ -129,8 +130,8 @@ public class IdCardServlet extends HttpServlet {
 								String firstName = certHeaderData.get("GIVENNAME"), lastName = certHeaderData.get("SURNAME");
 								
 								if(firstName != null && lastName != null) {
-									mainSession.setAttribute("firstName", firstName);
-									mainSession.setAttribute("lastName", lastName);
+									mainSession.setAttribute("firstName", WordUtils.capitalizeFully(firstName, new char[] {'-', ' '}));
+									mainSession.setAttribute("lastName", WordUtils.capitalizeFully(lastName, new char[] {'-', ' '}));
 								}
 							}
 						}
@@ -147,7 +148,9 @@ public class IdCardServlet extends HttpServlet {
 			response.getWriter().write("Main session ID not specified.\n");
 		}
 		
-		response.sendRedirect("http://" + request.getServerName() + ":8080/querytest/" + redirectParam);
+		if(request.getParameter("noRedirect") == null) {
+			response.sendRedirect("http://" + request.getServerName() + ":8080/querytest/" + redirectParam);
+		}
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

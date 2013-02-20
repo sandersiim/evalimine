@@ -14,7 +14,8 @@ public enum JsonQueryTypes {
 	SETREGION("setregion", JsonQueryTypeSetRegion.class),
 	ADMINLOGIN("adminlogin", JsonQueryTypeAdminLogin.class),
 	ADMINUSERS("adminusers", JsonQueryTypeAdminUsers.class),
-	SESSIONID("sessionid", JsonQueryTypeSessionId.class);
+	SESSIONID("sessionid", JsonQueryTypeSessionId.class),
+	NAMEFROMCARD("namefromcard", JsonQueryTypeNameFromCard.class);
 	
 	private final String typeName;
 	private final Class<? extends JsonQueryInterface> typeClass;

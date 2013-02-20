@@ -22,6 +22,7 @@ public class JsonQueryHandler {
 		addQueryType(false, JsonQueryTypes.CANDIDATES);
 		addQueryType(false, JsonQueryTypes.PARTIES);
 		addQueryType(false, JsonQueryTypes.SESSIONID);
+		addQueryType(false, JsonQueryTypes.NAMEFROMCARD);
 		
 		addQueryType(false, JsonQueryTypes.ADMINUSERS);
 		
