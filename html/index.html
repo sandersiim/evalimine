@@ -4,6 +4,7 @@
 		<meta charset="utf-8" />
 		<title>E-valimised</title>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/json3/3.2.4/json3.min.js"></script>
 		<script type="text/javascript" src="test.js"></script>
 		<link rel="stylesheet" media="screen" href="style.css" />
 		<link rel="stylesheet" media="print" href="style_print.css" />
@@ -24,11 +25,14 @@
 			</div>		
 			<div class="clear"></div>
 			<div id="content">
-				<div id="tab_statistics" class="tab">
+				<div id="tab_stats_regions" class="tab">
 					<div class="tabNameLabel">Statistika</div>
 				</div>
 				<div id="tab_voting" class="tab">
 					<div class="tabNameLabel">Hääletamine</div>
+					<div class="tabContents">
+						
+					</div>
 				</div>
 				<div id="tab_help" class="tab">
 					<div class="tabNameLabel">Abi</div>
@@ -42,6 +46,9 @@
 					<div id="login_pswd">
 						<h2>Salakoodiga</h2>
 						<form method="GET" action="#" id="loginByPassword">
+							<div class="errorMessage" id="loginErrorMessage">
+								
+							</div>
 							<div class="inputBoxWithLabel"> 
 								<label class="label" for="username">Isikukood</label> <input type="text" name="" id="username" value=""/>
 							</div>
@@ -54,7 +61,7 @@
 					<div id="login_idcard">
 						<h2>Id-kaardiga</h2>
 						<form method="GET" enctype="multipart/form-data" action="#" id="loginByIdCard">
-							<input type="hidden" ame="authSessionId" id="authSessionId" value=""/>		
+							<input type="hidden" name="authSessionId" id="authSessionId" value=""/>		
 							<input id="idCardPic" type="submit" value=""/>					
 						</form>
 					</div>					
