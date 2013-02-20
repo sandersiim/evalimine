@@ -129,6 +129,11 @@ body {
 	-webkit-transition: visibility 0s linear 0.5s,opacity 0.5s linear; /* Safari and Chrome */
 }
 
+.inputBoxWithLabel {
+	display: block;
+}
+
+
 .visible {
 	visibility: visible;
 	opacity:1;
