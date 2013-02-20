@@ -1,3 +1,5 @@
+var loggedIn = false;
+
 function resizeElements() {
 	$("#mainblock").height($(window).height()-($("#mainblock").outerHeight(true)-$("#mainblock").height())); 
 	$("#content").height($("#mainblock").height()-$("#header").outerHeight()-$("#footer").outerHeight()); 
@@ -27,7 +29,11 @@ function swapTab(selectedMenu) {
 			addClassToElement($("#tab_help")[0],"visible");
 			break;
 		case "menu_mydata":
-			addClassToElement($("#tab_login")[0],"visible");
+			if(loggedIn) {
+				addClassToElement($("#tab_mydata")[0],"visible");
+			} else {
+				addClassToElement($("#tab_login")[0],"visible");
+			}
 			break;
 		case "menu_statistics":
 			addClassToElement($("#tab_statistics")[0],"visible");
@@ -43,6 +49,12 @@ $(document).ready(function() {
 	$(".menuitem").click( function() {
 		changeMenuSelection(this);
 		swapTab(this);
+	});
+
+	$("#loginbutton").click( function() {
+		$("#menu_mydata").html("Minu andmed");
+		loggedIn = true;
+		swapTab($("#menu_mydata")[0]);
 	});
 		
 	resizeElements();
