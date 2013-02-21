@@ -26,8 +26,8 @@ public class JsonQueryTypeSetRegion implements JsonQueryInterface {
 			}
 			else {
 				int affected = sqlHandler.simpleUpdateQuery(
-						"UPDATE ev_candidates SET regionId = " + regionId + " WHERE id = " + userInfo.getUserId() + " AND " +
-						"regionId = " + 0 + " AND 0 < (SELECT COUNT(*) FROM ev_regions WHERE id = " + regionId + ")");
+						"UPDATE ev_users SET voteRegionId = " + regionId + " WHERE id = " + userInfo.getUserId() + " AND " +
+						"voteRegionId = " + 0 + " AND 0 < (SELECT COUNT(*) FROM ev_regions WHERE id = " + regionId + ")");
 				
 				if(affected == -1) {
 					return new JsonResponseTypeStatus(-1, "setRegionAction", "Set region failed - database query error.");

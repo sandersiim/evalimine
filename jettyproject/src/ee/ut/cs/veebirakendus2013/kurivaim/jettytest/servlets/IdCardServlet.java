@@ -149,7 +149,9 @@ public class IdCardServlet extends HttpServlet {
 		}
 		
 		if(request.getParameter("noRedirect") == null) {
-			response.sendRedirect("http://" + request.getServerName() + ":8080/querytest/" + redirectParam);
+			boolean isUsingTestPage = (request.getParameter("testPage") != null);
+			
+			response.sendRedirect("http://" + request.getServerName() + ":8080/" + (isUsingTestPage ? "querytest/" : "") + redirectParam);
 		}
 	}
 	

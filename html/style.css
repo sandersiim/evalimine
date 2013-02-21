@@ -116,7 +116,7 @@ body {
 }
 
 #idCardPic {
-	background:transparent url(idkaart.gif) no-repeat;
+	background:transparent url('images/idkaart.gif') no-repeat;
 	cursor:pointer;
 	width: 88px;
 	height: 31px;
@@ -195,4 +195,104 @@ body {
 
 .clear {
 	clear: both;
+}
+
+.templateContainer {
+	display: none;
+}
+
+.candidateForVoting {
+	width: 750px;
+	height: 80px;
+	border: 2px solid black;
+	border-radius: 5px;
+	margin-bottom: 5px;
+	margin-left: 25px;
+	margin-right: 25px;
+}
+
+.candidateForVoting .photo {
+	width: 70px;
+	height: 70px;
+	padding: 5px;
+	float: left;
+}
+
+.candidateForVoting .photo img {
+	width: 70px;
+	height: 70px;
+}
+
+.candidateForVoting .info {
+	width: 450px;
+	height: 80px;
+	float: left;
+}
+
+.candidateForVoting .nameAndVotes {
+	width: 450px;
+	height: 50px;
+}
+
+.candidateForVoting .candidateName {
+	width: 350px;
+	height: 44px;
+	float: left;
+	font-size: 32px;
+	padding-top: 6px;
+	font-weight: bold;
+}
+
+.candidateForVoting .voteCount {
+	width: 100px;
+	height: 30px;
+	float: left;
+	font-size: 24px;
+	font-weight: bold;
+	padding-top: 10px;
+}
+
+.candidateForVoting .partyInfo {
+	width: 450px;
+	height: 30px;
+}
+
+.candidateForVoting .partyLogo {
+	height: 26px;
+	width: 26px;
+	padding: 2px;
+	float: left;
+}
+
+.candidateForVoting .partyLogo img {
+	height: 26px;
+	width: 26px;
+}
+
+.candidateForVoting .partyName {
+	width: 408px;
+	padding: 6px;
+	float: left;
+	font-size: 18px;
+}
+
+.candidateForVoting .action {
+	width: 188px;
+	padding: 11px;
+	float: left;
+}
+
+.candidateForVoting form {
+	margin: 0;
+	padding: 0;
+}
+
+.candidateForVoting .voteButton {
+	width: 180px;
+	height: 60px;
+}
+
+.candidateForVoting .cancelButton {
+	width: 180px;
+	height: 60px;
 }

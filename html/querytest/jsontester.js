@@ -39,7 +39,7 @@ $(document).ready(function() {
 	$("#authenticationForm").submit(function(event) {
 		var sessionId = $("#authSessionId").val();
 		
-		this.action = "https://" + window.location.hostname + ":8443";
+		this.action = "https://" + window.location.hostname + ":8443/";
 		
 		if(sessionId.length == 0) {
 			$.ajax("../dyn/sessionid", {dataType: "json"}).done(function(data) {

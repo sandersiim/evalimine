@@ -43,6 +43,10 @@ public class MysqlQueryPartyInfo {
 	public List<MysqlQueryPartyInfo> queryAllByFilter(int queryRegionId, int orderingMethod) {
 		PreparedStatement statement = null;
 		
+		if(orderingMethod == 7) {
+			return queryAllWithoutVotes();
+		}
+		
 		try {
 			String orderingString = "";
 			
@@ -58,6 +62,23 @@ public class MysqlQueryPartyInfo {
 			statement = sqlHandler.getConnection().prepareStatement(
 					"SELECT a.id AS id, a.keyword AS keyword, a.displayName AS displayName, COALESCE(SUM(b.voteCount), 0) AS voteCount FROM ev_parties AS a " +
 					"LEFT JOIN ev_candidates AS b ON a.id = b.partyId" + regionFilter + " GROUP BY a.id" + orderingString);
+			
+			return fillMultiDataFromResults(statement.executeQuery());
+		} catch (SQLException e) {
+			//TODO: log this error somewhere
+			e.printStackTrace();
+		} finally {
+			sqlHandler.statementCloser(statement);
+		}
+		
+		return null;
+	}
+	
+	public List<MysqlQueryPartyInfo> queryAllWithoutVotes() {
+		PreparedStatement statement = null;
+		
+		try {
+			statement = sqlHandler.getConnection().prepareStatement("SELECT id, keyword, displayName, 0 AS voteCount FROM ev_parties");
 			
 			return fillMultiDataFromResults(statement.executeQuery());
 		} catch (SQLException e) {

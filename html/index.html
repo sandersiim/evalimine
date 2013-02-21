@@ -31,7 +31,48 @@
 				<div id="tab_voting" class="tab">
 					<div class="tabNameLabel">Hääletamine</div>
 					<div class="tabContents">
-						
+						<div class="templateContainer">
+							<div class="candidateForVoting" id="candidateTemplate">
+								<div class="photo"><img src="images/scary_face.png" alt="Kandidaadi foto" /></div>
+								<div class="info">
+									<div class="nameAndVotes">
+										<div class="candidateName">Teet Tuhajuhan</div>
+										<div class="voteCount">21541</div>
+										<div class="clear"></div>
+									</div>
+									<div class="partyInfo">
+										<div class="partyLogo"><img src="images/scary_face.png" alt="Partei logo" /></div>
+										<div class="partyName">VPP (Vasak-parem-partei)</div>
+										<div class="clear"></div>
+									</div>
+								</div>
+								<div class="action">
+									<form method="GET" action="#" class="voteGiveForm">
+										<input type="hidden" class="voteCandidateId" value="0" />
+										<input class="voteButton" type="submit" value="Annan oma hääle"/>
+									</form>
+									<form method="GET" action="#" class="voteCancelForm">
+										<input class="cancelButton" type="submit" value="Tühistan hääle"/>
+									</form>
+								</div>
+								<div class="clear"></div>
+							</div>
+						</div>
+						<div id="votingCandidateList">
+							
+						</div>
+					</div>
+				</div>
+				<div id="tab_err_login" class="tab">
+					<div class="tabNameLabel">Hääletamine</div>
+					<div class="tabContents">
+						<h2>Hääletamiseks peab sisse logima.</h2>
+					</div>
+				</div>
+				<div id="tab_err_region" class="tab">
+					<div class="tabNameLabel">Hääletamine</div>
+					<div class="tabContents">
+						<h2>Hääletamiseks peab piirkonna valima.</h2>
 					</div>
 				</div>
 				<div id="tab_help" class="tab">
@@ -39,32 +80,43 @@
 				</div>
 				<div id="tab_mydata" class="tab">
 					<div class="tabNameLabel">Minu andmed</div>
+					<div class="tabContents">
+						<div id="logoutSection">
+							<form method="GET" action="#" id="logoutForm">
+								<input id="logoutButton" class="submitButton" type="submit" value="Logi välja"/>		
+							</form>
+						</div>
+					</div>
 				</div>
 				<div id="tab_login" class="tab visible">
 					<div class="tabNameLabel">Logi sisse</div>
-					<div class="clear"></div>
-					<div id="login_pswd">
-						<h2>Salakoodiga</h2>
-						<form method="GET" action="#" id="loginByPassword">
-							<div class="errorMessage" id="loginErrorMessage">
-								
-							</div>
-							<div class="inputBoxWithLabel"> 
-								<label class="label" for="username">Isikukood</label> <input type="text" name="" id="username" value=""/>
-							</div>
-							<div class="inputBoxWithLabel"> 
-								<label class="label" for="password">Salasõna</label> <input type="password" name="" id="password" value=""/>
-							</div>
-							<input id="loginbutton" class="submitButton" type="submit" value="Logi sisse"/>		
-						</form>
+					<div class="tabContents">
+						<div id="login_pswd">
+							<h2>Salakoodiga</h2>
+							<form method="GET" action="#" id="loginByPassword">
+								<div class="errorMessage" id="loginErrorMessage">
+									
+								</div>
+								<div class="inputBoxWithLabel"> 
+									<label class="label" for="username">Isikukood</label> <input type="text" name="" id="username" value=""/>
+								</div>
+								<div class="inputBoxWithLabel"> 
+									<label class="label" for="password">Salasõna</label> <input type="password" name="" id="password" value=""/>
+								</div>
+								<input id="loginbutton" class="submitButton" type="submit" value="Logi sisse"/>		
+							</form>
+						</div>
+						<div id="login_idcard">
+							<h2>Id-kaardiga</h2>
+							<form method="GET" enctype="multipart/form-data" action="#" id="loginByIdCard">
+								<div class="errorMessage" id="authErrorMessage">
+									
+								</div>
+								<input type="hidden" name="authSessionId" id="authSessionId" value=""/>		
+								<input id="idCardPic" type="submit" value=""/>					
+							</form>
+						</div>
 					</div>
-					<div id="login_idcard">
-						<h2>Id-kaardiga</h2>
-						<form method="GET" enctype="multipart/form-data" action="#" id="loginByIdCard">
-							<input type="hidden" name="authSessionId" id="authSessionId" value=""/>		
-							<input id="idCardPic" type="submit" value=""/>					
-						</form>
-					</div>					
 				</div>
 				<div id="tab_application" class="tab">
 					<div class="tabNameLabel">Kandideeri</div>

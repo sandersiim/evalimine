@@ -1,0 +1,1 @@
+scary_face.png: http://openclipart.org/detail/28800/scary-face-by-purzen
