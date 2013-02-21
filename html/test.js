@@ -256,7 +256,12 @@ voteSystem.refreshVotingList = function() {
 				if(selectedId == 0) {
 					element.find(".voteCancelForm").css("display", "none");
 					element.find(".voteGiveForm").submit(function() {
-						voteSystem.voteForCandidate($(this).children(".voteCandidateId").val());
+						var candidateId = $(this).children(".voteCandidateId").val();
+						
+						voteSystem.confirmMessage("Kinnita hääl", "Kas oled kindel, et soovid anda sellele kandidaadile oma hääle?", function() {
+							voteSystem.voteForCandidate(candidateId);
+						});
+						
 						return false;
 					});
 					
@@ -265,7 +270,10 @@ voteSystem.refreshVotingList = function() {
 				else if(selectedId == info.candidateId) {
 					element.find(".voteGiveForm").css("display", "none");
 					element.find(".voteCancelForm").submit(function() {
-						voteSystem.voteForCandidate(0);
+						voteSystem.confirmMessage("Kinnita tühistus", "Kas oled kindel, et soovid oma häält tühistada?", function() {
+							voteSystem.voteForCandidate(0);
+						});
+						
 						return false;
 					});
 					
@@ -278,6 +286,27 @@ voteSystem.refreshVotingList = function() {
 				}
 			}
 		}
+	});
+};
+
+voteSystem.confirmMessage = function(title, message, yesCallback) {
+	$("#confirmBlock").css("display", "block");
+	$("#confirmBlock").width($(window).width());
+	$("#confirmBlock").height($(window).height());
+	$("#confirmBox").css("margin-top", (($(window).height() - 300) / 2) + "px");
+	$("#confirmBoxTitle").text(title);
+	$("#confirmBoxMessage").text(message);
+	
+	$("#confirmBoxNo").click(function(event) {
+		$("#confirmBlock").css("display", "none");
+	});
+	
+	$("#confirmBoxYes").on("click", function(event) {
+		$(this).off("click");
+		
+		$("#confirmBlock").css("display", "none");
+		
+		yesCallback();
 	});
 };
 
