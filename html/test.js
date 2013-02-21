@@ -297,13 +297,13 @@ voteSystem.confirmMessage = function(title, message, yesCallback) {
 	$("#confirmBoxTitle").text(title);
 	$("#confirmBoxMessage").text(message);
 	
-	$("#confirmBoxNo").click(function(event) {
+	$("#confirmBoxNo").on("click", function(event) {
+		$("#confirmBoxYes").off("click");
 		$("#confirmBlock").css("display", "none");
 	});
 	
 	$("#confirmBoxYes").on("click", function(event) {
-		$(this).off("click");
-		
+		$("#confirmBoxYes").off("click");
 		$("#confirmBlock").css("display", "none");
 		
 		yesCallback();
