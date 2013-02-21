@@ -137,10 +137,31 @@ voteSystem.applyUserInfo = function(newUserInfo) {
 	}
 };
 
+voteSystem.redirectBasedOnUserInfo = function() {
+	if(!voteSystem.loggedIn) return;
+	
+	var redirectTab = null;
+	
+	if(voteSystem.userInfo.userInfo.voteRegionId == 0) {
+		redirectTab = "tab_mydata";
+	}
+	else if(voteSystem.userInfo.userInfo.votedCandidateId == 0) {
+		redirectTab = "tab_voting";
+	}
+	
+	if(redirectTab) {
+		voteSystem.setActiveTab(redirectTab, true);
+	}
+}
+
 voteSystem.queryStatus = function() {
 	voteSystem.jsonQuery("status", {}, false, function(data) {
 		if(data.responseType == "userInfo") {
 			voteSystem.applyUserInfo(data);
+		}
+		
+		if(!voteSystem.checkHashOnStatus) {
+			voteSystem.redirectBasedOnUserInfo();
 		}
 		
 		voteSystem.requestTabActivationOnStatus(window.location.hash);
@@ -273,6 +294,7 @@ voteSystem.initialise = function() {
 		voteSystem.jsonQuery("login", {username:$("#username").val(), password:$("#password").val()}, false, function(data) {
 			if(data.responseType == "userInfo") {
 				voteSystem.applyUserInfo(data);
+				voteSystem.redirectBasedOnUserInfo();
 			}
 			else if(data.responseType == "status") {
 				if(data.statusCode < 0) {
