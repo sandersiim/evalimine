@@ -30,6 +30,7 @@
 				</div>
 				<div id="tab_voting" class="tab">
 					<div class="tabNameLabel">Hääletamine</div>
+					<div class="clear"></div>
 					<div class="tabContents">
 						<div class="templateContainer">
 							<div class="candidateForVoting" id="candidateTemplate">
@@ -65,12 +66,14 @@
 				</div>
 				<div id="tab_err_login" class="tab">
 					<div class="tabNameLabel">Hääletamine</div>
+					<div class="clear"></div>
 					<div class="tabContents">
 						<h2>Hääletamiseks peab sisse logima.</h2>
 					</div>
 				</div>
 				<div id="tab_err_region" class="tab">
 					<div class="tabNameLabel">Hääletamine</div>
+					<div class="clear"></div>
 					<div class="tabContents">
 						<h2>Hääletamiseks peab piirkonna valima.</h2>
 					</div>
@@ -80,16 +83,60 @@
 				</div>
 				<div id="tab_mydata" class="tab">
 					<div class="tabNameLabel">Minu andmed</div>
-					<div class="tabContents">
-						<div id="logoutSection">
-							<form method="GET" action="#" id="logoutForm">
-								<input id="logoutButton" class="submitButton" type="submit" value="Logi välja"/>		
-							</form>
+					<div class="logoutSection">
+						<form method="GET" action="#" id="logoutForm">
+							<input id="logoutButton" class="submitButton" type="submit" value="Logi välja"/>		
+						</form>
+					</div>
+					<div class="clear"></div>
+					<div class="tabContents">					
+						<div class="myDataInfoSection">
+							<div class="myDataPhoto"><img src="images/scary_face.png" alt=""/></div>
+							<div class="myDataInfo">
+								<div class="myDataInfoNameAndValue">
+									<div class="myDataInfoName"></div>
+									<div class="myDataInfoValue" id="myDataName"></div>
+								</div>
+								<div class="myDataInfoNameAndValue">
+									<div class="myDataInfoName">Isikukood:</div>
+									<div class="myDataInfoValue" id="myDataIdCode">39208100868</div>
+								</div>
+								<div class="myDataInfoNameAndValue">
+									<div class="myDataInfoName">Piirkond:</div>
+									<div class="myDataInfoValue" id="myDataRegion">Tartu linn</div>
+								</div>
+								<div class="myDataInfoNameAndValue">
+									<div class="myDataInfoName">Hääletamine:</div>
+									<div class="myDataInfoValue redText" id="myDataVoting">Te pole oma häält veel andnud!</div>
+								</div>
+								<div class="myDataInfoNameAndValue">
+									<div class="myDataInfoName">Kandideerimine:</div>
+									<div class="myDataInfoValue" id="myDataApplication">Kandideeri oma piirkonnas</div>
+								</div>
+							</div>
 						</div>
+						<div class="clear"></div>
+						<div class="myDataChangePasswordSection">
+							<h3>Muuda salasõna</h3>
+							<form method="GET" action="#" id="changePassword">
+								<div class="errorMessage" id="changePasswordErrorMessage"></div>
+								<div class="inputBoxWithLabel"> 
+									<label class="label" for="oldPassword">Vana salasõna</label> <input type="password" name="" id="oldPassword" value=""/>
+								</div>
+								<div class="inputBoxWithLabel"> 
+									<label class="label" for="newPassword">Uus salasõna</label> <input type="password" name="" id="newPassword" value=""/>
+								</div>
+								<div class="inputBoxWithLabel"> 
+									<label class="label" for="newPasswordConfirmation">Uus salasõna uuesti</label> <input type="password" name="" id="newPasswordConfirmation" value=""/>
+								</div>
+								<input id="loginbutton" class="submitButton" type="submit" value="Salvesta"/>		
+							</form>
+						</div>						
 					</div>
 				</div>
 				<div id="tab_login" class="tab visible">
 					<div class="tabNameLabel">Logi sisse</div>
+					<div class="clear"></div>
 					<div class="tabContents">
 						<div id="login_pswd">
 							<h2>Salakoodiga</h2>
