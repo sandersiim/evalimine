@@ -10,6 +10,7 @@ voteSystem.partyList = {};
 voteSystem.regionList = {};
 voteSystem.partyListQuery = null;
 voteSystem.regionListQuery = null;
+voteSystem.lastSeenHash = null;
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
@@ -87,6 +88,11 @@ voteSystem.setActiveTab = function(tabName, activateMenu) {
 	}
 };
 
+voteSystem.updateHashSilently = function(newHash) {
+	voteSystem.lastSeenHash = newHash;
+	window.location.hash = newHash;
+};
+
 voteSystem.swapToTab = function(tabElement) {
 	$.each($(".tab.visible"), function(index, oldTab) {
 		voteSystem.removeClassFromElement(oldTab, "visible");
@@ -98,6 +104,8 @@ voteSystem.swapToTab = function(tabElement) {
 		if(voteSystem.tabCallbacks[newTab.id]) {
 			voteSystem.tabCallbacks[newTab.id](newTab);
 		}
+		
+		voteSystem.updateHashSilently("#" + newTab.id);
 	});
 };
 
@@ -482,10 +490,14 @@ voteSystem.initialise = function() {
 	}
 	
 	$(window).on("hashchange", function() {
-		if(window.location.hash.indexOf("#tab_") == 0) {
-			voteSystem.checkHashOnStatus = window.location.hash.substr(1);
-			voteSystem.requestTabActivationOnStatus();
+		if(voteSystem.lastSeenHash != window.location.hash) {
+			if(window.location.hash.indexOf("#tab_") == 0) {
+				voteSystem.checkHashOnStatus = window.location.hash.substr(1);
+				voteSystem.requestTabActivationOnStatus();
+			}
 		}
+		
+		voteSystem.lastSeenHash = window.location.hash;
 	});
 	
 	voteSystem.resizeElements();
