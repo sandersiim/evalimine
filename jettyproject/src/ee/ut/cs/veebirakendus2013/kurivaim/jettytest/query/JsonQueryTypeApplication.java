@@ -9,9 +9,9 @@ import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryUserInfo;
 
 public class JsonQueryTypeApplication implements JsonQueryInterface {
 	
-	String firstName;
-	String lastName;
-	int partyId;
+	private String firstName;
+	private String lastName;
+	private int partyId;
 
 	@Override
 	public JsonResponseInterface processQuery(JsonQueryInfo queryInfo) {

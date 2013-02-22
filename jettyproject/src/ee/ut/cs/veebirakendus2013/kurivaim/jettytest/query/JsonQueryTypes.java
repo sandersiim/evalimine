@@ -8,6 +8,7 @@ public enum JsonQueryTypes {
 	STATUS("status", JsonQueryTypeStatus.class),
 	CANDIDATES("candidates", JsonQueryTypeCandidates.class),
 	PARTIES("parties", JsonQueryTypeParties.class),
+	REGIONS("regions", JsonQueryTypeRegions.class),
 	VOTE("vote", JsonQueryTypeVote.class),
 	APPLICATION("application", JsonQueryTypeApplication.class),
 	PHOTO("photo", JsonQueryTypePhoto.class),

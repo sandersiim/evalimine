@@ -7,6 +7,7 @@ voteSystem.activeMenuItem = "menu_mydata"
 voteSystem.tabCallbacks = {};
 voteSystem.menuList = ["menu_statistics", "menu_mydata", "menu_help", "menu_voting"];
 voteSystem.partyList = {};
+voteSystem.regionList = {};
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
@@ -112,8 +113,9 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 				voteSystem.setActiveTab("tab_err_region", false);
 			}
 			else {
-				voteSystem.setActiveTab("tab_voting", false);
+				voteSystem.setActiveTab("tab_voting", false);				
 			}
+			voteSystem.refreshMyDataInfo();
 		}
 		else {
 			$("#menu_mydata").text("Logi sisse");
@@ -173,6 +175,17 @@ voteSystem.queryParties = function() {
 		if(data.responseType == "parties" && data.partyList) {
 			$.each(data.partyList, function(index, item) {
 				voteSystem.partyList[item.partyId] = item;
+			});
+		}
+	});
+};
+
+voteSystem.queryRegions = function() {
+	voteSystem.jsonQuery("regions", {}, false, function(data) {
+		if(data.responseType == "regions" && data.regionList) {
+			$.each(data.regionList, function(index, item) {
+				voteSystem.regionList[item.regionId] = item;
+				console.log(item);
 			});
 		}
 	});
@@ -289,6 +302,17 @@ voteSystem.refreshVotingList = function() {
 	});
 };
 
+voteSystem.refreshMyDataInfo = function() {
+	if (voteSystem.userInfo.userInfo) {
+		$("#myDataIdCode").text(voteSystem.userInfo.userInfo["username"]);
+		if ( voteSystem.userInfo.userInfo["voteRegionId"] ) {	
+			voteSystem.removeClassFromElement($("#myDataRegion")[0],"errorMessage" );
+			$("#myDataRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
+			$("#toSetRegionButton").detach();
+		} 
+	}
+};
+
 voteSystem.confirmMessage = function(title, message, yesCallback) {
 	$("#confirmBlock").css("display", "block");
 	$("#confirmBlock").width($(window).width());
@@ -317,7 +341,7 @@ voteSystem.initialise = function() {
 	
 	voteSystem.setTabActivateCB("tab_voting", function(tabElement) {
 		voteSystem.refreshVotingList();
-	});
+	});	
 
 	$("#loginByPassword").submit( function() {
 		voteSystem.jsonQuery("login", {username:$("#username").val(), password:$("#password").val()}, false, function(data) {
@@ -367,6 +391,18 @@ voteSystem.initialise = function() {
 		
 		return false;
 	});
+
+	$("#toVotingButton").click( function() {
+		voteSystem.setActiveMenuItem($("#menu_voting")[0]);
+	});
+
+	$("#toApplicationButton").click( function() {
+		voteSystem.swapToTab("tab_application");
+	});
+
+	$("#toMyDataButton").click( function() {
+		voteSystem.swapToTab("tab_mydata");
+	});	
 	
 	if(window.location.hash == "#authSessionError") {
 		$("#authErrorMessage").text("Serveri sessiooni tuvastamine ebaõnnestus.");
@@ -406,6 +442,7 @@ voteSystem.initialise = function() {
 	
 	voteSystem.queryStatus();
 	voteSystem.queryParties();
+	voteSystem.queryRegions();
 };
 
 $(document).ready(function() {

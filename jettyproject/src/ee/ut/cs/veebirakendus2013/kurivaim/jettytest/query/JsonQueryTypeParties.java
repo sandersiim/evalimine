@@ -14,7 +14,7 @@ public class JsonQueryTypeParties implements JsonQueryInterface {
 			MysqlConnectionHandler sqlHandler = queryInfo.getSqlHandler();
 			
 			if(!sqlHandler.validateConnection()) {
-				return new JsonResponseTypeStatus(-1, "candidateList", "Fetching candidate list failed - no database connection.");
+				return new JsonResponseTypeStatus( -1, "partyList", "Fetching party list failed - no database connection.");
 			}
 			
 			return new JsonResponseTypeParties(new MysqlQueryPartyInfo(sqlHandler).queryAllByFilter(regionId, orderId));
@@ -23,7 +23,7 @@ public class JsonQueryTypeParties implements JsonQueryInterface {
 			//TODO: when logging system is present, log this error
 			e.printStackTrace();
 			
-			return new JsonResponseTypeStatus(-1, "candidateList", "Fetching candidate list failed - unknown error.");
+			return new JsonResponseTypeStatus( -1, "partyList", "Fetching party list failed - unknown error.");
 		}
 	}
 }

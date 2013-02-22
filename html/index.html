@@ -99,20 +99,20 @@
 								</div>
 								<div class="myDataInfoNameAndValue">
 									<div class="myDataInfoName">Isikukood:</div>
-									<div class="myDataInfoValue" id="myDataIdCode">39208100868</div>
+									<div class="myDataInfoValue" id="myDataIdCode"></div>
 								</div>
 								<div class="myDataInfoNameAndValue">
 									<div class="myDataInfoName">Piirkond:</div>
-									<div class="myDataInfoValue" id="myDataRegion">Tartu linn</div>
+									<div class="myDataInfoValue errorMessage" id="myDataRegion">Teil on piirkond määramata!</div> <button class="linkButton" id="toSetRegionButton">Määra piirkond</button>
 								</div>
 								<div class="myDataInfoNameAndValue">
 									<div class="myDataInfoName">Hääletamine:</div>
-									<div class="myDataInfoValue redText" id="myDataVoting">Te pole oma häält veel andnud! <button class="linkButton">Hääletama</button></div>
+									<div class="myDataInfoValue errorMessage" id="myDataVoting">Te pole oma häält veel andnud!</div> <button class="linkButton" id="toVotingButton">Hääletama</button>
 								</div>
 								<div class="myDataInfoNameAndValue">
 									<div class="myDataInfoName">Kandideerimine:</div>
 									<div class="myDataInfoValue" id="myDataApplication">
-										<button class="linkButton">Kandideeri oma piirkonnas</button>
+										<button class="linkButton" id="toApplicationButton">Kandideeri oma piirkonnas</button>
 									</div>
 								</div>
 							</div>
@@ -143,8 +143,7 @@
 						<div id="login_pswd">
 							<h2>Salakoodiga</h2>
 							<form method="GET" action="#" id="loginByPassword">
-								<div class="errorMessage" id="loginErrorMessage">
-									
+								<div class="errorMessage" id="loginErrorMessage">									
 								</div>
 								<div class="inputBoxWithLabel"> 
 									<label class="label" for="username">Isikukood</label> <input type="text" name="" id="username" value=""/>
@@ -168,7 +167,29 @@
 					</div>
 				</div>
 				<div id="tab_application" class="tab">
-					<div class="tabNameLabel">Kandideeri</div>
+					<div class="tabNameLabel"><div class="linkButton" id="toMyDataButton">Minu andmed</div>->Kandideeri</div>
+					<div class="clear"></div>
+					<div class="tabContents">
+						<div class="myDataInfoSection">
+							<div class="myDataPhoto"><img src="images/scary_face.png" alt=""/></div>
+							<div class="myDataInfo">
+								<div class="myDataInfoNameAndValue">
+									<div class="myDataInfoName">Teie piirkond:</div>
+									<div class="myDataInfoValue" id="myDataAppRegion">Tartu linn</div>
+								</div>
+								<div class="myDataInfoNameAndValue">
+									<div class="myDataInfoName">Palun sisestage oma nimi:</div>
+									<div class="myDataInfoValue"></div>
+								</div>
+								<div class="inputBoxWithLabel">
+									<label class="label" for="firstname">Eesnimi</label> <input type="text" name="" id="firstname" value=""/>
+								</div>
+								<div class="inputBoxWithLabel">
+									<label class="label" for="lastname">Perenimi</label> <input type="text" name="" id="lastname" value=""/>
+								</div>
+							</div>
+						</div>						
+					</div>
 				</div>
 
 			</div>

@@ -1,0 +1,28 @@
+package ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query;
+
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryRegionInfo;
+
+
+public class JsonQueryTypeRegions implements JsonQueryInterface {
+	
+	@Override
+	public JsonResponseInterface processQuery(JsonQueryInfo queryInfo) {
+		try {
+			MysqlConnectionHandler sqlHandler = queryInfo.getSqlHandler();
+			
+			if(!sqlHandler.validateConnection()) {
+				return new JsonResponseTypeStatus(-1, "regionList", "Fetching region list failed - no database connection.");
+			}
+			
+			return new JsonResponseTypeRegions(new MysqlQueryRegionInfo(sqlHandler).queryAll());
+		}
+		catch(Exception e) {
+			//TODO: when logging system is present, log this error
+			e.printStackTrace();
+			
+			return new JsonResponseTypeStatus(-1, "regionList", "Fetching region list failed - unknown error.");
+		}
+	}
+	
+}
