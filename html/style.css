@@ -1,6 +1,6 @@
 body {
 	text-align: center;
-	font-family: "Century Schoolbook", Georgia, Times, serif;
+	font-family: Ubuntu, sans-serif;
 	color: #333;
 	margin: 0;
 }
@@ -106,6 +106,7 @@ body {
 	-moz-box-shadow:inset 0px 0px 3px 3px rgba(153,153,153,0.85);
 	-webkit-box-shadow:inset 0px 0px 3px 3px rgba(153,153,153,0.85);
 	box-shadow:inset 0px 0px 3px 3px rgba(153,153,153,0.85);	
+	overflow: hidden;
 }
 
 #login_pswd {
@@ -129,7 +130,7 @@ body {
 
 .inputBoxWithLabel {
 	display: block;
-	padding: 10px 0;
+	padding-bottom: 20px;
 }
 
 .label {
@@ -137,11 +138,16 @@ body {
 	float: left;
 }
 
+.boldLabel {
+	font-weight: bold;
+	padding: 10px 0;
+}
+
 .submitButton {
 	float:right;
 	height: 35px;
 	width: 100px;
-	font-family: "Century Schoolbook", Georgia, Times, serif;
+	font-family: Ubuntu, sans-serif;
 	font-weight: bold;
 	color: #333;
 	-webkit-user-select: none; /* Chrome/Safari */        
@@ -252,6 +258,15 @@ body {
 
 .myDataChangePasswordSection h3 {
 	margin: 0;
+	padding-bottom: 15px;
+}
+
+.myDataChangePasswordSection .inputBoxWithLabel {
+	padding-bottom: 15px;
+}
+
+.myDataApplyNameSection {
+	padding: 0px 40px;
 }
 
 .linkButton {
@@ -260,7 +275,7 @@ body {
 	border: 0;
 	text-decoration: underline;
 	padding: 0;
-	font-family: "Century Schoolbook", Georgia, Times, serif;
+	font-family: Ubuntu, sans-serif;
 	font-weight: bold;
 	color: #0000FF;
 	cursor: pointer;	
@@ -284,6 +299,10 @@ body {
 
 .clear {
 	clear: both;
+}
+
+.displayNone {
+	display: none;
 }
 
 .errorMessage {
@@ -444,4 +463,8 @@ body {
 	background: #cccccc;
 	font-size: 26px;
 	cursor: pointer;
+}
+
+.greenText {
+	color: #1DC223;
 }

@@ -24,8 +24,8 @@ voteSystem.menuActiveTab = {
 };
 
 voteSystem.resizeElements = function() {
-	$("#mainblock").height($(window).height()-($("#mainblock").outerHeight(true)-$("#mainblock").height())); 
-	$("#content").height($("#mainblock").height()-$("#header").outerHeight()-$("#footer").outerHeight()); 
+	$("#mainblock").height(Math.min($(window).height()-($("#mainblock").outerHeight(true)-$("#mainblock").height()),680)); 
+	$("#content").height(Math.min($("#mainblock").height()-$("#header").outerHeight()-$("#footer").outerHeight(),500)); 
 };
 
 voteSystem.addClassToElement = function(element, oneClass) {
@@ -114,8 +114,7 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 			}
 			else {
 				voteSystem.setActiveTab("tab_voting", false);				
-			}
-			voteSystem.refreshMyDataInfo();
+			}			
 		}
 		else {
 			$("#menu_mydata").text("Logi sisse");
@@ -123,7 +122,9 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 			voteSystem.setActiveTab("tab_login", false);
 			voteSystem.setActiveTab("tab_err_login", false);
 		}
+		
 	}
+	voteSystem.refreshMyDataInfo();
 	
 	voteSystem.loggedIn = isLoggedIn;
 }
@@ -185,7 +186,6 @@ voteSystem.queryRegions = function() {
 		if(data.responseType == "regions" && data.regionList) {
 			$.each(data.regionList, function(index, item) {
 				voteSystem.regionList[item.regionId] = item;
-				console.log(item);
 			});
 		}
 	});
@@ -239,6 +239,7 @@ voteSystem.voteForCandidate = function(candidateId) {
 			if(data.statusCode == 10 || data.statusCode == 11) {
 				voteSystem.userInfo.userInfo.votedCandidateId = candidateId;
 				voteSystem.refreshVotingList();
+				voteSystem.refreshMyDataInfo();
 			}
 			else {
 				alert(data.statusMessage);
@@ -302,15 +303,57 @@ voteSystem.refreshVotingList = function() {
 	});
 };
 
+var setRegionButton;
+var applicationButton;
+var votingButton;
+
 voteSystem.refreshMyDataInfo = function() {
 	if (voteSystem.userInfo.userInfo) {
 		$("#myDataIdCode").text(voteSystem.userInfo.userInfo["username"]);
 		if ( voteSystem.userInfo.userInfo["voteRegionId"] ) {	
 			voteSystem.removeClassFromElement($("#myDataRegion")[0],"errorMessage" );
 			$("#myDataRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
-			$("#toSetRegionButton").detach();
-		} 
-	}
+			$("#myDataApplyRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
+			setRegionButton = $("#toSetRegionButton").detach();
+			if ( voteSystem.userInfo.userInfo.votedCandidateId ) {
+				voteSystem.removeClassFromElement($("#myDataVoting")[0],"errorMessage" );
+				voteSystem.addClassToElement($("#myDataVoting")[0],"greenText" );
+				$("#myDataVoting").text("Hääl antud:"+"");
+				votingButton = $("#toVotingButton").detach();
+			} else {
+				voteSystem.removeClassFromElement($("#myDataVoting")[0],"greenText" );
+				voteSystem.addClassToElement($("#myDataVoting")[0],"errorMessage" );
+				$("#myDataVoting").text("Te pole oma häält veel andnud!");
+				if (votingButton) {
+					$("#myDataVoting").after(votingButton);
+					votingButton = null;
+				} 
+			}
+			if ( voteSystem.userInfo.candidateInfo) {
+				voteSystem.removeClassFromElement($("#myDataName").parent()[0],"displayNone");
+				$("#myDataName").text(voteSystem.userInfo.candidateInfo["firstName"]+" "+voteSystem.userInfo.candidateInfo["lastName"]);
+				$("#myDataApplication").text("Te kandideerite oma piirkonnas");
+				applicationButton = $("#toApplicationButton").detach();
+			} else {
+				voteSystem.addClassToElement($("#myDataName").parent()[0],"displayNone");
+				$("#myDataName").text("");
+				$("#myDataApplication").text("");
+				if (applicationButton) {
+					$("#myDataApplication").after(applicationButton);
+					applicationButton = null;
+				} 
+			}
+		} else {
+			voteSystem.addClassToElement($("#myDataRegion")[0],"errorMessage" );
+			$("#myDataRegion").text("Teil on piirkond määramata!");
+			$("#myDataApplyRegion").text("");			
+			if ( setRegionButton) {
+				$("#myDataRegion").after(setRegionButton);
+				setRegionButton = null;
+			}
+			//ei saa hääletada ega kandideerida
+		}		
+	} 
 };
 
 voteSystem.confirmMessage = function(title, message, yesCallback) {
@@ -440,9 +483,9 @@ voteSystem.initialise = function() {
 		voteSystem.resizeElements();
 	});
 	
-	voteSystem.queryStatus();
-	voteSystem.queryParties();
 	voteSystem.queryRegions();
+	voteSystem.queryStatus();
+	voteSystem.queryParties();	
 };
 
 $(document).ready(function() {
