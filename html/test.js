@@ -318,9 +318,9 @@ voteSystem.refreshVotingList = function() {
 	});
 };
 
-var setRegionButton;
-var applicationButton;
-var votingButton;
+var setRegionLink;
+var applicationLink;
+var votingLink;
 
 voteSystem.refreshMyDataInfo = function() {
 	if (voteSystem.userInfo.userInfo) {
@@ -338,37 +338,37 @@ voteSystem.refreshMyDataInfo = function() {
 				voteSystem.removeClassFromElement($("#myDataVoting")[0],"errorMessage" );
 				voteSystem.addClassToElement($("#myDataVoting")[0],"greenText" );
 				$("#myDataVoting").text("Hääl antud:"+"");
-				votingButton = $("#toVotingButton").detach();
+				votingLink = $("#toVotingButton").detach();
 			} else {
 				voteSystem.removeClassFromElement($("#myDataVoting")[0],"greenText" );
 				voteSystem.addClassToElement($("#myDataVoting")[0],"errorMessage" );
 				$("#myDataVoting").text("Te pole oma häält veel andnud!");
-				if (votingButton) {
-					$("#myDataVoting").after(votingButton);
-					votingButton = null;
+				if (votingLink) {
+					$("#myDataVoting").after(votingLink);
+					votingLink = null;
 				} 
 			}
 			if ( voteSystem.userInfo.candidateInfo) {
 				voteSystem.removeClassFromElement($("#myDataName").parent()[0],"displayNone");
 				$("#myDataName").text(voteSystem.userInfo.candidateInfo["firstName"]+" "+voteSystem.userInfo.candidateInfo["lastName"]);
 				$("#myDataApplication").text("Te kandideerite oma piirkonnas");
-				applicationButton = $("#toApplicationButton").detach();
+				applicationLink = $("#toApplicationButton").detach();
 			} else {
 				voteSystem.addClassToElement($("#myDataName").parent()[0],"displayNone");
 				$("#myDataName").text("");
 				$("#myDataApplication").text("");
-				if (applicationButton) {
-					$("#myDataApplication").after(applicationButton);
-					applicationButton = null;
+				if (applicationLink) {
+					$("#myDataApplication").after(applicationLink);
+					applicationLink = null;
 				} 
 			}
 		} else {
 			voteSystem.addClassToElement($("#myDataRegion")[0],"errorMessage" );
 			$("#myDataRegion").text("Teil on piirkond määramata!");
 			$("#myDataApplyRegion").text("");			
-			if ( setRegionButton) {
-				$("#myDataRegion").after(setRegionButton);
-				setRegionButton = null;
+			if ( setRegionLink) {
+				$("#myDataRegion").after(setRegionLink);
+				setRegionLink = null;
 			}
 			//ei saa hääletada ega kandideerida
 		}		
