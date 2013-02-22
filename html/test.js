@@ -27,8 +27,8 @@ voteSystem.menuActiveTab = {
 };
 
 voteSystem.resizeElements = function() {
-	$("#mainblock").height(Math.min($(window).height()-($("#mainblock").outerHeight(true)-$("#mainblock").height()),680)); 
-	$("#content").height(Math.min($("#mainblock").height()-$("#header").outerHeight()-$("#footer").outerHeight(),500)); 
+	$("#mainblock").height(Math.max($(window).height()-($("#mainblock").outerHeight(true)-$("#mainblock").height()), 680)); 
+	$("#content").height($("#mainblock").height()-$("#header").outerHeight()-$("#footer").outerHeight(), 500); 
 };
 
 voteSystem.addClassToElement = function(element, oneClass) {
