@@ -36,6 +36,7 @@ public class JsonQueryHandler {
 		addQueryType(false, JsonQueryTypes.CHANGEPASS);
 		
 		addQueryType(false, JsonQueryTypes.ADMINLOGIN);
+		addQueryType(false, JsonQueryTypes.ADMINREMOVECANDIDATE);
 	}
 	
 	

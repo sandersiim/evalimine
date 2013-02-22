@@ -15,6 +15,7 @@ public enum JsonQueryTypes {
 	SETREGION("setregion", JsonQueryTypeSetRegion.class),
 	ADMINLOGIN("adminlogin", JsonQueryTypeAdminLogin.class),
 	ADMINUSERS("adminusers", JsonQueryTypeAdminUsers.class),
+	ADMINREMOVECANDIDATE("adminremovecandidate", JsonQueryTypeAdminRemoveCandidate.class),
 	SESSIONID("sessionid", JsonQueryTypeSessionId.class),
 	CHANGEPASS("changepass", JsonQueryTypeChangePass.class);
 	
