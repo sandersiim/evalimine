@@ -8,6 +8,8 @@ voteSystem.tabCallbacks = {};
 voteSystem.menuList = ["menu_statistics", "menu_mydata", "menu_help", "menu_voting"];
 voteSystem.partyList = {};
 voteSystem.regionList = {};
+voteSystem.partyListQuery = null;
+voteSystem.regionListQuery = null;
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
@@ -100,7 +102,7 @@ voteSystem.swapToTab = function(tabElement) {
 };
 
 voteSystem.jsonQuery = function(queryType, jsonObject, isPostQuery, doneFunction) {
-	$.ajax("dyn/" + queryType + "?json=" + JSON.stringify(jsonObject), {type: isPostQuery ? "POST" : "GET", dataType: "json"}).done(doneFunction);
+	return $.ajax("dyn/" + queryType + "?json=" + JSON.stringify(jsonObject), {type: isPostQuery ? "POST" : "GET", dataType: "json"}).done(doneFunction);
 };
 
 voteSystem.setLoggedInStatus = function(isLoggedIn) {
@@ -172,7 +174,7 @@ voteSystem.queryStatus = function() {
 };
 
 voteSystem.queryParties = function() {
-	voteSystem.jsonQuery("parties", {regionId:0, orderId:7}, false, function(data) {
+	voteSystem.partyListQuery = voteSystem.jsonQuery("parties", {regionId:0, orderId:7}, false, function(data) {
 		if(data.responseType == "parties" && data.partyList) {
 			$.each(data.partyList, function(index, item) {
 				voteSystem.partyList[item.partyId] = item;
@@ -182,7 +184,7 @@ voteSystem.queryParties = function() {
 };
 
 voteSystem.queryRegions = function() {
-	voteSystem.jsonQuery("regions", {}, false, function(data) {
+	voteSystem.regionListQuery = voteSystem.jsonQuery("regions", {}, false, function(data) {
 		if(data.responseType == "regions" && data.regionList) {
 			$.each(data.regionList, function(index, item) {
 				voteSystem.regionList[item.regionId] = item;
@@ -259,13 +261,18 @@ voteSystem.refreshVotingList = function() {
 		if(data.responseType == "candidates" && data.candidateList) {
 			for(var i = 0; i < data.candidateList.length; i++) {
 				var info = data.candidateList[i], element = template.clone();
-				var partyName = voteSystem.partyList[info.partyId] ? voteSystem.partyList[info.partyId].displayName : info.partyId;
 				
 				element.get().id = "";
 				element.find(".candidateName").text(info.firstName + " " + info.lastName);
 				element.find(".voteCount").text(info.voteCount);
-				element.find(".partyName").text(partyName);
+				element.find(".partyName").text(info.partyId);
 				element.find(".voteCandidateId").val(info.candidateId);
+				
+				voteSystem.partyListQuery.success(function() {
+					if(voteSystem.partyList[info.partyId]) {
+						element.find(".partyName").text(voteSystem.partyList[info.partyId].displayName);
+					}
+				});
 				
 				if(selectedId == 0) {
 					element.find(".voteCancelForm").css("display", "none");
@@ -312,8 +319,12 @@ voteSystem.refreshMyDataInfo = function() {
 		$("#myDataIdCode").text(voteSystem.userInfo.userInfo["username"]);
 		if ( voteSystem.userInfo.userInfo["voteRegionId"] ) {	
 			voteSystem.removeClassFromElement($("#myDataRegion")[0],"errorMessage" );
-			$("#myDataRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
-			$("#myDataApplyRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
+			
+			voteSystem.regionListQuery.success(function() {
+				$("#myDataRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
+				$("#myDataApplyRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
+			});
+			
 			setRegionButton = $("#toSetRegionButton").detach();
 			if ( voteSystem.userInfo.userInfo.votedCandidateId ) {
 				voteSystem.removeClassFromElement($("#myDataVoting")[0],"errorMessage" );
