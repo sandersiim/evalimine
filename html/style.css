@@ -139,6 +139,7 @@ body {
 }
 
 .boldLabel {
+	float: left;
 	font-weight: bold;
 	padding: 10px 0;
 }
@@ -231,6 +232,10 @@ body {
 	padding-left: 40px;
 }
 
+.myDataInfoNameAndValue a {
+	float: left;
+}
+
 .myDataInfoName {
 	float: left;
 	width: 170px;
@@ -242,6 +247,7 @@ body {
 }
 
 .myDataPhoto img {
+	float:left;
 	width: 120px;
 	height: 120px;
 }
@@ -265,28 +271,36 @@ body {
 	padding-bottom: 15px;
 }
 
-.myDataApplyInputDataSection {
+#applicationForm {
 	padding: 0px 40px;
 }
 
-
-.linkButton {
-	float: left;
-	background: none;
-	border: 0;
-	text-decoration: underline;
-	padding: 0;
-	font-family: Ubuntu, sans-serif;
-	font-weight: bold;
-	color: #0000FF;
-	cursor: pointer;	
-	-webkit-user-select: none; /* Chrome/Safari */        
-	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* IE10+ */
+#toVotingLink {
+	padding-left:15px;
 }
 
-.linkButton:active {
-	background: #2652E0;
+#uploaderDragDrop {
+	float: left;
+	border: 1px solid black;
+}
+
+.dropbox {
+	float: left;
+	padding: 10px;
+}
+
+.smallText {
+	float: left;
+	font-size: 12px;
+}
+
+.buttons {
+	padding-top: 100px;
+}
+
+.buttonContainer {
+	float: right;
+	padding-left: 50px;
 }
 
 .visible {

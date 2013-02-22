@@ -318,10 +318,6 @@ voteSystem.refreshVotingList = function() {
 	});
 };
 
-var setRegionLink;
-var applicationLink;
-var votingLink;
-
 voteSystem.refreshMyDataInfo = function() {
 	if (voteSystem.userInfo.userInfo) {
 		$("#myDataIdCode").text(voteSystem.userInfo.userInfo["username"]);
@@ -333,43 +329,42 @@ voteSystem.refreshMyDataInfo = function() {
 				$("#myDataApplyRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
 			});
 			
-			setRegionButton = $("#toSetRegionButton").detach();
+			$("#toSetRegionLink").remove();
 			if ( voteSystem.userInfo.userInfo.votedCandidateId ) {
 				voteSystem.removeClassFromElement($("#myDataVoting")[0],"errorMessage" );
 				voteSystem.addClassToElement($("#myDataVoting")[0],"greenText" );
 				$("#myDataVoting").text("Hääl antud:"+"");
-				votingLink = $("#toVotingButton").detach();
+				$("#toVotingLink").remove();
 			} else {
 				voteSystem.removeClassFromElement($("#myDataVoting")[0],"greenText" );
 				voteSystem.addClassToElement($("#myDataVoting")[0],"errorMessage" );
 				$("#myDataVoting").text("Te pole oma häält veel andnud!");
-				if (votingLink) {
-					$("#myDataVoting").after(votingLink);
-					votingLink = null;
-				} 
+				if (!$("#toVotingLink")[0]) {
+					$("#myDataVoting").after("<a id=\"toVotingLink\" href=\"#tab_voting\">Mine hääletama</a>");	
+				}			
 			}
 			if ( voteSystem.userInfo.candidateInfo) {
-				voteSystem.removeClassFromElement($("#myDataName").parent()[0],"displayNone");
+				voteSystem.removeClassFromElement($("#myDataName").parent()[0],"displayNone");				
 				$("#myDataName").text(voteSystem.userInfo.candidateInfo["firstName"]+" "+voteSystem.userInfo.candidateInfo["lastName"]);
+				voteSystem.addClassToElement($("#myDataApplication")[0],"greenText");
 				$("#myDataApplication").text("Te kandideerite oma piirkonnas");
-				applicationLink = $("#toApplicationButton").detach();
+				$("#toApplicationLink").remove();
 			} else {
 				voteSystem.addClassToElement($("#myDataName").parent()[0],"displayNone");
 				$("#myDataName").text("");
 				$("#myDataApplication").text("");
-				if (applicationLink) {
-					$("#myDataApplication").after(applicationLink);
-					applicationLink = null;
-				} 
+				if (!$("#toApplicationLink")[0]) {
+					$("#myDataApplication").after("<a id=\"toApplicationLink\" href=\"#tab_application\">Kandideeri oma piirkonnas</a>"); 
+				}
 			}
 		} else {
 			voteSystem.addClassToElement($("#myDataRegion")[0],"errorMessage" );
 			$("#myDataRegion").text("Teil on piirkond määramata!");
 			$("#myDataApplyRegion").text("");			
-			if ( setRegionLink) {
-				$("#myDataRegion").after(setRegionLink);
-				setRegionLink = null;
+			if (!$("#toSetRegionLink")[0]) {
+				$("#myDataRegion").after("<a id=\"toSetRegionLink\" href=\"linkButton\">Määra piirkond</a>");
 			}
+			
 			//ei saa hääletada ega kandideerida
 		}		
 	} 
@@ -454,17 +449,9 @@ voteSystem.initialise = function() {
 		return false;
 	});
 
-	$("#toVotingButton").click( function() {
-		voteSystem.setActiveMenuItem($("#menu_voting")[0]);
-	});
-
-	$("#toApplicationButton").click( function() {
-		voteSystem.swapToTab("tab_application");
-	});
-
 	$("#toMyDataButton").click( function() {
-		voteSystem.swapToTab("tab_mydata");
-	});	
+		voteSystem.setActiveTab("tab_mydata",false);
+	});
 	
 	if(window.location.hash == "#authSessionError") {
 		$("#authErrorMessage").text("Serveri sessiooni tuvastamine ebaõnnestus.");
@@ -498,6 +485,28 @@ voteSystem.initialise = function() {
 		}
 		
 		voteSystem.lastSeenHash = window.location.hash;
+	});
+
+	$("#uploaderDragDrop").on("drop", function(event) {
+		if(event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+			//fileUpload(event.dataTransfer.files[0]);
+		}
+		
+		return false;
+	});
+	
+	$("#uploaderDragDrop").click(function(event) {
+		$("#uploaderFile").click();
+	});
+	
+	$("#uploaderFile").change(function(event) {
+		if(this.files.length > 0) {
+			//fileUpload(this.files[0]);
+		}
+	});
+	
+	$("#uploaderForm").submit(function(event) {
+		return false;
 	});
 	
 	voteSystem.resizeElements();

@@ -104,15 +104,15 @@
 								</div>
 								<div class="myDataInfoNameAndValue">
 									<div class="myDataInfoName">Piirkond:</div>
-									<div class="myDataInfoValue" id="myDataRegion"></div> <a href="linkButton" id="toSetRegionButton">Määra piirkond</a>
+									<div class="myDataInfoValue" id="myDataRegion"></div> <a id="toSetRegionLink" href="linkButton">Määra piirkond</a>
 								</div>
 								<div class="myDataInfoNameAndValue">
 									<div class="myDataInfoName">Hääletamine:</div>
-									<div class="myDataInfoValue" id="myDataVoting"></div> <a href="#tab_voting">Mine hääletama</a>
+									<div class="myDataInfoValue" id="myDataVoting"></div> <a id="toVotingLink" href="#tab_voting">Mine hääletama</a>
 								</div>
 								<div class="myDataInfoNameAndValue">
 									<div class="myDataInfoName">Kandideerimine:</div>
-									<div class="myDataInfoValue greenText" id="myDataApplication"></div><a href="#tab_application">Kandideeri oma piirkonnas</a>
+									<div class="myDataInfoValue" id="myDataApplication"></div><a id="toApplicationLink" href="#tab_application">Kandideeri oma piirkonnas</a>
 								</div>
 							</div>
 						</div>
@@ -170,27 +170,46 @@
 					<div class="clear"></div>
 					<div class="tabContents">
 						<div class="myDataInfoSection">
-							<div class="myDataPhoto"><img src="images/scary_face.png" alt=""/></div>
+							<div class="myDataPhoto">
+								<form method="POST" enctype="multipart/form-data" action="#" id="pictureUpload">
+									<input type="file" name="fileData" id="uploaderFile" class="displayNone" value="" />
+									<div id="uploaderDragDrop" ondragover="return false"><img src="images/scary_face.png" alt=""/></div>
+								</form>
+								<div class="smallText">Kliki või lohista pilt siia</div>
+								
+								<div class="clear"></div>								
+							</div>
 							<div class="myDataInfo">
 								<div class="myDataInfoNameAndValue">
 									<div class="myDataInfoName">Teie piirkond:</div>
 									<div class="myDataInfoValue" id="myDataApplyRegion"></div>
 								</div>																	
-								<div class="myDataApplyInputDataSection">
+								<form method="GET" action="#" id="applicationForm">	
 									<div class="boldLabel">Palun sisestage oma nimi:</div>
+									<div class="clear"></div>
 									<div class="inputBoxWithLabel">
-										<label class="label" for="firstname">Eesnimi</label> <input type="text" form="" id="firstname" value=""/>
+										<label class="label" for="firstname">Eesnimi</label> <input type="text" id="firstname" value=""/>
 									</div>
 									<div class="inputBoxWithLabel">
-										<label class="label" for="lastname">Perenimi</label> <input type="text" form="" id="lastname" value=""/>
+										<label class="label" for="lastname">Perenimi</label> <input type="text" id="lastname" value=""/>
 									</div>
 								
 									<div class="boldLabel">Palun valige oma partei:</div>
-									<select form="" name="parties">										
-									   	<option value="one">one</option>
-									   	<option value="two">two</option>										
-									</select>
-								</div>
+									<div class="dropbox">
+										<select id="parties">										
+										   	<option value="1">Raske töö erakond</option>
+										   	<option value="2">Lihtsa inimese partei</option>										
+										</select>
+									</div>
+									<div class="clear"></div>
+									<div class="buttons">
+										<div class="buttonContainer">
+											<button type="button" class="submitButton" id="toMyDataButton">Tühista</button>
+										</div>
+										<input id="applyButton" class="submitButton" type="submit" value="Kandideeri"/>
+										
+									</div>
+								</form>
 							</div>
 						</div>						
 					</div>
