@@ -23,7 +23,6 @@ public class JsonQueryHandler {
 		addQueryType(false, JsonQueryTypes.PARTIES);
 		addQueryType(false, JsonQueryTypes.REGIONS);
 		addQueryType(false, JsonQueryTypes.SESSIONID);
-		addQueryType(false, JsonQueryTypes.NAMEFROMCARD);
 		
 		addQueryType(false, JsonQueryTypes.ADMINUSERS);
 		
@@ -34,6 +33,7 @@ public class JsonQueryHandler {
 		addQueryType(false, JsonQueryTypes.APPLICATION);
 		addQueryType(false, JsonQueryTypes.SETREGION);
 		addQueryType(true, JsonQueryTypes.PHOTO);
+		addQueryType(false, JsonQueryTypes.CHANGEPASS);
 		
 		addQueryType(false, JsonQueryTypes.ADMINLOGIN);
 	}

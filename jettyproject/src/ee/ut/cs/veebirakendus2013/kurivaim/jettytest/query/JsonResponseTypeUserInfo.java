@@ -18,9 +18,17 @@ public class JsonResponseTypeUserInfo implements JsonResponseInterface {
 	@SerializedName("candidateInfo")
 	private final MysqlQueryCandidateInfo candidateInfo;
 	
-	public JsonResponseTypeUserInfo(String reason, MysqlQueryUserInfo userInfo, MysqlQueryCandidateInfo candidateInfo) {
+	@SerializedName("cardFirstName")
+	private final String cardFirstName;
+	
+	@SerializedName("cardLastName")
+	private final String cardLastName;
+	
+	public JsonResponseTypeUserInfo(String reason, MysqlQueryUserInfo userInfo, MysqlQueryCandidateInfo candidateInfo, String cardFirstName, String cardLastName) {
 		this.reason = reason;
 		this.userInfo = userInfo;
 		this.candidateInfo = candidateInfo;
+		this.cardFirstName = cardFirstName;
+		this.cardLastName = cardLastName;
 	}
 }

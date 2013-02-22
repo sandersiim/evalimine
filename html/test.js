@@ -124,7 +124,21 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 			}
 			else {
 				voteSystem.setActiveTab("tab_voting", false);				
-			}			
+			}
+			
+			if(voteSystem.userInfo.cardFirstName && voteSystem.userInfo.cardLastName) {
+				$("#oldPasswordBlock").css("visibility", "hidden");
+				$("#firstname").val(voteSystem.userInfo.cardFirstName);
+				$("#lastname").val(voteSystem.userInfo.cardLastName);
+			}
+			else {
+				$("#oldPasswordBlock").css("visibility", "visible");
+				$("#oldPassword").val("");
+				$("#firstname").val("");
+				$("#lastname").val("");
+			}
+			
+			$("#changePasswordErrorMessage").text("");
 		}
 		else {
 			$("#menu_mydata").text("Logi sisse");
@@ -401,6 +415,8 @@ voteSystem.initialise = function() {
 	});	
 
 	$("#loginByPassword").submit( function() {
+		$("#loginErrorMessage").text("");
+		
 		voteSystem.jsonQuery("login", {username:$("#username").val(), password:$("#password").val()}, false, function(data) {
 			if(data.responseType == "userInfo") {
 				voteSystem.applyUserInfo(data);
@@ -420,6 +436,8 @@ voteSystem.initialise = function() {
 	});
 	
 	$("#loginByIdCard").submit(function(event) {
+		$("#authErrorMessage").text("");
+		
 		var sessionId = $("#authSessionId").val();
 		
 		this.action = "https://" + window.location.hostname + ":8443/";
@@ -439,6 +457,29 @@ voteSystem.initialise = function() {
 		}
 		
 		return true;
+	});
+	
+	$("#changePassword").submit(function(event) {
+		$("#changePasswordErrorMessage").text("");
+		
+		voteSystem.jsonQuery("changepass", {oldPassword:$("#oldPassword").val(), newPassword:$("#newPassword").val(), newPasswordRepeat:$("#newPasswordConfirmation").val()}, false, function(data) {
+			if(data.responseType == "status") {
+				if(data.statusCode < 0) $("#changePasswordErrorMessage").text("Süsteemi viga.");
+				else if(data.statusCode == 1) $("#changePasswordErrorMessage").text("Pole sisse logitud.");
+				else if(data.statusCode == 2) $("#changePasswordErrorMessage").text("Uus salasõna alla 5 tähemärgi.");
+				else if(data.statusCode == 3) $("#changePasswordErrorMessage").text("Uued salasõnad ei kattu.");
+				else if(data.statusCode == 4) $("#changePasswordErrorMessage").text("Vana salasõna ei ole õige.");
+				else if(data.statusCode == 10) {
+					$("#changePasswordErrorMessage").text("Salasõna edukalt muudetud.");
+				}
+				
+				$("#oldPassword").val("");
+				$("#newPassword").val("");
+				$("#newPasswordConfirmation").val("");
+			}
+		});
+		
+		return false;
 	});
 	
 	$("#logoutForm").submit(function(event) {

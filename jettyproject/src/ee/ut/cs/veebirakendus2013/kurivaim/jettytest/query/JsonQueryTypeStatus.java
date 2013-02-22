@@ -19,7 +19,9 @@ public class JsonQueryTypeStatus implements JsonQueryInterface {
 				return new JsonResponseTypeStatus(-1, "infoAction", "Getting status info failed - no database connection.");
 			}
 			
-			return new JsonResponseTypeUserInfo("infoAction", queryInfo.getLoggedInUserInfo(), queryInfo.getLoggedInCandidateInfo());
+			String cardFirstName = queryInfo.getSessionStringParameter("firstName"), cardLastName = queryInfo.getSessionStringParameter("lastName");
+			
+			return new JsonResponseTypeUserInfo("infoAction", queryInfo.getLoggedInUserInfo(), queryInfo.getLoggedInCandidateInfo(), cardFirstName, cardLastName);
 		}
 	}
 }

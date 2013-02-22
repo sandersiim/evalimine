@@ -69,7 +69,9 @@ public class JsonQueryTypeApplication implements JsonQueryInterface {
 						return new JsonResponseTypeStatus(3, "applyAction", "Candidacy application failed - no such party.");
 					}
 					else {
-						return new JsonResponseTypeUserInfo("applyAction", userInfo, queryInfo.getLoggedInCandidateInfo());
+						String cardFirstName = queryInfo.getSessionStringParameter("firstName"), cardLastName = queryInfo.getSessionStringParameter("lastName");
+						
+						return new JsonResponseTypeUserInfo("applyAction", userInfo, queryInfo.getLoggedInCandidateInfo(), cardFirstName, cardLastName);
 					}
 				}
 			}

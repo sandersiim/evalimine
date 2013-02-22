@@ -16,7 +16,7 @@ public enum JsonQueryTypes {
 	ADMINLOGIN("adminlogin", JsonQueryTypeAdminLogin.class),
 	ADMINUSERS("adminusers", JsonQueryTypeAdminUsers.class),
 	SESSIONID("sessionid", JsonQueryTypeSessionId.class),
-	NAMEFROMCARD("namefromcard", JsonQueryTypeNameFromCard.class);
+	CHANGEPASS("changepass", JsonQueryTypeChangePass.class);
 	
 	private final String typeName;
 	private final Class<? extends JsonQueryInterface> typeClass;
