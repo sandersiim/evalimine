@@ -27,7 +27,7 @@ voteSystem.menuActiveTab = {
 };
 
 voteSystem.resizeElements = function() {
-	$("#mainblock").height(Math.max($(window).height()-($("#mainblock").outerHeight(true)-$("#mainblock").height()), 680)); 
+	$("#mainblock").height(Math.max($(window).height()-($("#mainblock").outerHeight(true)-$("#mainblock").height()), 630)); 
 	$("#content").height($("#mainblock").height()-$("#header").outerHeight()-$("#footer").outerHeight(), 500); 
 };
 
@@ -464,12 +464,14 @@ voteSystem.initialise = function() {
 		
 		voteSystem.jsonQuery("changepass", {oldPassword:$("#oldPassword").val(), newPassword:$("#newPassword").val(), newPasswordRepeat:$("#newPasswordConfirmation").val()}, false, function(data) {
 			if(data.responseType == "status") {
+				voteSystem.removeClassFromElement($("#changePasswordErrorMessage")[0],"greenText");
 				if(data.statusCode < 0) $("#changePasswordErrorMessage").text("Süsteemi viga.");
 				else if(data.statusCode == 1) $("#changePasswordErrorMessage").text("Pole sisse logitud.");
 				else if(data.statusCode == 2) $("#changePasswordErrorMessage").text("Uus salasõna alla 5 tähemärgi.");
 				else if(data.statusCode == 3) $("#changePasswordErrorMessage").text("Uued salasõnad ei kattu.");
 				else if(data.statusCode == 4) $("#changePasswordErrorMessage").text("Vana salasõna ei ole õige.");
 				else if(data.statusCode == 10) {
+					voteSystem.addClassToElement($("#changePasswordErrorMessage")[0],"greenText");
 					$("#changePasswordErrorMessage").text("Salasõna edukalt muudetud.");
 				}
 				
