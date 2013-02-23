@@ -26,9 +26,11 @@ voteSystem.menuActiveTab = {
 	"menu_voting" : voteSystem.menuTabList["menu_voting"][0]
 };
 
-voteSystem.resizeElements = function() {
-	$("#mainblock").height(Math.max($(window).height()-($("#mainblock").outerHeight(true)-$("#mainblock").height()), 630)); 
-	$("#content").height($("#mainblock").height()-$("#header").outerHeight()-$("#footer").outerHeight(), 500); 
+voteSystem.resizeElements = function() {	 
+	var visibleTab = $(".tab.visible")[0];
+	$("#content").height(Math.max($("#"+visibleTab.id +" .tabNameLabel").outerHeight(true) + $("#"+visibleTab.id +" .tabContents").outerHeight(true), 450)); 
+	$("#mainblock").height( Math.max($(window).height()-($("#mainblock").outerHeight(true)-$("#mainblock").height()), $("#content").outerHeight()+$("#header").outerHeight()+$("#footer").outerHeight()));
+	window.scrollTo(0,0);
 };
 
 voteSystem.addClassToElement = function(element, oneClass) {
@@ -107,6 +109,7 @@ voteSystem.swapToTab = function(tabElement) {
 		
 		voteSystem.updateHashSilently("#" + newTab.id);
 	});
+	voteSystem.resizeElements();
 };
 
 voteSystem.jsonQuery = function(queryType, jsonObject, isPostQuery, doneFunction) {
@@ -489,6 +492,37 @@ voteSystem.initialise = function() {
 		
 		return false;
 	});
+
+	$("#setRegionForm").submit( function(event) {
+		$("#setRegionErrorMessage").text("");
+		var selectedRegionId = $("#regions").val();
+		if (selectedRegionId == "") {
+			$("#setRegionErrorMessage").text("Palun valige piirkond");
+		} else {
+			var regionName = $("#regions").find(":selected").text();
+			voteSystem.confirmMessage("Kinnita", "Kas oled kindel, et soovite oma piirkonnaks määrata "+regionName+"? "+
+				"Pärast kinnitamist ei saa te enam oma piirkonda muuta.", function() {
+				voteSystem.jsonQuery("setregion", {regionId:selectedRegionId}, false, function(data) {
+					if(data.responseType == "status") {
+						if(data.statusCode < 0) $("#setRegionErrorMessage").text("Süsteemi viga.");
+						else if(data.statusCode == 1) $("#setRegionErrorMessage").text("Pole sisse logitud.");
+						else if(data.statusCode == 3) $("#setRegionErrorMessage").text("Seda piirkonda pole olemas.");
+						else if(data.statusCode == 10) {
+							$("#setRegionErrorMessage").text("");
+							voteSystem.userInfo.userInfo["voteRegionId"] = selectedRegionId;
+							voteSystem.refreshMyDataInfo();
+							voteSystem.setActiveTab("tab_mydata",false);
+							voteSystem.setActiveTab("tab_voting",false);
+						}						
+					}
+				});
+			});
+
+			return false;			
+		}
+
+		return false;
+	});
 	
 	$("#logoutForm").submit(function(event) {
 		voteSystem.jsonQuery("logout", {}, false, function(data) {
@@ -499,6 +533,10 @@ voteSystem.initialise = function() {
 	});
 
 	$("#toMyDataButton").click( function() {
+		voteSystem.setActiveTab("tab_mydata",false);
+	});
+
+	$("#toMyDataButton2").click( function() {
 		voteSystem.setActiveTab("tab_mydata",false);
 	});
 	

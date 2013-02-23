@@ -3,6 +3,8 @@ body {
 	font-family: Ubuntu, sans-serif;
 	color: #333;
 	margin: 0;
+	-webkit-text-size-adjust:none;
+	font-size: 62.5%;
 }
 
 a:visited {
@@ -10,6 +12,7 @@ a:visited {
 }
 
 a:active {
+	border: 0;
 	background: #7DA4FF;
 }
 
@@ -20,7 +23,6 @@ h3.errorMessage {
 #mainblock {
 	width: 900px;
 	margin: 5px auto;
-	height: 700px;
 
 	-moz-border-radius:8px;
 	-webkit-border-radius:8px;
@@ -44,19 +46,20 @@ h3.errorMessage {
 	margin: 0;
 	float: left;
 	font-weight: bold;
-	font-size: 38px;
+	font-size: 4.5em;
 	letter-spacing: -2px;	
 }
 
 #sitetitle span {
 	font-weight: bold;
-	font-size: 24px;
+	font-size: .6em;
 	letter-spacing: -1px;
 	color: #8c8c8c;
 	padding-left: 15px;
 }
 
 .menubar {
+	font-size: 1.65em;
 	width: 812px;
 	margin: 0 auto;
 	text-shadow:2px 2px 5px #999;
@@ -110,7 +113,6 @@ h3.errorMessage {
 
 #content {
 	margin: 0 auto;
-	height: 500px;
 	width: 810px;
 	-moz-border-radius:20px;
 	-webkit-border-radius:20px;
@@ -129,6 +131,10 @@ h3.errorMessage {
 #login_idcard {
 	float:left;
 	padding: 0 60px;
+}
+
+#testtext {
+	padding: 40px;
 }
 
 #idCardPic {
@@ -159,13 +165,14 @@ h3.errorMessage {
 .submitButton {
 	float:right;
 	height: 35px;
-	width: 100px;
+	width: auto;
 	font-family: Ubuntu, sans-serif;
 	font-weight: bold;
 	color: #333;
 	-webkit-user-select: none; /* Chrome/Safari */        
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* IE10+ */
+	font-size: 1em;
 
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
@@ -209,19 +216,22 @@ h3.errorMessage {
 }
 
 .tabContents {
+	float:left;
+	font-size: 1.6em;
 	padding: 15px;
 }
 
 .tabNameLabel {
 	float: left;
 	padding: 15px 30px;
-	font-size: 30px;
+	font-size: 3em;
 	font-weight: bold;
 }
 
 .logoutSection {
+	font-size: 1.6em;
 	float:right;
-	padding-top: 30px;
+	padding-top: 20px;
 	padding-right: 50px;
 }
 
@@ -291,6 +301,16 @@ h3.errorMessage {
 	padding-left: 15px;
 }
 
+.setRegionSection {
+	padding-top: 100px;
+	padding-left: 100px;
+}
+
+#setRegionErrorMessage {
+	float: right;
+	padding-right: 100px;
+}
+
 #toVotingLink {
 	padding-left:15px;
 }
@@ -307,10 +327,11 @@ h3.errorMessage {
 
 .smallText {
 	float: left;
-	font-size: 12px;
+	font-size: 0.75em;
 }
 
 .buttons {
+	padding-right: 100px;
 	padding-top: 100px;
 }
 
@@ -382,7 +403,7 @@ h3.errorMessage {
 	width: 350px;
 	height: 44px;
 	float: left;
-	font-size: 32px;
+	font-size: 2em;
 	padding-top: 6px;
 	font-weight: bold;
 }
@@ -391,7 +412,7 @@ h3.errorMessage {
 	width: 100px;
 	height: 30px;
 	float: left;
-	font-size: 24px;
+	font-size: 1.5em;
 	font-weight: bold;
 	padding-top: 10px;
 }
@@ -415,9 +436,9 @@ h3.errorMessage {
 
 .candidateForVoting .partyName {
 	width: 408px;
-	padding: 6px;
+	padding-left: 6px;
 	float: left;
-	font-size: 18px;
+	font-size: 1.5em;
 }
 
 .candidateForVoting .action {
@@ -472,11 +493,11 @@ h3.errorMessage {
 #confirmBoxTitle {
 	width: 400px;
 	height: 70px;
-	font-size: 30px;
+	font-size: 3.0em;
 }
 
 #confirmBoxMessage {
-	font-size: 20px;
+	font-size: 2.0em;
 	height: 70px;
 }
 
@@ -492,7 +513,7 @@ h3.errorMessage {
 	height: 30px;
 	border: 2px solid black;
 	background: #cccccc;
-	font-size: 26px;
+	font-size: 2.6em;
 	cursor: pointer;
 }
 

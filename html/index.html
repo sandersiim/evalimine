@@ -21,13 +21,16 @@
 					<div id="menu_help" class="menuitem">Abi</div>
 					<div id="menu_mydata" class="menuitem menuselected">Logi sisse</div>
 					<div class="clear"></div>
-				</div>
-				<div id="testtext"></div>
+				</div>				
 			</div>		
 			<div class="clear"></div>
 			<div id="content">
 				<div id="tab_stats_regions" class="tab">
 					<div class="tabNameLabel">Statistika</div>
+					<div class="clear"></div>
+					<div class="tabContents">
+
+					</div>
 				</div>
 				<div id="tab_voting" class="tab">
 					<div class="tabNameLabel">Hääletamine</div>
@@ -83,14 +86,13 @@
 					<div class="tabNameLabel">Abi</div>
 				</div>
 				<div id="tab_mydata" class="tab">
-					<div class="tabNameLabel">Minu andmed</div>
+					<div class="tabNameLabel">Minu andmed</div>	
 					<div class="logoutSection">
 						<form method="GET" action="#" id="logoutForm">
 							<input id="logoutButton" class="submitButton" type="submit" value="Logi välja"/>		
 						</form>
-					</div>
-					<div class="clear"></div>
-					<div class="tabContents">					
+					</div>				
+					<div class="tabContents">											
 						<div class="myDataInfoSection">
 							<div class="myDataPhoto"><img src="images/scary_face.png" alt=""/></div>
 							<div class="myDataInfo">
@@ -115,8 +117,7 @@
 									<div class="myDataInfoValue" id="myDataApplication"></div><a id="toApplicationLink" href="#tab_application">Kandideeri oma piirkonnas</a>
 								</div>
 							</div>
-						</div>
-						<div class="clear"></div>
+						</div>						
 						<div class="myDataChangePasswordSection">
 							<h3>Muuda salasõna</h3>
 							<form method="GET" action="#" id="changePassword">
@@ -163,6 +164,8 @@
 								<input id="idCardPic" type="submit" value=""/>					
 							</form>
 						</div>
+						<div class="clear"></div>
+						<div id="testtext">testuser: 39010101234/48902114321, password="testpass"</div>
 					</div>
 				</div>
 				<div id="tab_application" class="tab">
@@ -196,9 +199,9 @@
 								
 									<div class="boldLabel">Palun valige oma partei:</div>
 									<div class="dropbox">
-										<select id="parties">										
-										   	<option value="1">Raske töö erakond</option>
-										   	<option value="2">Lihtsa inimese partei</option>										
+										<select id="parties">			
+											<option value="">Vali partei</option>							
+										   	<option value="1">Raske töö partei</option>
 										</select>
 									</div>
 									<div class="clear"></div>
@@ -218,7 +221,27 @@
 					<div class="tabNameLabel"><a href="#tab_mydata">Minu andmed</a>->Määra piirkond</div>
 					<div class="clear"></div>
 					<div class="tabContents">
-
+						<div class="setRegionSection">
+							<form method="GET" action="#" id="setRegionForm">
+								<div class="boldLabel">Valige piirkond, kus soovite hääletada ja/või kandideerida:</div>
+								<div class="dropbox">
+									<select id="regions">			
+										<option value="">Vali piirkond</option>							
+									   	<option value="1">Tartu linn</option>
+									   	<option value="2">Pärnu linn</option>
+									</select>
+								</div>
+								<div class="clear"></div>
+								<div class="errorMessage" id="setRegionErrorMessage"></div>	
+								<div class="clear"></div>							
+								<div class="buttons">
+									<div class="buttonContainer">
+										<button type="button" class="submitButton" id="toMyDataButton2">Tühista</button>
+									</div>
+									<input id="setRegionButton" class="submitButton" type="submit" value="Salvesta"/>				
+								</div>								
+							</form>
+						</div>
 					</div>
 				</div>
 
