@@ -30,7 +30,6 @@ voteSystem.resizeElements = function() {
 	var visibleTab = $(".tab.visible")[0];
 	$("#content").height(Math.max($("#"+visibleTab.id +" .tabNameLabel").outerHeight(true) + $("#"+visibleTab.id +" .tabContents").outerHeight(true), 450)); 
 	$("#mainblock").height( Math.max($(window).height()-($("#mainblock").outerHeight(true)-$("#mainblock").height()), $("#content").outerHeight()+$("#header").outerHeight()+$("#footer").outerHeight()));
-	window.scrollTo(0,0);
 };
 
 voteSystem.addClassToElement = function(element, oneClass) {
