@@ -14,7 +14,7 @@ voteSystem.lastSeenHash = null;
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
-	"menu_mydata" : ["tab_login", "tab_mydata", "tab_application"],
+	"menu_mydata" : ["tab_login", "tab_mydata", "tab_application", "tab_setregion"],
 	"menu_help" : ["tab_help"],
 	"menu_voting" : ["tab_err_login", "tab_voting", "tab_err_region"]
 };
@@ -336,8 +336,9 @@ voteSystem.refreshMyDataInfo = function() {
 	if (voteSystem.userInfo.userInfo) {
 		$("#myDataIdCode").text(voteSystem.userInfo.userInfo["username"]);
 		if ( voteSystem.userInfo.userInfo["voteRegionId"] ) {	
-			voteSystem.removeClassFromElement($("#myDataRegion")[0],"errorMessage" );
-			
+			voteSystem.removeClassFromElement($("#myDataApplication")[0],"greyText");
+			voteSystem.removeClassFromElement($("#myDataVoting")[0],"greyText");
+			voteSystem.removeClassFromElement($("#myDataRegion")[0],"errorMessage" );			
 			voteSystem.regionListQuery.success(function() {
 				$("#myDataRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
 				$("#myDataApplyRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
@@ -372,14 +373,19 @@ voteSystem.refreshMyDataInfo = function() {
 				}
 			}
 		} else {
+			voteSystem.addClassToElement($("#myDataName").parent()[0],"displayNone");
+			$("#toApplicationLink").remove();
+			$("#toVotingLink").remove();
 			voteSystem.addClassToElement($("#myDataRegion")[0],"errorMessage" );
 			$("#myDataRegion").text("Teil on piirkond määramata!");
 			$("#myDataApplyRegion").text("");			
 			if (!$("#toSetRegionLink")[0]) {
 				$("#myDataRegion").after("<a id=\"toSetRegionLink\" href=\"linkButton\">Määra piirkond</a>");
 			}
-			
-			//ei saa hääletada ega kandideerida
+			voteSystem.addClassToElement($("#myDataApplication")[0],"greyText");
+			voteSystem.addClassToElement($("#myDataVoting")[0],"greyText");
+			$("#myDataApplication").text("Kandideerimiseks peate piirkonna määrama.");
+			$("#myDataVoting").text("Hääletamiseks peate piirkonna määrama.");
 		}		
 	} 
 };

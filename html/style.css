@@ -5,6 +5,18 @@ body {
 	margin: 0;
 }
 
+a:visited {
+	color: blue;
+}
+
+a:active {
+	background: #7DA4FF;
+}
+
+h3.errorMessage {
+	padding-left: 30px;
+}
+
 #mainblock {
 	width: 900px;
 	margin: 5px auto;
@@ -275,6 +287,10 @@ body {
 	padding: 0px 40px;
 }
 
+#toSetRegionLink {
+	padding-left: 15px;
+}
+
 #toVotingLink {
 	padding-left:15px;
 }
@@ -482,4 +498,8 @@ body {
 
 .greenText {
 	color: #1DC223;
+}
+
+.greyText {
+	color: #999;
 }
