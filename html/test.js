@@ -276,6 +276,10 @@ voteSystem.voteForCandidate = function(candidateId) {
 
 voteSystem.refreshVotingList = function() {
 	var queryData = {regionId: 0, partyId: 0, namePrefix:"", orderId:0, startIndex: 0, count: 1000};
+	if( voteSystem.userInfo.userInfo["voteRegionId"] ) {
+		var regionName = voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"];
+		$("#tab_voting .tabNameLabel").text("Hääletamine - Sinu piirkond: "+regionName);
+	}
 
 	voteSystem.jsonQuery("candidates", queryData, false, function(data) {
 		var listElement = $("#votingCandidateList"), template = $("#candidateTemplate");
@@ -499,7 +503,7 @@ voteSystem.initialise = function() {
 			$("#setRegionErrorMessage").text("Palun valige piirkond");
 		} else {
 			var regionName = $("#regions").find(":selected").text();
-			voteSystem.confirmMessage("Kinnita", "Kas oled kindel, et soovite oma piirkonnaks määrata "+regionName+"? "+
+			voteSystem.confirmMessage("Kinnita", "Kas olete kindel, et soovite oma piirkonnaks määrata "+regionName+"? "+
 				"Pärast kinnitamist ei saa te enam oma piirkonda muuta.", function() {
 				voteSystem.jsonQuery("setregion", {regionId:selectedRegionId}, false, function(data) {
 					if(data.responseType == "status") {
