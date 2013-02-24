@@ -18,6 +18,7 @@ voteSystem.regionViewLoaded = false;
 voteSystem.regionViewLastFilter = "";
 voteSystem.votedCandidateName = "";
 voteSystem.candidateViewState = null;
+voteSystem.partyViewState = null;
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
@@ -559,6 +560,65 @@ voteSystem.candidateFiltersChanged = function() {
 	});
 };
 
+voteSystem.addLineToPartyView = function(listElement, template, partyName, keyword, voteCount, votePercentage) {
+	var element = template.clone();
+	
+	element.get().id = "";
+	element.find(".partyName").text(partyName);
+	element.find(".candidatesLink").attr("href", "#tab_stats_candidates-all-" + keyword);
+	element.find(".voteCount").text(voteCount + " häält");
+	element.find(".votePercentage").text(votePercentage);
+	
+	listElement.append(element);
+};
+
+voteSystem.loadPartyView = function(params) {
+	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).done( function() {
+		if(voteSystem.partyViewState == null) {
+			for(var regionId in voteSystem.regionList) {
+				$("#partyViewRegionFilter").append($("<option>", {
+					value: voteSystem.regionList[regionId].keyword,
+					text: voteSystem.regionList[regionId].displayName
+				}));
+			}
+		}
+		
+		if(params != voteSystem.partyViewState) {
+			var paramList = params.split("-");
+			var findRegionId = voteSystem.findRegionFromKeyword(paramList[0]);
+			
+			var queryData = {regionId: findRegionId, orderId: 4};
+			
+			voteSystem.jsonQuery("parties", queryData, false, function(data) {
+				if(data.responseType == "parties" && data.partyList) {
+					var listElement = $("#statsPartyList"), template = $("#partyTemplate"), totalVotes = 0;
+					listElement.html("");
+					
+					for(var i = 0; i < data.partyList.length; i++) {
+						totalVotes += data.partyList[i].voteCount;
+					}
+					
+					for(var i = 0; i < data.partyList.length; i++) {
+						var percentage = parseFloat(Math.round(((totalVotes > 0) ? data.partyList[i].voteCount / totalVotes : 0) * 1000) / 10).toFixed(1) + "%";
+						
+						voteSystem.addLineToPartyView(listElement, template, data.partyList[i].displayName, data.partyList[i].keyword, data.partyList[i].voteCount, percentage);
+					}
+				}
+			});
+		
+			voteSystem.partyViewState = params;
+		}
+	});
+};
+
+voteSystem.partyFiltersChanged = function() {
+	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).done( function() {
+		var regionKeyword = $("#partyViewRegionFilter").val();
+		
+		window.location.hash = "#tab_stats_parties-" + regionKeyword;
+	});
+};
+
 voteSystem.refreshMyDataInfo = function() {
 	if (voteSystem.userInfo.userInfo) {
 		$("#myDataIdCode").text(voteSystem.userInfo.userInfo["username"]);
@@ -660,6 +720,10 @@ voteSystem.initialise = function() {
 	
 	voteSystem.setTabActivateCB("tab_stats_candidates", function(tabElement, parameters) {
 		voteSystem.loadCandidateView(parameters);
+	});
+	
+	voteSystem.setTabActivateCB("tab_stats_parties", function(tabElement, parameters) {
+		voteSystem.loadPartyView(parameters);
 	});	
 
 	$("#loginByPassword").submit( function() {
@@ -880,6 +944,10 @@ voteSystem.initialise = function() {
 	
 	$("#candidateViewPartyFilter").change(function(event) {
 		voteSystem.candidateFiltersChanged();
+	});
+	
+	$("#partyViewRegionFilter").change(function(event) {
+		voteSystem.partyFiltersChanged();
 	});
 	
 	

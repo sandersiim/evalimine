@@ -596,6 +596,62 @@ h3.errorMessage {
 	text-align: right;
 }
 
+.partyForStats {
+	width: 750px;
+	height: 70px;
+	border: 2px solid black;
+	border-radius: 5px;
+	margin-bottom: 3px;
+	margin-left: 10px;
+}
+
+.partyForStats .logo {
+	width: 64px;
+	height: 64px;
+	overflow: hidden;
+	padding: 3px;
+	float: left;
+}
+
+.partyForStats .nameAndLink {
+	width: 340px;
+	height: 70px;
+	overflow: hidden;
+	padding-left: 10px;
+	float: left;
+}
+
+.partyForStats .partyName {
+	line-height: 40px;
+	font-size: 1.6em;
+	font-weight: bold;
+}
+
+.partyForStats .candidatesLink {
+	line-height: 20px;
+	font-size: 1.1em;
+}
+
+.partyForStats .voteCount {
+	width: 100px;
+	height: 70px;
+	overflow: hidden;
+	font-size: 1.4em;
+	line-height: 70px;
+	float: left;
+}
+
+.partyForStats .votePercentage {
+	width: 200px;
+	height: 70px;
+	line-height: 70px;
+	overflow: hidden;
+	font-size: 2.5em;
+	font-weight: bold;
+	float: left;
+	text-align: right;
+}
+
 #regionViewParams {
 	float: right;
 }
@@ -608,7 +664,7 @@ h3.errorMessage {
 	color: #aaaaaa;
 }
 
-#regionViewFilter , #candidateViewRegionFilter, #candidateViewPartyFilter, #candidateViewNameFilter, #candidateViewOrdering {
+#regionViewFilter , #candidateViewRegionFilter, #candidateViewPartyFilter, #candidateViewNameFilter, #candidateViewOrdering, #partyViewOrdering, #partyViewRegionFilter {
 	width: 170px;
 }
 
