@@ -467,16 +467,41 @@ voteSystem.findPartyFromKeyword = function(keyword) {
 	return 0;
 };
 
+voteSystem.wrapSpanInParent = function(spanElement) {
+	var parent = spanElement.parent();
+
+	if(spanElement.width() >= parent.width()) {
+		spanElement.css("width", (parent.width() - 20) + "px");
+		spanElement.attr("class", "wrappedText");
+		spanElement.attr("title", spanElement.text());
+		
+		parent.append($("<div>", {text: "...", class: "wrappedEtc"} ));
+		parent.append($("<div>", {class: "clear"} ));
+	}
+};
+
+voteSystem.placeTextAsSpanInElement = function(element, spanText) {
+	var spanElement = $("<span>", {	text: spanText } );
+	spanElement.css("white-space", "nowrap");
+	
+	element.html(spanElement);
+	return spanElement;
+};
+
 voteSystem.addLineToCandidateView = function(listElement, template, candidateName, partyName, regionName, voteCount) {
 	var element = template.clone();
 	
 	element.get().id = "";
-	element.find(".candidateName").text(candidateName);
-	element.find(".partyName").text(partyName);
-	element.find(".regionName").text(regionName);
+	var nameWrapper = voteSystem.placeTextAsSpanInElement(element.find(".candidateName"), candidateName);
+	var partyWrapper = voteSystem.placeTextAsSpanInElement(element.find(".partyName"), partyName);
+	var regionWrapper = voteSystem.placeTextAsSpanInElement(element.find(".regionName"), regionName);
 	element.find(".voteCount").text(voteCount);
 	
 	listElement.append(element);
+	
+	voteSystem.wrapSpanInParent(nameWrapper);
+	voteSystem.wrapSpanInParent(partyWrapper);
+	voteSystem.wrapSpanInParent(regionWrapper);
 };
 
 voteSystem.loadCandidateView = function(params) {
@@ -516,6 +541,8 @@ voteSystem.loadCandidateView = function(params) {
 						
 						voteSystem.addLineToCandidateView(listElement, template, info.firstName + " " + info.lastName, partyName, regionName, info.voteCount);
 					}
+					
+					voteSystem.addLineToCandidateView(listElement, template, "Testing a very very very very very very long name", "Partei on ka jube jube jube jube jube pika nimega", "Regioon", 100);
 				}
 			});
 		

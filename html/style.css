@@ -671,3 +671,15 @@ h3.errorMessage {
 .greyText {
 	color: #999;
 }
+
+.wrappedText {
+	display: block;
+	float: left;
+	overflow: hidden;
+}
+
+.wrappedEtc {
+	float: left;
+	width: 10px;
+	color: red;
+}
