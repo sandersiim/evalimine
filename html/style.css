@@ -664,7 +664,7 @@ h3.errorMessage {
 	color: #aaaaaa;
 }
 
-#regionViewFilter , #candidateViewRegionFilter, #candidateViewPartyFilter, #candidateViewNameFilter, #candidateViewOrdering, #partyViewOrdering, #partyViewRegionFilter {
+#regionViewFilter , #candidateViewRegionFilter, #candidateViewPartyFilter, #candidateViewNameFilter, #candidateViewOrdering, #partyViewRegionFilter {
 	width: 170px;
 }
 

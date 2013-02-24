@@ -327,7 +327,7 @@ voteSystem.voteForCandidate = function(candidateId) {
 }
 
 voteSystem.refreshVotingList = function() {
-	var queryData = {regionId: 0, partyId: 0, namePrefix:"", orderId:0, startIndex: 0, count: 1000};
+	var queryData = {regionId: voteSystem.userInfo.userInfo.voteRegionId, partyId: 0, namePrefix:"", orderId:0, startIndex: 0, count: 1000};
 	
 	if(voteSystem.userInfo.userInfo["voteRegionId"]) {
 		voteSystem.partyListQuery.success(function() {
@@ -432,14 +432,6 @@ voteSystem.loadRegionView = function() {
 			var info = voteSystem.regionList[regionId];
 		
 			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
-			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
-			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
-			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
-			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
-			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
-			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
-			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
-			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
 		}
 	});
 };
@@ -542,8 +534,6 @@ voteSystem.loadCandidateView = function(params) {
 						
 						voteSystem.addLineToCandidateView(listElement, template, info.firstName + " " + info.lastName, partyName, regionName, info.voteCount);
 					}
-					
-					voteSystem.addLineToCandidateView(listElement, template, "Testing a very very very very very very long name", "Partei on ka jube jube jube jube jube pika nimega", "Regioon", 100);
 				}
 			});
 		
