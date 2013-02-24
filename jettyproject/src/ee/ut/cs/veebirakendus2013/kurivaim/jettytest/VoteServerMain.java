@@ -18,11 +18,14 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.servlets.GzipFilter;
+import org.eclipse.jetty.servlets.gzip.GzipHandler;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.IdCardServlet;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.MultiPartFilterWrapper;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.ResourceHandlerWrapper;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.VoteServlet;
 
 public class VoteServerMain {
@@ -46,20 +49,27 @@ public class VoteServerMain {
 		filterHolder.setInitParameter("maxFileSize", "262144");
 		filterHolder.setInitParameter("maxRequestSize", "524288");
 		
+		FilterHolder filterGzip = new FilterHolder(new GzipFilter());
+		
 		ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		contextHandler.setContextPath("/dyn");
 		contextHandler.addServlet(new ServletHolder(new VoteServlet(sqlHandler)), "/*");
 		contextHandler.setAttribute("javax.servlet.context.tempdir", new File("../temp"));
 		contextHandler.addFilter(filterHolder, "/photo", EnumSet.of(DispatcherType.REQUEST));
+		contextHandler.addFilter(filterGzip, "/*", EnumSet.of(DispatcherType.REQUEST));
 		
 		server.setAttribute("sessionManager", contextHandler.getSessionHandler().getSessionManager());
 		
-		ResourceHandler resourceHandler = new ResourceHandler();
+		ResourceHandler resourceHandler = new ResourceHandlerWrapper();
 		resourceHandler.setResourceBase("../html/");
+		resourceHandler.setCacheControl("max-age=3153600, public");
+		
+		GzipHandler gzipHandler = new GzipHandler();
+		gzipHandler.setHandler(resourceHandler);
 		
 		HandlerList handlers = new HandlerList();
 		handlers.addHandler(contextHandler);
-		handlers.addHandler(resourceHandler);
+		handlers.addHandler(gzipHandler);
 		
 		server.setHandler(handlers);
 		server.start();
