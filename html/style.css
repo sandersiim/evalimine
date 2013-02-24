@@ -241,9 +241,9 @@ h3.errorMessage {
 }
 
 .tabNameLabelsMultiple {
-	padding: 20px 30px;
-	font-size: 1.5em;
-	width: 750px;
+	padding: 20px 0;
+	margin: 0 auto;
+	font-size: 1.6em;
 	text-align: center;
 	font-weight: bold;
 }
@@ -266,7 +266,7 @@ h3.errorMessage {
 
 .myDataInfoSection {
 	float: left;
-	padding-left: 45px; 
+	padding-left: 43px; 
 }
 
 .myDataInfo {
@@ -280,7 +280,7 @@ h3.errorMessage {
 .myDataInfoNameAndValue {
 	font-weight: bold;
 	padding-bottom: 30px;
-	padding-left: 40px;
+	padding-left: 38px;
 }
 
 .myDataInfoNameAndValue a {

@@ -869,7 +869,7 @@ voteSystem.initialise = function() {
 	$("#uploaderForm").submit(function(event) {
 		return false;
 	});
-	
+
 	voteSystem.resizeElements();
 	
 	$(window).resize(function() {
