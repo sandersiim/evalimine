@@ -367,6 +367,11 @@ h3.errorMessage {
 	padding-left: 50px;
 }
 
+.FaqSection {
+	font-size: 1.15em;
+	padding-left: 20px;
+}
+
 .visible {
 	visibility: visible;
 	opacity:1;
