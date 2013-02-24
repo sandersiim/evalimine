@@ -448,7 +448,7 @@ voteSystem.loadRegionView = function() {
 	});
 };
 
-voteSystem.findRegionFromKeyword = function(keyword) {
+voteSystem.regionFromKeyword = function(keyword) {
 	if(keyword && keyword.length > 0) {	
 		for(var regionId in voteSystem.regionList) {
 			if(keyword == voteSystem.regionList[regionId].keyword) {
@@ -460,7 +460,7 @@ voteSystem.findRegionFromKeyword = function(keyword) {
 	return 0;
 };
 
-voteSystem.findKeywordFromRegion = function(regionId) {
+voteSystem.keywordFromRegion = function(regionId) {
 	if(voteSystem.regionList[regionId]) {
 		return voteSystem.regionList[regionId].keyword;
 	}
@@ -469,7 +469,7 @@ voteSystem.findKeywordFromRegion = function(regionId) {
 	}
 };
 
-voteSystem.findPartyFromKeyword = function(keyword) {
+voteSystem.partyFromKeyword = function(keyword) {
 	if(keyword && keyword.length > 0) {	
 		for(var partyId in voteSystem.partyList) {
 			if(keyword == voteSystem.partyList[partyId].keyword) {
@@ -479,6 +479,15 @@ voteSystem.findPartyFromKeyword = function(keyword) {
 	}
 	
 	return 0;
+};
+
+voteSystem.keywordFromParty = function(partyId) {
+	if(voteSystem.partyList[partyId]) {
+		return voteSystem.partyList[partyId].keyword;
+	}
+	else {
+		return "all";
+	}
 };
 
 voteSystem.wrapSpanInParent = function(spanElement) {
@@ -538,27 +547,35 @@ voteSystem.loadCandidateView = function(params) {
 		
 		if(params != voteSystem.candidateViewState) {
 			var paramList = params.split("-");
-			var findRegionId = voteSystem.findRegionFromKeyword(paramList[0]);
-			var findPartyId = voteSystem.findPartyFromKeyword(paramList[1]);
+			var findRegionId = voteSystem.regionFromKeyword(paramList[0]);
+			var findPartyId = voteSystem.partyFromKeyword(paramList[1]);
+			var regionKeyword = voteSystem.keywordFromRegion(findRegionId);
+			var partyKeyword = voteSystem.keywordFromParty(findPartyId);
+			var sanitizedParamString = regionKeyword + "-" + partyKeyword;
 			
-			var queryData = {regionId: findRegionId, partyId: findPartyId, namePrefix: "", orderId: 4, startIndex: 0, count: 1000};
-			
-			voteSystem.jsonQuery("candidates", queryData, false, function(data) {
-				if(data.responseType == "candidates" && data.candidateList) {
-					var listElement = $("#statsCandidateList"), template = $("#candidateStatsTemplate");
-					listElement.html("");
-					
-					for(var i = 0; i < data.candidateList.length; i++) {
-						var info = data.candidateList[i];
-						var partyName = voteSystem.partyList[info.partyId].displayName;
-						var regionName = voteSystem.regionList[info.regionId].displayName;
+			if(sanitizedParamString  != voteSystem.candidateViewState) {
+				var queryData = {regionId: findRegionId, partyId: findPartyId, namePrefix: "", orderId: 4, startIndex: 0, count: 1000};
+				
+				voteSystem.jsonQuery("candidates", queryData, false, function(data) {
+					if(data.responseType == "candidates" && data.candidateList) {
+						var listElement = $("#statsCandidateList"), template = $("#candidateStatsTemplate");
+						listElement.html("");
 						
-						voteSystem.addLineToCandidateView(listElement, template, info.firstName + " " + info.lastName, partyName, regionName, info.voteCount);
+						for(var i = 0; i < data.candidateList.length; i++) {
+							var info = data.candidateList[i];
+							var partyName = voteSystem.partyList[info.partyId].displayName;
+							var regionName = voteSystem.regionList[info.regionId].displayName;
+							
+							voteSystem.addLineToCandidateView(listElement, template, info.firstName + " " + info.lastName, partyName, regionName, info.voteCount);
+						}
 					}
-				}
-			});
-		
-			voteSystem.candidateViewState = params;
+				});
+								
+				voteSystem.candidateViewState = sanitizedParamString;
+				
+				$("#candidateViewRegionFilter").val(regionKeyword);
+				$("#candidateViewPartyFilter").val(partyKeyword);
+			}
 		}
 	});
 };
@@ -596,7 +613,7 @@ voteSystem.loadPartyView = function(params) {
 		
 		if(params != voteSystem.partyViewState) {
 			var paramList = params.split("-");
-			var findRegionId = voteSystem.findRegionFromKeyword(paramList[0]);
+			var findRegionId = voteSystem.regionFromKeyword(paramList[0]);
 			
 			var queryData = {regionId: findRegionId, orderId: 4};
 			
@@ -611,7 +628,7 @@ voteSystem.loadPartyView = function(params) {
 					
 					for(var i = 0; i < data.partyList.length; i++) {
 						var percentage = parseFloat(Math.round(((totalVotes > 0) ? data.partyList[i].voteCount / totalVotes : 0) * 1000) / 10).toFixed(1) + "%";
-						var regionKeyword = voteSystem.findKeywordFromRegion(findRegionId);
+						var regionKeyword = voteSystem.keywordFromRegion(findRegionId);
 						
 						voteSystem.addLineToPartyView(listElement, template, data.partyList[i].displayName, data.partyList[i].keyword, regionKeyword, data.partyList[i].voteCount, percentage);
 					}
