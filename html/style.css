@@ -226,6 +226,7 @@ h3.errorMessage {
 }
 
 .tabContents {
+	float: left;
 	width: 780px;
 	font-size: 1.6em;
 	margin: 10px;
@@ -235,6 +236,7 @@ h3.errorMessage {
 }
 
 .tabNameLabel {
+	float: left;
 	padding: 15px 30px;
 	font-size: 3em;
 	font-weight: bold;
