@@ -60,6 +60,38 @@
 						<a href="#tab_stats_parties">Statistika parteide lõikes</a> | 
 						<a href="#tab_stats_map">Statistika kaardil</a>
 					</div>
+					<div class="tabHeader">
+						<form method="GET" action="#">
+							<div id="candidateViewParams">
+								<select id="candidateViewOrdering">
+									<option value="all">Järjest häälte arvu järgi</option>
+								</select>
+								<select id="candidateViewRegionFilter">
+									<option value="all">Kogu Eesti</option>
+								</select>
+								<select id="candidateViewPartyFilter">
+									<option value="all">Kõik parteid</option>
+								</select>
+								<input type="text" id="candidateViewNameFilter" value="Filtreeri nimesid" />
+							</div>
+							<div class="clear"></div>
+						</form>
+					</div>
+					<div class="tabContents">
+						<div class="templateContainer">
+							<div class="candidateForStats" id="candidateStatsTemplate">
+								<img class="candidatePhoto" src="images/scary_face.png" alt="Kandidaadi foto" />
+								<div class="candidateName"></div>
+								<img class="partyLogo" src="images/scary_face.png" alt="Partei logo" />
+								<div class="partyName"></div>
+								<div class="regionName"></div>
+								<div class="voteCount"></div>
+								<div class="clear"></div>
+							</div>
+						</div>
+						<div id="statsCandidateList">
+						</div>
+					</div>
 				</div>
 				<div id="tab_stats_parties" class="tab">
 					<div class="tabNameLabelsMultiple">
