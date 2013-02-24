@@ -235,7 +235,6 @@ h3.errorMessage {
 }
 
 .tabNameLabel {
-	float: left;
 	padding: 15px 30px;
 	font-size: 3em;
 	font-weight: bold;
@@ -243,7 +242,7 @@ h3.errorMessage {
 
 .tabNameLabelsMultiple {
 	padding: 20px 30px;
-	font-size: 1.6em;
+	font-size: 1.5em;
 	width: 750px;
 	text-align: center;
 	font-weight: bold;
@@ -255,10 +254,14 @@ h3.errorMessage {
 }
 
 .logoutSection {
-	font-size: 1.6em;
-	float:right;
-	padding-top: 20px;
-	padding-right: 50px;
+	font-weight: normal;
+	font-size: 15px;
+	float: right;
+	padding-right: 30px;
+}
+
+.labelFloating {
+	float: left;
 }
 
 .myDataInfoSection {
