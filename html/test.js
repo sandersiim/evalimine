@@ -15,12 +15,9 @@ voteSystem.regionListQuery = null;
 voteSystem.candidateNameQuery = null;
 voteSystem.lastSeenHash = null;
 voteSystem.regionViewLoaded = false;
-<<<<<<< HEAD
 voteSystem.regionViewLastFilter = "";
 voteSystem.votedCandidateName = "";
-=======
 voteSystem.candidateViewState = null;
->>>>>>> Implemented candidate statistics view
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
