@@ -2,7 +2,9 @@ var voteSystem = {}
 
 voteSystem.userInfo = {}
 voteSystem.loggedIn = false;
-voteSystem.checkHashOnStatus = null;
+voteSystem.initialTabSet = false;
+voteSystem.delayedTabName = null;
+voteSystem.delayedTabParams = null;
 voteSystem.activeMenuItem = "menu_mydata"
 voteSystem.tabCallbacks = {};
 voteSystem.menuList = ["menu_statistics", "menu_mydata", "menu_help", "menu_voting"];
@@ -11,6 +13,8 @@ voteSystem.regionList = {};
 voteSystem.partyListQuery = null;
 voteSystem.regionListQuery = null;
 voteSystem.lastSeenHash = null;
+voteSystem.regionViewLoaded = false;
+voteSystem.regionViewLastFilter = "";
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
@@ -26,10 +30,38 @@ voteSystem.menuActiveTab = {
 	"menu_voting" : voteSystem.menuTabList["menu_voting"][0]
 };
 
-voteSystem.resizeElements = function() {	 
-	var visibleTab = $(".tab.visible")[0];
-	$("#content").height(Math.max($("#"+visibleTab.id +" .tabNameLabel").outerHeight(true) + $("#"+visibleTab.id +" .tabContents").outerHeight(true), 450)); 
-	$("#mainblock").height( Math.max($(window).height()-($("#mainblock").outerHeight(true)-$("#mainblock").height()), $("#content").outerHeight()+$("#header").outerHeight()+$("#footer").outerHeight()));
+voteSystem.menuActiveTabParams = {
+	"menu_statistics" : "",
+	"menu_mydata" : "",
+	"menu_help" : "",
+	"menu_voting" : ""
+};
+
+voteSystem.resizeTabContents = function(tabElement) {
+	var nameBlock = $(tabElement).children(".tabNameLabel");
+	var headerBlock = $(tabElement).children(".tabHeader");
+	var contentsBlock = $(tabElement).children(".tabContents");
+	
+	var heightRemaining = $("#content").height() - 35;
+	
+	if(contentsBlock) {
+		heightRemaining -= $(tabElement).outerHeight() - $(tabElement).height();
+		if(nameBlock) heightRemaining -= nameBlock.outerHeight();
+		if(headerBlock) heightRemaining -= headerBlock.outerHeight();
+		
+		contentsBlock.height(heightRemaining);
+	}
+}
+
+voteSystem.resizeElements = function() {
+	$("#mainblock").height(Math.max($(window).height() - ($("#mainblock").outerHeight(true) - $("#mainblock").height()), 630));
+	$("#content").height($("#mainblock").height() - $("#header").outerHeight()-$("#footer").outerHeight());
+	
+	var visibleTab = $(".tab.visible");
+	
+	if(visibleTab) {
+		voteSystem.resizeTabContents(visibleTab.get());
+	}
 };
 
 voteSystem.addClassToElement = function(element, oneClass) {
@@ -51,13 +83,15 @@ voteSystem.changeActiveMenuClass = function(newMenuSelection) {
 };
 
 voteSystem.setActiveMenuItem = function(newMenuSelection) {
+	voteSystem.activeMenuItem = newMenuSelection.id;
+
 	voteSystem.changeActiveMenuClass(newMenuSelection);
 	voteSystem.swapToActiveTabForMenuItem(newMenuSelection)
 };
 
 voteSystem.swapToActiveTabForMenuItem = function(selectedMenu) {
 	if(voteSystem.menuActiveTab[selectedMenu.id]) {
-		voteSystem.swapToTab(voteSystem.menuActiveTab[selectedMenu.id]);
+		voteSystem.swapToTab(voteSystem.menuActiveTab[selectedMenu.id], voteSystem.menuActiveTabParams[selectedMenu.id]);
 	}
 };
 
@@ -75,15 +109,16 @@ voteSystem.getMenuItemNameForTab = function(tabName) {
 	return foundMenu;
 };
 
-voteSystem.setActiveTab = function(tabName, activateMenu) {
+voteSystem.setActiveTab = function(tabName, tabParameters, activateMenu) {
 	var menuItemName = voteSystem.getMenuItemNameForTab(tabName);
 	
 	if(menuItemName) {
 		if(voteSystem.menuActiveTab[menuItemName]) {
 			voteSystem.menuActiveTab[menuItemName] = tabName;
+			voteSystem.menuActiveTabParams[menuItemName] = tabParameters;
 		}
 
-		if(this.activeMenuItem == menuItemName || activateMenu) {
+		if(voteSystem.activeMenuItem == menuItemName || activateMenu) {
 			voteSystem.setActiveMenuItem($("#" + menuItemName)[0]);
 		}
 	}
@@ -94,7 +129,7 @@ voteSystem.updateHashSilently = function(newHash) {
 	window.location.hash = newHash;
 };
 
-voteSystem.swapToTab = function(tabElement) {
+voteSystem.swapToTab = function(tabElement, tabParameters) {
 	$.each($(".tab.visible"), function(index, oldTab) {
 		voteSystem.removeClassFromElement(oldTab, "visible");
 	});
@@ -103,11 +138,13 @@ voteSystem.swapToTab = function(tabElement) {
 		voteSystem.addClassToElement(newTab, "visible");
 		
 		if(voteSystem.tabCallbacks[newTab.id]) {
-			voteSystem.tabCallbacks[newTab.id](newTab);
+			voteSystem.tabCallbacks[newTab.id](newTab, tabParameters);
 		}
 		
-		voteSystem.updateHashSilently("#" + newTab.id);
+		voteSystem.resizeTabContents(newTab);
+		voteSystem.updateHashSilently("#" + newTab.id + ((tabParameters.length > 0) ? "-" + tabParameters : ""));
 	});
+	
 	voteSystem.resizeElements();
 };
 
@@ -119,13 +156,13 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 	if(voteSystem.loggedIn != isLoggedIn) {
 		if(isLoggedIn) {
 			$("#menu_mydata").text("Minu andmed");
-			voteSystem.setActiveTab("tab_mydata", false);
+			voteSystem.setActiveTab("tab_mydata", "", false);
 			
 			if(voteSystem.userInfo.userInfo.voteRegionId == 0) {
-				voteSystem.setActiveTab("tab_err_region", false);
+				voteSystem.setActiveTab("tab_err_region", "", false);
 			}
 			else {
-				voteSystem.setActiveTab("tab_voting", false);				
+				voteSystem.setActiveTab("tab_voting", "", false);
 			}
 			
 			if(voteSystem.userInfo.cardFirstName && voteSystem.userInfo.cardLastName) {
@@ -145,8 +182,8 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 		else {
 			$("#menu_mydata").text("Logi sisse");
 			
-			voteSystem.setActiveTab("tab_login", false);
-			voteSystem.setActiveTab("tab_err_login", false);
+			voteSystem.setActiveTab("tab_login", "", false);
+			voteSystem.setActiveTab("tab_err_login", "", false);
 		}
 		
 	}
@@ -179,7 +216,7 @@ voteSystem.redirectBasedOnUserInfo = function() {
 	}
 	
 	if(redirectTab) {
-		voteSystem.setActiveTab(redirectTab, true);
+		voteSystem.setActiveTab(redirectTab, "", true);
 	}
 }
 
@@ -189,11 +226,11 @@ voteSystem.queryStatus = function() {
 			voteSystem.applyUserInfo(data);
 		}
 		
-		if(!voteSystem.checkHashOnStatus) {
+		if(!voteSystem.initialTabSet) {
 			voteSystem.redirectBasedOnUserInfo();
 		}
 		
-		voteSystem.requestTabActivationOnStatus(window.location.hash);
+		voteSystem.requestTabActivationOnStatus();
 	});
 };
 
@@ -208,7 +245,7 @@ voteSystem.queryParties = function() {
 };
 
 voteSystem.queryRegions = function() {
-	voteSystem.regionListQuery = voteSystem.jsonQuery("regions", {}, false, function(data) {
+	voteSystem.regionListQuery = voteSystem.jsonQuery("regions", {resultMethod: 1}, false, function(data) {
 		if(data.responseType == "regions" && data.regionList) {
 			$.each(data.regionList, function(index, item) {
 				voteSystem.regionList[item.regionId] = item;
@@ -221,23 +258,24 @@ voteSystem.setTabActivateCB = function(tabName, callbackFunction) {
 	voteSystem.tabCallbacks[tabName] = callbackFunction;
 };
 
-voteSystem.requestTabActivation = function(tabName) {
+voteSystem.requestTabActivation = function(tabName, tabParameters) {
 	var menuName = voteSystem.getMenuItemNameForTab(tabName);
 	if(!menuName) return;
 
 	if(menuName == "menu_mydata" || menuName == "menu_voting") {
-		voteSystem.checkHashOnStatus = tabName;
+		voteSystem.delayedTabName = tabName;
+		voteSystem.delayedTabParams = tabParameters;
 	}
 	else {
-		voteSystem.setActiveTab(tabName, true);
+		voteSystem.setActiveTab(tabName, tabParameters, true);
 	}
 };
 
 voteSystem.requestTabActivationOnStatus = function() {
-	if(!voteSystem.checkHashOnStatus) return;
+	if(!voteSystem.delayedTabName) return;
 	
-	var tabName = voteSystem.checkHashOnStatus;
-	voteSystem.checkHashOnStatus = null;
+	var tabName = voteSystem.delayedTabName, tabParameters = voteSystem.delayedTabParams;
+	voteSystem.delayedTabName = null;
 	
 	var menuName = voteSystem.getMenuItemNameForTab(tabName);
 	if(!menuName) return;
@@ -254,7 +292,7 @@ voteSystem.requestTabActivationOnStatus = function() {
 		tabName = voteSystem.menuActiveTab["menu_voting"];
 	}
 	
-	voteSystem.setActiveTab(tabName, true);
+	voteSystem.setActiveTab(tabName, tabParameters, true);
 };
 
 voteSystem.voteForCandidate = function(candidateId) {
@@ -276,9 +314,14 @@ voteSystem.voteForCandidate = function(candidateId) {
 
 voteSystem.refreshVotingList = function() {
 	var queryData = {regionId: 0, partyId: 0, namePrefix:"", orderId:0, startIndex: 0, count: 1000};
-	if( voteSystem.userInfo.userInfo["voteRegionId"] ) {
-		var regionName = voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"];
-		$("#tab_voting .tabNameLabel").text("Hääletamine - Sinu piirkond: "+regionName);
+	
+	if(voteSystem.userInfo.userInfo["voteRegionId"]) {
+		voteSystem.partyListQuery.success(function() {
+			if(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]) {
+				var regionName = voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"];
+				$("#tab_voting .tabNameLabel").text("Hääletamine - Sinu piirkond: " + regionName);
+			}
+		});
 	}
 
 	voteSystem.jsonQuery("candidates", queryData, false, function(data) {
@@ -334,6 +377,55 @@ voteSystem.refreshVotingList = function() {
 					listElement.append(element);
 				}
 			}
+		}
+	});
+};
+
+voteSystem.addLineToRegionView = function(listElement, template, displayName, keyword, voterCount, candidateCount) {
+	var element = template.clone();
+	
+	element.get().id = "";
+	element.find(".regionName").text(displayName);
+	element.find(".regionCandidateCount").text(candidateCount + " kandidaati");
+	element.find(".regionVoterCount").text(voterCount + " hääletajat");
+	element.find(".regionPartyStats").attr("href", "#tab_stats_parties-" + keyword);
+	element.find(".regionCandidateStats").attr("href", "#tab_stats_candidates-" + keyword + "-all");
+	
+	if(keyword == "all") element.addClass("combined");
+	
+	listElement.append(element);
+};
+
+voteSystem.loadRegionView = function() {
+	if(voteSystem.regionViewLoaded) return;
+	
+	voteSystem.regionViewLoaded = true;
+
+	voteSystem.regionListQuery.success(function(data) {
+		var listElement = $("#statsRegionList"), template = $("#regionTemplate");
+		listElement.html("");
+		
+		var totalVoters = 0, totalCandidates = 0;
+		
+		for(var regionId in voteSystem.regionList) {
+			totalVoters += voteSystem.regionList[regionId].totalVoters;
+			totalCandidates += voteSystem.regionList[regionId].totalCandidates;
+		}
+		
+		voteSystem.addLineToRegionView(listElement, template, "Kogu Eesti", "all", totalVoters, totalCandidates);
+		
+		for(var regionId in voteSystem.regionList) {
+			var info = voteSystem.regionList[regionId];
+		
+			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
+			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
+			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
+			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
+			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
+			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
+			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
+			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
+			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
 		}
 	});
 };
@@ -418,12 +510,20 @@ voteSystem.confirmMessage = function(title, message, yesCallback) {
 };
 
 voteSystem.initialise = function() {
+	voteSystem.queryRegions();
+	voteSystem.queryStatus();
+	voteSystem.queryParties();	
+	
 	$(".menuitem").click( function() {
 		voteSystem.setActiveMenuItem(this);
 	});
 	
 	voteSystem.setTabActivateCB("tab_voting", function(tabElement) {
 		voteSystem.refreshVotingList();
+	});	
+	
+	voteSystem.setTabActivateCB("tab_stats_regions", function(tabElement) {
+		voteSystem.loadRegionView();
 	});	
 
 	$("#loginByPassword").submit( function() {
@@ -514,8 +614,8 @@ voteSystem.initialise = function() {
 							$("#setRegionErrorMessage").text("");
 							voteSystem.userInfo.userInfo["voteRegionId"] = selectedRegionId;
 							voteSystem.refreshMyDataInfo();
-							voteSystem.setActiveTab("tab_mydata",false);
-							voteSystem.setActiveTab("tab_voting",false);
+							voteSystem.setActiveTab("tab_mydata", "", false);
+							voteSystem.setActiveTab("tab_voting", "", false);
 						}						
 					}
 				});
@@ -536,11 +636,11 @@ voteSystem.initialise = function() {
 	});
 
 	$("#toMyDataButton").click( function() {
-		voteSystem.setActiveTab("tab_mydata",false);
+		voteSystem.setActiveTab("tab_mydata", "", false);
 	});
 
 	$("#toMyDataButton2").click( function() {
-		voteSystem.setActiveTab("tab_mydata",false);
+		voteSystem.setActiveTab("tab_mydata", "", false);
 	});
 	
 	if(window.location.hash == "#authSessionError") {
@@ -563,13 +663,34 @@ voteSystem.initialise = function() {
 		window.location.hash = "";
 	}
 	else if(window.location.hash.indexOf("#tab_") == 0) {
-		voteSystem.requestTabActivation(window.location.hash.substr(1));
+		var hashString = window.location.hash.substr(1);
+		var dashPosition = hashString.indexOf("-");
+		
+		voteSystem.initialTabSet = true;
+		
+		if(dashPosition < 0) {
+			voteSystem.requestTabActivation(hashString, "");
+		}
+		else {
+			voteSystem.requestTabActivation(hashString.slice(0, dashPosition), hashString.slice(dashPosition + 1));
+		}
 	}
 	
 	$(window).on("hashchange", function() {
 		if(voteSystem.lastSeenHash != window.location.hash) {
 			if(window.location.hash.indexOf("#tab_") == 0) {
-				voteSystem.checkHashOnStatus = window.location.hash.substr(1);
+				var hashString = window.location.hash.substr(1);
+				var dashPosition = hashString.indexOf("-");
+				
+				if(dashPosition < 0) {
+					voteSystem.delayedTabName = hashString;
+					voteSystem.delayedTabParams = "";
+				}
+				else {
+					voteSystem.delayedTabName = hashString.slice(0, dashPosition);
+					voteSystem.delayedTabParams = hashString.slice(dashPosition + 1);
+				}
+				
 				voteSystem.requestTabActivationOnStatus();
 			}
 		}
@@ -583,6 +704,20 @@ voteSystem.initialise = function() {
 		}
 		
 		return false;
+	});
+	
+	
+	
+	$("#regionViewFilter").focus(function(event) {
+		if($("#regionViewFilter").val() == "Filtreeri piirkondi") {
+			$("#regionViewFilter").val("");
+		}
+	});
+	
+	$("#regionViewFilter").blur(function(event) {
+		if($("#regionViewFilter").val() == "") {
+			$("#regionViewFilter").val("Filtreeri piirkondi");
+		}
 	});
 	
 	$("#uploaderDragDrop").click(function(event) {
@@ -604,10 +739,6 @@ voteSystem.initialise = function() {
 	$(window).resize(function() {
 		voteSystem.resizeElements();
 	});
-	
-	voteSystem.queryRegions();
-	voteSystem.queryStatus();
-	voteSystem.queryParties();	
 };
 
 $(document).ready(function() {

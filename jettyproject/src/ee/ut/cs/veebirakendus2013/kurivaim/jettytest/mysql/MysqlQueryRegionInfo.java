@@ -16,6 +16,8 @@ public class MysqlQueryRegionInfo {
 	private String displayName;
 	private int mapCoordsX;
 	private int mapCoordsY;
+	private int totalVoters;
+	private int totalCandidates;
 	
 	private transient final MysqlConnectionHandler sqlHandler;
 	
@@ -24,12 +26,30 @@ public class MysqlQueryRegionInfo {
 		this.sqlHandler = sqlHandler;
 	}
 	
-	
 	public List<MysqlQueryRegionInfo> queryAll() {
 		PreparedStatement statement = null;
 				
 		try {
-			statement = sqlHandler.getConnection().prepareStatement("SELECT * from ev_regions;");
+			statement = sqlHandler.getConnection().prepareStatement("SELECT *, 0 AS totalVoters, 0 AS totalCandidates FROM ev_regions AS");
+			
+			return fillMultiDataFromResults(statement.executeQuery());
+		} catch (SQLException e) {
+			// TODO: log this error somewhere
+			e.printStackTrace();
+		} finally {
+			sqlHandler.statementCloser(statement);
+		}
+		
+		return null;
+	}
+	
+	public List<MysqlQueryRegionInfo> queryAllWithCounts() {
+		PreparedStatement statement = null;
+				
+		try {
+			statement = sqlHandler.getConnection().prepareStatement(
+					"SELECT *, (SELECT COUNT(*) FROM ev_users WHERE voteRegionId = a.id) AS totalVoters," +
+					"(SELECT COUNT(*) FROM ev_candidates WHERE regionId = a.id) AS totalCandidates FROM ev_regions AS a");
 			
 			return fillMultiDataFromResults(statement.executeQuery());
 		} catch (SQLException e) {
@@ -62,6 +82,8 @@ public class MysqlQueryRegionInfo {
 		displayName = results.getString("displayName");
 		mapCoordsX = results.getInt("mapCoordsX");
 		mapCoordsY = results.getInt("mapCoordsY");
+		totalVoters = results.getInt("totalVoters");
+		totalCandidates = results.getInt("totalCandidates");
 		
 		return this;
 	}
@@ -94,6 +116,14 @@ public class MysqlQueryRegionInfo {
 	
 	public int getMapCoordsY() {
 		return mapCoordsY;
+	}
+	
+	public int getTotalVoters() {
+		return totalVoters;
+	}
+	
+	public int getTotalCandidates() {
+		return totalCandidates;
 	}
 
 }

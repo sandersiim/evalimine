@@ -21,15 +21,31 @@
 					<div id="menu_help" class="menuitem">Abi</div>
 					<div id="menu_mydata" class="menuitem menuselected">Logi sisse</div>
 					<div class="clear"></div>
-				</div>				
+				</div>
 			</div>		
 			<div class="clear"></div>
 			<div id="content">
 				<div id="tab_stats_regions" class="tab">
-					<div class="tabNameLabel">Statistika</div>
-					<div class="clear"></div>
+					<div class="tabNameLabel">Statistika -> Piirkondade nimekiri</div>
+					<div class="tabHeader">
+						<form method="GET" action="#">
+							<div id="regionViewParams"><input type="text" id="regionViewFilter" value="Filtreeri piirkondi"/></div>
+							<div class="clear"></div>
+						</form>
+					</div>
 					<div class="tabContents">
-
+						<div class="templateContainer">
+							<div class="regionForStats" id="regionTemplate">
+								<div class="regionName"></div>
+								<div class="regionCandidateCount"></div>
+								<div class="regionVoterCount"></div>
+								<a class="regionPartyStats"></a>
+								<a class="regionCandidateStats"></a>
+								<div class="clear"></div>
+							</div>
+						</div>
+						<div id="statsRegionList">
+						</div>
 					</div>
 				</div>
 				<div id="tab_voting" class="tab">

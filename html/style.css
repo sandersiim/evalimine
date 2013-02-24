@@ -218,14 +218,23 @@ h3.errorMessage {
 	-webkit-transition: visibility 0s linear 0.5s,opacity 0.5s linear; /* Safari and Chrome */
 }
 
-.tabContents {
-	float:left;
+.tabHeader {
+	width: 780px;
 	font-size: 1.6em;
-	padding: 15px;
+	margin: 0 10px;
+	padding: 0 5px;
+}
+
+.tabContents {
+	width: 780px;
+	font-size: 1.6em;
+	margin: 10px;
+	padding: 5px;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .tabNameLabel {
-	float: left;
 	padding: 15px 30px;
 	font-size: 3em;
 	font-weight: bold;
@@ -375,8 +384,7 @@ h3.errorMessage {
 	border: 2px solid black;
 	border-radius: 5px;
 	margin-bottom: 5px;
-	margin-left: 25px;
-	margin-right: 25px;
+	margin-left: 10px;
 }
 
 .candidateForVoting .photo {
@@ -458,6 +466,59 @@ h3.errorMessage {
 .candidateForVoting .submitButton {
 	width: 180px;
 	height: 60px;
+}
+
+.regionForStats {
+	width: 750px;
+	height: 25px;
+	border: 2px solid black;
+	border-radius: 3px;
+	margin-bottom: 3px;
+	margin-left: 10px;
+}
+
+.regionForStats.combined {
+	background: #44ccff;
+}
+
+.regionForStats .regionName {
+	width: 282px;
+	float: left;
+	font-size: 18px;
+	font-weight: bold;
+	padding-left: 10px;
+}
+
+.regionForStats .regionCandidateCount {
+	width: 200px;
+	float: left;
+	font-size: 18px;
+}
+
+.regionForStats .regionVoterCount {
+	width: 200px;
+	float: left;
+	font-size: 18px;
+}
+
+.regionForStats .regionPartyStats {
+	margin: 0 2px;
+	width: 25px;
+	height: 25px;
+	float: left;
+	background: #cccccc;
+}
+
+.regionForStats .regionCandidateStats {
+	margin: 0 2px;
+	width: 25px;
+	height: 25px;
+	float: left;
+	background: #cccccc;
+}
+
+#regionViewParams {
+	float: right;
 }
 
 #confirmBlock {
