@@ -1,0 +1,68 @@
+#mainblock {
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	border-radius:8px;
+	-moz-box-shadow:inset 0px 0px 3px 3px rgba(10,10,10,0.7);
+	-webkit-box-shadow:inset 0px 0px 3px 3px rgba(10,10,10,0.7);
+	box-shadow:inset 0px 0px 3px 3px rgba(10,10,10,0.7);
+}
+
+.menubar .menuitem {
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	-moz-box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);
+	-webkit-box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);
+	box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	-webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+}
+
+.menubar .menuitem:hover {	
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );	
+	-moz-box-shadow:inset 0px 0px 2px 2px rgba(210,210,210,0.5);
+	-webkit-box-shadow:inset 0px 0px 2px 2px rgba(210,210,210,0.5);
+	box-shadow:inset 0px 0px 2px 2px rgba(210,210,210,0.5);
+}
+
+.menubar .menuitem:active {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+}
+
+.menubar .menuselected {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );	
+}
+
+#content {
+	-moz-border-radius:20px;
+	-webkit-border-radius:20px;
+	border-radius:20px;
+	-moz-box-shadow:inset 0px 0px 3px 3px rgba(153,153,153,0.85);
+	-webkit-box-shadow:inset 0px 0px 3px 3px rgba(153,153,153,0.85);
+	box-shadow:inset 0px 0px 3px 3px rgba(153,153,153,0.85);	
+}
+
+.submitButton {
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
+	-moz-box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);
+	-webkit-box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);
+	box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);	
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );	
+}
+
+.submitButton:hover {	
+	-moz-box-shadow:inset 0px 0px 2px 2px rgba(121,187,255,0.5);
+	-webkit-box-shadow:inset 0px 0px 2px 2px rgba(121,187,255,0.5);
+	box-shadow:inset 0px 0px 2px 2px rgba(121,187,255,0.5);
+}
