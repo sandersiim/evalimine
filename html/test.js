@@ -70,6 +70,18 @@ voteSystem.resizeElements = function() {
 	}
 };
 
+voteSystem.resizeForPrint = function() {
+	var visibleTab = $(".tab.visible");
+	
+	if(visibleTab) {
+		var contentsBlock = visibleTab.children(".tabContents");
+		contentsBlock.height(contentsBlock.prop("scrollHeight"));
+		visibleTab.height(visibleTab.prop("scrollHeight"));
+		$("#content").height($("#content").prop("scrollHeight"));
+		$("#mainblock").height($("#content").outerHeight() + $("#header").outerHeight() + $("#footer").outerHeight());
+	}
+};
+
 voteSystem.addClassToElement = function(element, oneClass) {
 	if (element.className.indexOf(oneClass) == -1) {
 		element.className += " " + oneClass;
@@ -691,6 +703,30 @@ voteSystem.confirmMessage = function(title, message, yesCallback) {
 	});
 };
 
+//hints from: http://tjvantoll.com/2012/06/15/detecting-print-requests-with-javascript/
+voteSystem.configurePrinting = function() {
+	var beforePrint = function() {
+		voteSystem.resizeForPrint();
+	};
+	var afterPrint = function() {
+		voteSystem.resizeElements();
+	};
+
+	if (window.matchMedia) {
+		var mediaQueryList = window.matchMedia("print");
+		mediaQueryList.addListener(function(mql) {
+			if (mql.matches) {
+				beforePrint();
+			} else {
+				afterPrint();
+			}
+		});
+	}
+
+	window.onbeforeprint = beforePrint;
+	window.onafterprint = afterPrint;
+};
+
 voteSystem.initialise = function() {
 	voteSystem.queryRegions();
 	voteSystem.queryStatus();
@@ -714,7 +750,7 @@ voteSystem.initialise = function() {
 	
 	voteSystem.setTabActivateCB("tab_stats_parties", function(tabElement, parameters) {
 		voteSystem.loadPartyView(parameters);
-	});	
+	});
 
 	$("#loginByPassword").submit( function() {
 		$("#loginErrorMessage").text("");
@@ -960,6 +996,8 @@ voteSystem.initialise = function() {
 	$(window).resize(function() {
 		voteSystem.resizeElements();
 	});
+	
+	voteSystem.configurePrinting();
 };
 
 $(document).ready(function() {
