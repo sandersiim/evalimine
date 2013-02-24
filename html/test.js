@@ -59,7 +59,7 @@ voteSystem.resizeTabContents = function(tabElement) {
 }
 
 voteSystem.resizeElements = function() {
-	$("#mainblock").height(Math.max($(window).height() - ($("#mainblock").outerHeight(true) - $("#mainblock").height()), 630));
+	$("#mainblock").height(Math.max($(window).height() - ($("#mainblock").outerHeight(true) - $("#mainblock").height()), 630)-1);
 	$("#content").height($("#mainblock").height() - $("#header").outerHeight()-$("#footer").outerHeight());
 	
 	var visibleTab = $(".tab.visible");

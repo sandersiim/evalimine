@@ -5,6 +5,7 @@
 		<title>E-valimised</title>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/json3/3.2.4/json3.min.js"></script>
+		<script src="overthrow.js"></script>
 		<script type="text/javascript" src="test.js"></script>
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">  
 		<link rel="stylesheet" type="text/css" media="all" href="style.css" />
@@ -38,7 +39,7 @@
 							<div class="clear"></div>
 						</form>
 					</div>
-					<div class="tabContents">
+					<div class="tabContents overthrow">
 						<div class="templateContainer">
 							<div class="regionForStats" id="regionTemplate">
 								<div class="regionName"></div>
@@ -77,7 +78,7 @@
 							<div class="clear"></div>
 						</form>
 					</div>
-					<div class="tabContents">
+					<div class="tabContents overthrow">
 						<div class="templateContainer">
 							<div class="candidateForStats" id="candidateStatsTemplate">
 								<img class="candidatePhoto" src="images/scary_face.png" alt="Kandidaadi foto" />
@@ -112,7 +113,7 @@
 				<div id="tab_voting" class="tab">
 					<div class="tabNameLabel">Hääletamine</div>
 					<div class="clear"></div>
-					<div class="tabContents">
+					<div class="tabContents overthrow">
 						<div class="templateContainer">
 							<div class="candidateForVoting" id="candidateTemplate">
 								<div class="photo"><img src="images/scary_face.png" alt="Kandidaadi foto" /></div>
@@ -148,14 +149,14 @@
 				<div id="tab_err_login" class="tab">
 					<div class="tabNameLabel">Hääletamine</div>
 					<div class="clear"></div>
-					<div class="tabContents">
+					<div class="tabContents overthrow">
 						<h3 class="errorMessage">Hääletamiseks peate <a href="#tab_login">sisse logima</a>.</h3>
 					</div>
 				</div>
 				<div id="tab_err_region" class="tab">
 					<div class="tabNameLabel">Hääletamine</div>
 					<div class="clear"></div>
-					<div class="tabContents">
+					<div class="tabContents overthrow">
 						<h3 class="errorMessage">Hääletamiseks peate <a href="#tab_setregion">piirkonna määrama</a>.</h3>
 					</div>
 				</div>
@@ -174,7 +175,7 @@
 						</div>
 						<div class="clear"></div>
 					</div>	
-					<div class="tabContents">											
+					<div class="tabContents overthrow">											
 						<div class="myDataInfoSection">
 							<div class="myDataPhoto"><img src="images/scary_face.png" alt=""/></div>
 							<div class="myDataInfo">
@@ -221,7 +222,7 @@
 				<div id="tab_login" class="tab visible">
 					<div class="tabNameLabel">Logi sisse</div>
 					<div class="clear"></div>
-					<div class="tabContents">
+					<div class="tabContents overthrow">
 						<div id="login_pswd">
 							<h2>Salakoodiga</h2>
 							<form method="GET" action="#" id="loginByPassword">
@@ -253,7 +254,7 @@
 				<div id="tab_application" class="tab">
 					<div class="tabNameLabel"><a href="#tab_mydata">Minu andmed</a>->Kandideeri</div>
 					<div class="clear"></div>
-					<div class="tabContents">
+					<div class="tabContents overthrow">
 						<div class="myDataInfoSection">
 							<div class="myDataPhoto">
 								<form method="POST" enctype="multipart/form-data" action="#" id="pictureUpload">
@@ -302,7 +303,7 @@
 				<div id="tab_setregion" class="tab">
 					<div class="tabNameLabel"><a href="#tab_mydata">Minu andmed</a>->Määra piirkond</div>
 					<div class="clear"></div>
-					<div class="tabContents">
+					<div class="tabContents overthrow">
 						<div class="setRegionSection">
 							<form method="GET" action="#" id="setRegionForm">
 								<div class="boldLabel">Valige piirkond, kus soovite hääletada ja/või kandideerida:</div>
