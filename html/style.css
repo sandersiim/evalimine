@@ -500,6 +500,8 @@ h3.errorMessage {
 
 .regionForStats .regionName {
 	width: 282px;
+	height: 25px;
+	overflow: hidden;
 	float: left;
 	font-size: 1.125em;
 	font-weight: bold;
@@ -508,12 +510,16 @@ h3.errorMessage {
 
 .regionForStats .regionCandidateCount {
 	width: 200px;
+	height: 25px;
+	overflow: hidden;
 	float: left;
 	font-size: 1.125em;
 }
 
 .regionForStats .regionVoterCount {
 	width: 200px;
+	height: 25px;
+	overflow: hidden;
 	float: left;
 	font-size: 1.125em;
 }
@@ -553,6 +559,8 @@ h3.errorMessage {
 
 .candidateForStats .candidateName {
 	width: 190px;
+	height: 25px;
+	overflow: hidden;
 	float: left;
 	padding-left: 5px;
 	font-size: 1.0625em;
@@ -561,18 +569,24 @@ h3.errorMessage {
 
 .candidateForStats .partyName {
 	width: 240px;
+	height: 25px;
+	overflow: hidden;
 	float: left;
 	font-size: 1.0625em;
 }
 
 .candidateForStats .regionName {
 	width: 150px;
+	height: 25px;
+	overflow: hidden;
 	float: left;
 	font-size: 1.0625em;
 }
 
 .candidateForStats .voteCount {
 	width: 100px;
+	height: 25px;
+	overflow: hidden;
 	float: left;
 	font-size: 1.0625em;
 	font-weight: bold;
