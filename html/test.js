@@ -39,6 +39,7 @@ voteSystem.menuActiveTabParams = {
 
 voteSystem.resizeTabContents = function(tabElement) {
 	var nameBlock = $(tabElement).children(".tabNameLabel");
+	var multiNameBlock = $(tabElement).children(".tabNameLabelsMultiple");
 	var headerBlock = $(tabElement).children(".tabHeader");
 	var contentsBlock = $(tabElement).children(".tabContents");
 	
@@ -47,6 +48,7 @@ voteSystem.resizeTabContents = function(tabElement) {
 	if(contentsBlock) {
 		heightRemaining -= $(tabElement).outerHeight() - $(tabElement).height();
 		if(nameBlock) heightRemaining -= nameBlock.outerHeight();
+		if(multiNameBlock) heightRemaining -= multiNameBlock.outerHeight();
 		if(headerBlock) heightRemaining -= headerBlock.outerHeight();
 		
 		contentsBlock.height(heightRemaining);

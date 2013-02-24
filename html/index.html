@@ -26,7 +26,12 @@
 			<div class="clear"></div>
 			<div id="content">
 				<div id="tab_stats_regions" class="tab">
-					<div class="tabNameLabel">Statistika -> Piirkondade nimekiri</div>
+					<div class="tabNameLabelsMultiple">
+						<a href="#tab_stats_regions" class="selected">Piirkondade nimekiri</a> | 
+						<a href="#tab_stats_candidates">Statistika kandidaatide lõikes</a> | 
+						<a href="#tab_stats_parties">Statistika parteide lõikes</a> | 
+						<a href="#tab_stats_map">Statistika kaardil</a>
+					</div>
 					<div class="tabHeader">
 						<form method="GET" action="#">
 							<div id="regionViewParams"><input type="text" id="regionViewFilter" value="Filtreeri piirkondi"/></div>
@@ -46,6 +51,30 @@
 						</div>
 						<div id="statsRegionList">
 						</div>
+					</div>
+				</div>
+				<div id="tab_stats_candidates" class="tab">
+					<div class="tabNameLabelsMultiple">
+						<a href="#tab_stats_regions">Piirkondade nimekiri</a> | 
+						<a href="#tab_stats_candidates" class="selected">Statistika kandidaatide lõikes</a> | 
+						<a href="#tab_stats_parties">Statistika parteide lõikes</a> | 
+						<a href="#tab_stats_map">Statistika kaardil</a>
+					</div>
+				</div>
+				<div id="tab_stats_parties" class="tab">
+					<div class="tabNameLabelsMultiple">
+						<a href="#tab_stats_regions">Piirkondade nimekiri</a> | 
+						<a href="#tab_stats_candidates">Statistika kandidaatide lõikes</a> | 
+						<a href="#tab_stats_parties" class="selected">Statistika parteide lõikes</a> | 
+						<a href="#tab_stats_map">Statistika kaardil</a>
+					</div>
+				</div>
+				<div id="tab_stats_map" class="tab">
+					<div class="tabNameLabelsMultiple">
+						<a href="#tab_stats_regions">Piirkondade nimekiri</a> | 
+						<a href="#tab_stats_candidates">Statistika kandidaatide lõikes</a> | 
+						<a href="#tab_stats_parties">Statistika parteide lõikes</a> | 
+						<a href="#tab_stats_map" class="selected">Statistika kaardil</a>
 					</div>
 				</div>
 				<div id="tab_voting" class="tab">

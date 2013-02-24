@@ -219,9 +219,9 @@ h3.errorMessage {
 }
 
 .tabHeader {
-	width: 780px;
+	width: 740px;
 	font-size: 1.6em;
-	margin: 0 10px;
+	margin: 0 30px;
 	padding: 0 5px;
 }
 
@@ -238,6 +238,19 @@ h3.errorMessage {
 	padding: 15px 30px;
 	font-size: 3em;
 	font-weight: bold;
+}
+
+.tabNameLabelsMultiple {
+	padding: 20px 30px;
+	font-size: 16px;
+	width: 750px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.tabNameLabelsMultiple .selected {
+	color: black;
+	text-decoration: none;
 }
 
 .logoutSection {
