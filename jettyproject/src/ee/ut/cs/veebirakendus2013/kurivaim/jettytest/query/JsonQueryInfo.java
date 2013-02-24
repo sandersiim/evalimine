@@ -43,7 +43,7 @@ public class JsonQueryInfo {
 	}
 	
 	public void processQuery() {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		response.setStatus(HttpServletResponse.SC_OK);
 		
 		JsonQueryInterface jsonQuery = null;
