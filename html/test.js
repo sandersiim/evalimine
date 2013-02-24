@@ -12,9 +12,11 @@ voteSystem.partyList = {};
 voteSystem.regionList = {};
 voteSystem.partyListQuery = null;
 voteSystem.regionListQuery = null;
+voteSystem.candidateNameQuery = null;
 voteSystem.lastSeenHash = null;
 voteSystem.regionViewLoaded = false;
 voteSystem.regionViewLastFilter = "";
+voteSystem.votedCandidateName = "";
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
@@ -256,6 +258,14 @@ voteSystem.queryRegions = function() {
 	});
 };
 
+voteSystem.queryCandidateName = function(_candidateId) {
+	voteSystem.candidateNameQuery = voteSystem.jsonQuery("candidate", {candidateId:_candidateId}, false, function(data) {
+		if(data.responseType == "candidate" && data.candidateInfo) {
+			voteSystem.votedCandidateName = data.candidateInfo.firstName + " " + data.candidateInfo.lastName;
+		}
+	});
+};
+
 voteSystem.setTabActivateCB = function(tabName, callbackFunction) {
 	voteSystem.tabCallbacks[tabName] = callbackFunction;
 };
@@ -447,11 +457,14 @@ voteSystem.refreshMyDataInfo = function() {
 			$("#toSetRegionLink").remove();
 			if ( voteSystem.userInfo.userInfo.votedCandidateId ) {
 				voteSystem.removeClassFromElement($("#myDataVoting")[0],"errorMessage" );
-				voteSystem.addClassToElement($("#myDataVoting")[0],"greenText" );
-				$("#myDataVoting").text("Hääl antud:"+"");
+				if ( !voteSystem.votedCandidateName ) {
+					voteSystem.queryCandidateName(voteSystem.userInfo.userInfo.votedCandidateId);
+				}
+				voteSystem.candidateNameQuery.success(function() {
+					$("#myDataVoting").html("<span class=\"greenText\">Hääl antud: </span>"+voteSystem.votedCandidateName);
+				});				
 				$("#toVotingLink").remove();
 			} else {
-				voteSystem.removeClassFromElement($("#myDataVoting")[0],"greenText" );
 				voteSystem.addClassToElement($("#myDataVoting")[0],"errorMessage" );
 				$("#myDataVoting").text("Te pole oma häält veel andnud!");
 				if (!$("#toVotingLink")[0]) {

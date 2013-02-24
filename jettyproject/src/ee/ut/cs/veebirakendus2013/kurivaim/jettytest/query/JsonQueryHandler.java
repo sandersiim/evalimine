@@ -19,6 +19,7 @@ public class JsonQueryHandler {
 	private void initQueries() {
 		//GET queries
 		addQueryType(false, JsonQueryTypes.STATUS);
+		addQueryType(false, JsonQueryTypes.CANDIDATE);
 		addQueryType(false, JsonQueryTypes.CANDIDATES);
 		addQueryType(false, JsonQueryTypes.PARTIES);
 		addQueryType(false, JsonQueryTypes.REGIONS);

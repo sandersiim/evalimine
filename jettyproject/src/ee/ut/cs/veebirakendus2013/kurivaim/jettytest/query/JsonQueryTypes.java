@@ -6,6 +6,7 @@ public enum JsonQueryTypes {
 	LOGIN("login", JsonQueryTypeLogin.class),
 	LOGOUT("logout", JsonQueryTypeLogout.class),
 	STATUS("status", JsonQueryTypeStatus.class),
+	CANDIDATE("candidate", JsonQueryTypeCandidate.class),
 	CANDIDATES("candidates", JsonQueryTypeCandidates.class),
 	PARTIES("parties", JsonQueryTypeParties.class),
 	REGIONS("regions", JsonQueryTypeRegions.class),
