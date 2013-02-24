@@ -460,6 +460,15 @@ voteSystem.findRegionFromKeyword = function(keyword) {
 	return 0;
 };
 
+voteSystem.findKeywordFromRegion = function(regionId) {
+	if(voteSystem.regionList[regionId]) {
+		return voteSystem.regionList[regionId].keyword;
+	}
+	else {
+		return "all";
+	}
+};
+
 voteSystem.findPartyFromKeyword = function(keyword) {
 	if(keyword && keyword.length > 0) {	
 		for(var partyId in voteSystem.partyList) {
@@ -562,12 +571,12 @@ voteSystem.candidateFiltersChanged = function() {
 	});
 };
 
-voteSystem.addLineToPartyView = function(listElement, template, partyName, keyword, voteCount, votePercentage) {
+voteSystem.addLineToPartyView = function(listElement, template, partyName, keyword, regionKeyword, voteCount, votePercentage) {
 	var element = template.clone();
 	
 	element.get().id = "";
 	element.find(".partyName").text(partyName);
-	element.find(".candidatesLink").attr("href", "#tab_stats_candidates-all-" + keyword);
+	element.find(".candidatesLink").attr("href", "#tab_stats_candidates-" + regionKeyword + "-" + keyword);
 	element.find(".voteCount").text(voteCount + " häält");
 	element.find(".votePercentage").text(votePercentage);
 	
@@ -602,8 +611,9 @@ voteSystem.loadPartyView = function(params) {
 					
 					for(var i = 0; i < data.partyList.length; i++) {
 						var percentage = parseFloat(Math.round(((totalVotes > 0) ? data.partyList[i].voteCount / totalVotes : 0) * 1000) / 10).toFixed(1) + "%";
+						var regionKeyword = voteSystem.findKeywordFromRegion(findRegionId);
 						
-						voteSystem.addLineToPartyView(listElement, template, data.partyList[i].displayName, data.partyList[i].keyword, data.partyList[i].voteCount, percentage);
+						voteSystem.addLineToPartyView(listElement, template, data.partyList[i].displayName, data.partyList[i].keyword, regionKeyword, data.partyList[i].voteCount, percentage);
 					}
 				}
 			});
