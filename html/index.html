@@ -308,19 +308,20 @@
 									<div class="boldLabel">Palun sisestage oma nimi:</div>
 									<div class="clear"></div>
 									<div class="inputBoxWithLabel">
-										<label class="label" for="firstname">Eesnimi</label> <input type="text" id="firstname" value=""/>
+										<label class="label" for="applicationFirstName">Eesnimi</label> <input type="text" id="applicationFirstName" value=""/>
 									</div>
 									<div class="inputBoxWithLabel">
-										<label class="label" for="lastname">Perenimi</label> <input type="text" id="lastname" value=""/>
+										<label class="label" for="applicationLastName">Perenimi</label> <input type="text" id="applicationLastName" value=""/>
 									</div>
 								
 									<div class="boldLabel">Palun valige oma partei:</div>
 									<div class="dropbox">
 										<select id="parties">			
-											<option value="">Vali partei</option>							
-										   	<option value="1">Raske töö partei</option>
+											<option value="">Vali partei</option>
 										</select>
 									</div>
+									<div class="clear"></div>
+									<div class="errorMessage" id="applicationErrorMessage"></div>	
 									<div class="clear"></div>
 									<div class="buttons">
 										<div class="buttonContainer">
@@ -342,14 +343,12 @@
 								<div class="boldLabel">Valige piirkond, kus soovite hääletada ja/või kandideerida:</div>
 								<div class="dropbox">
 									<select id="regions">			
-										<option value="">Vali piirkond</option>							
-									   	<option value="1">Tartu linn</option>
-									   	<option value="2">Pärnu linn</option>
+										<option value="">Vali piirkond</option>
 									</select>
 								</div>
 								<div class="clear"></div>
 								<div class="errorMessage" id="setRegionErrorMessage"></div>	
-								<div class="clear"></div>							
+								<div class="clear"></div>
 								<div class="buttons">
 									<div class="buttonContainer">
 										<button type="button" class="submitButton" id="toMyDataButton2">Tühista</button>

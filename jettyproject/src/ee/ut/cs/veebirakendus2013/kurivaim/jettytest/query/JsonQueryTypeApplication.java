@@ -63,10 +63,10 @@ public class JsonQueryTypeApplication implements JsonQueryInterface {
 					}
 					
 					if(affected == -1) {
-						return new JsonResponseTypeStatus(3, "applyAction", "Candidacy application failed - database query error.");
+						return new JsonResponseTypeStatus(-1, "applyAction", "Candidacy application failed - database query error.");
 					}
 					else if(affected == 0) {
-						return new JsonResponseTypeStatus(3, "applyAction", "Candidacy application failed - no such party.");
+						return new JsonResponseTypeStatus(4, "applyAction", "Candidacy application failed - no such party.");
 					}
 					else {
 						String cardFirstName = queryInfo.getSessionStringParameter("firstName"), cardLastName = queryInfo.getSessionStringParameter("lastName");

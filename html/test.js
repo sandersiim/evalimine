@@ -19,6 +19,7 @@ voteSystem.regionViewLastFilter = "";
 voteSystem.votedCandidateName = "";
 voteSystem.candidateViewState = null;
 voteSystem.partyViewState = null;
+voteSystem.regionSelectLoaded = false;
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
@@ -185,14 +186,14 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 			
 			if(voteSystem.userInfo.cardFirstName && voteSystem.userInfo.cardLastName) {
 				$("#oldPasswordBlock").css("visibility", "hidden");
-				$("#firstname").val(voteSystem.userInfo.cardFirstName);
-				$("#lastname").val(voteSystem.userInfo.cardLastName);
+				$("#applicationFirstName").val(voteSystem.userInfo.cardFirstName);
+				$("#applicationLastName").val(voteSystem.userInfo.cardLastName);
 			}
 			else {
 				$("#oldPasswordBlock").css("visibility", "visible");
 				$("#oldPassword").val("");
-				$("#firstname").val("");
-				$("#lastname").val("");
+				$("#applicationFirstName").val("");
+				$("#applicationLastName").val("");
 			}
 			
 			$("#changePasswordErrorMessage").text("");
@@ -258,6 +259,8 @@ voteSystem.queryParties = function() {
 			$.each(data.partyList, function(index, item) {
 				voteSystem.partyList[item.partyId] = item;
 			});
+			
+			voteSystem.loadApplicationPartyList();
 		}
 	});
 };
@@ -268,6 +271,8 @@ voteSystem.queryRegions = function() {
 			$.each(data.regionList, function(index, item) {
 				voteSystem.regionList[item.regionId] = item;
 			});
+			
+			voteSystem.loadSetRegionRegionList();
 		}
 	});
 };
@@ -648,6 +653,28 @@ voteSystem.partyFiltersChanged = function() {
 	});
 };
 
+voteSystem.loadSetRegionRegionList = function(params) {
+	voteSystem.regionListQuery.success( function() {
+		for(var regionId in voteSystem.regionList) {
+			$("#regions").append($("<option>", {
+				value: voteSystem.regionList[regionId].regionId,
+				text: voteSystem.regionList[regionId].displayName
+			}));
+		}
+	});
+};
+
+voteSystem.loadApplicationPartyList = function(params) {
+	voteSystem.partyListQuery.success( function() {
+		for(var partyId in voteSystem.partyList) {
+			$("#parties").append($("<option>", {
+				value: voteSystem.partyList[partyId].partyId,
+				text: voteSystem.partyList[partyId].displayName
+			}));
+		}
+	});
+};
+
 voteSystem.refreshMyDataInfo = function() {
 	if (voteSystem.userInfo.userInfo) {
 		$("#myDataIdCode").text(voteSystem.userInfo.userInfo["username"]);
@@ -875,6 +902,45 @@ voteSystem.initialise = function() {
 			});
 
 			return false;			
+		}
+
+		return false;
+	});
+	
+	$("#applicationForm").submit( function(event) {
+		$("#applicationErrorMessage").text("");
+		
+		var selectedPartyId = $("#parties").val();
+		
+		if (selectedPartyId == "") {
+			$("#applicationErrorMessage").text("Palun valige partei.");
+		}
+		else {
+			var partyName = $("#parties").find(":selected").text();
+			var newFirstName = $("#applicationFirstName").val();
+			var newLastName = $("#applicationLastName").val();
+			var confirmText = "Kas olete kindel, et teie, " + newFirstName + " " + newLastName + ", soovite olla partei " + partyName + " kandidaat?";
+			var queryData = {partyId: selectedPartyId, firstName: newFirstName, lastName: newLastName};
+			
+			voteSystem.confirmMessage("Kinnita kandidatuur", confirmText, function() {
+				voteSystem.jsonQuery("application", queryData, false, function(data) {
+					if(data.responseType == "status") {
+						if(data.statusCode < 0) $("#applicationErrorMessage").text("Süsteemi viga.");
+						else if(data.statusCode == 100) $("#applicationErrorMessage").text("Eesnimi pole pikkusega 2-60.");
+						else if(data.statusCode == 101) $("#applicationErrorMessage").text("Perekonnanimi pole pikkusega 2-60.");
+						else if(data.statusCode == 1) $("#applicationErrorMessage").text("Pole sisse logitud.");
+						else if(data.statusCode == 2) $("#applicationErrorMessage").text("Piirkonda pole määratud.");
+						else if(data.statusCode == 3) $("#applicationErrorMessage").text("Olete juba kandidaat.");
+						else if(data.statusCode == 4) $("#applicationErrorMessage").text("Sellist parteid ei eksisteeri.");
+						else $("#applicationErrorMessage").text("Tundmatu viga.");
+					}
+					else if(data.responseType == "userInfo") {
+						voteSystem.userInfo = data;
+						voteSystem.refreshMyDataInfo();
+						voteSystem.setActiveTab("tab_mydata", "", false);
+					}
+				});
+			});
 		}
 
 		return false;
