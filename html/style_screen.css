@@ -4,8 +4,8 @@
 	/*-moz-box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);
 	-webkit-box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);
 	box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);*/
-	border: 1px solid rgb(153,153,153);
-	border-bottom: 0;
+	border: 1px solid #999;
+	border-bottom: 2px solid #c50002;
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
 	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
 	-webkit-transition: all 0.2s linear;
@@ -25,10 +25,10 @@
 	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
 }
 
+
 .menubar .menuselected {
-	/*background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
-	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );	*/
-	background:#9DAAC2;	
+	background:#CCC;	
+	border-bottom: 2px solid #CCC;
 }
 
 .submitButton {

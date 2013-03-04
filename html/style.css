@@ -22,13 +22,19 @@ h3.errorMessage {
 
 #headerContainer {
  	background: #BCD9EB;
- 	border-bottom: 10px solid #9DAAC2;
 }
 
 #header {
 	margin: 0 auto;
 	width: 900px;
 	text-align: left;		
+}
+
+#headerSeparator {
+	border-top: 1px solid #999;
+	border-bottom: 1px solid #999;
+	height: 10px;
+	background: #CCC
 }
 
 #sitetitle {
@@ -56,6 +62,8 @@ h3.errorMessage {
 }
 
 .menubar {
+	position: relative;
+	top: 1px;
 	font-size: 1.65em;
 	width: 811px;
 	margin: 0 auto;
@@ -88,10 +96,6 @@ h3.errorMessage {
 
 .menubar .menuitem:active {
 	background-color:#378de5;	
-}
-
-.menubar .menuselected {
-	background-color:#9DAAC2;	
 }
 
 #content {
