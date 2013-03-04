@@ -20,14 +20,15 @@ h3.errorMessage {
 	padding-left: 30px;
 }
 
-#mainblock {
-	width: 900px;
-	margin: 5px auto;
+#headerContainer {
+ 	background: #BCD9EB;
+ 	border-bottom: 10px solid #9DAAC2;
 }
 
 #header {
-	text-align: left;	
-	padding-bottom: 20px;
+	margin: 0 auto;
+	width: 900px;
+	text-align: left;		
 }
 
 #sitetitle {
@@ -56,17 +57,18 @@ h3.errorMessage {
 
 .menubar {
 	font-size: 1.65em;
-	width: 812px;
+	width: 811px;
 	margin: 0 auto;
 	text-shadow:2px 2px 5px #999;
 	font-weight: bold;
 }
 
 .menubar .menuitem {
-	width: 203px;
+	width: 197px;
 	height: 20px;
 	float: left;
 	text-align: center;
+	margin-left: 5px;
 	padding: 6px 0;	
 	cursor: pointer;
 	-webkit-user-select: none; /* Chrome/Safari */        
@@ -75,6 +77,10 @@ h3.errorMessage {
 
 	background-color:#ededed;		
 }
+
+.menubar .menuitem:first-child {
+	margin-left: 0;
+} 
 
 .menubar .menuitem:hover {	
 	background-color:#79bbff;
@@ -85,7 +91,7 @@ h3.errorMessage {
 }
 
 .menubar .menuselected {
-	background-color:#79bbff;	
+	background-color:#9DAAC2;	
 }
 
 #content {
