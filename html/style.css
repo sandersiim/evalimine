@@ -21,12 +21,21 @@ h3.errorMessage {
 }
 
 #headerContainer {
- 	background: #BCD9EB;
+ 	background: #1975FF;
+}
+
+#logoAndHeader {
+	width: 1000px;
+	margin: 0 auto;
+}
+
+#logo {	
+	float:left;	
+	padding-top: 10px;
 }
 
 #header {
-	margin: 0 auto;
-	width: 900px;
+	float:left;		
 	text-align: left;		
 }
 
@@ -39,7 +48,7 @@ h3.errorMessage {
 
 #sitetitle {
 	float: left;
-	padding: 20px 44px 15px 44px;	
+	padding: 15px 44px 15px 44px;	
 }
 
 #sitetitle h1 {
@@ -48,6 +57,7 @@ h3.errorMessage {
 	font-weight: bold;
 	font-size: 4.5em;
 	letter-spacing: -2px;	
+	color:#222;
 }
 
 #sitetitle h2 {
@@ -57,7 +67,6 @@ h3.errorMessage {
 	font-weight: bold;
 	font-size: 2.8em;
 	letter-spacing: -1px;
-	color: #8c8c8c;
 	padding-left: 15px;
 }
 
@@ -167,8 +176,8 @@ h3.errorMessage {
 	color: #666;
 	padding: 7px 0;
 	margin: 0 auto;
-	height: 20px;
-	width: 810px;
+	height: 19px;
+	border-top: 1px solid #CCC;
 }
 
 .tab {

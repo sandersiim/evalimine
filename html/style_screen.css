@@ -1,33 +1,38 @@
 .menubar .menuitem {
 	border-top-left-radius: 7px;
 	border-top-right-radius: 7px;
-	/*-moz-box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);
-	-webkit-box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);
-	box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);*/
+	box-shadow:inset 0px 3px 2px 0px rgba(153,153,153,0.5);
 	border: 1px solid #999;
-	border-bottom: 2px solid #c50002;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
-	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	border-bottom: 2px solid #378de5;
+	background:#EEE;
+	transition: all 0.2s linear;
 	-webkit-transition: all 0.2s linear;
     -moz-transition: all 0.2s linear;
+    
 }
 
 .menubar .menuitem:hover {	
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
 	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );	
-	-moz-box-shadow:inset 0px 0px 2px 2px rgba(210,210,210,0.5);
-	-webkit-box-shadow:inset 0px 0px 2px 2px rgba(210,210,210,0.5);
-	box-shadow:inset 0px 0px 2px 2px rgba(210,210,210,0.5);
+	box-shadow:inset 0px 2px 1px 1px rgba(210,210,210,0.5);
 }
 
 .menubar .menuitem:active {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
 	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+	border-bottom: 2px solid #79bbff;
 }
 
 
 .menubar .menuselected {
 	background:#CCC;	
+	box-shadow:inset 0px 7px 2px 2px rgba(220,220,220,0.9);
+	border-bottom: 2px solid #CCC;
+}
+
+.menubar .menuselected:hover {	
+	background:#D3D3D3;	
+	box-shadow:inset 0px 5px 2px 2px rgba(220,220,220,0.9);
 	border-bottom: 2px solid #CCC;
 }
 
@@ -36,15 +41,11 @@
 	-moz-user-select: none; /* Firefox */
 	-ms-user-select: none; /* IE10+ */
 	border-radius:10px;
-	-moz-box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);
-	-webkit-box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);
 	box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);	
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
 	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );	
 }
 
 .submitButton:hover {	
-	-moz-box-shadow:inset 0px 0px 2px 2px rgba(121,187,255,0.5);
-	-webkit-box-shadow:inset 0px 0px 2px 2px rgba(121,187,255,0.5);
 	box-shadow:inset 0px 0px 2px 2px rgba(121,187,255,0.5);
 }
