@@ -3,23 +3,23 @@
 	border-top-right-radius: 7px;
 	box-shadow:inset 0px 3px 2px 0px rgba(153,153,153,0.5);
 	border: 1px solid #999;
-	border-bottom: 2px solid #378de5;
+	border-bottom: 2px solid #DDD;
 	background:#EEE;
-	transition: all 0.2s linear;
-	-webkit-transition: all 0.2s linear;
-    -moz-transition: all 0.2s linear;
-    
+	transition: all 0.2s linear, background 0.2s linear;
+	moz-transition: box-shadow 0.2s linear, background 0.2s linear;
+	webkit-transition: box-shadow 0.2s linear, background 0.2s linear;
 }
 
 .menubar .menuitem:hover {	
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
-	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );	
+	/*background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );	*/
 	box-shadow:inset 0px 2px 1px 1px rgba(210,210,210,0.5);
+	border-bottom: 2px solid #378de5;	
 }
 
 .menubar .menuitem:active {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
-	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+	/*background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );*/
 	border-bottom: 2px solid #79bbff;
 }
 
@@ -39,13 +39,33 @@
 .submitButton {
 	-webkit-user-select: none; /* Chrome/Safari */        
 	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* IE10+ */
 	border-radius:10px;
 	box-shadow:inset 0px 0px 1px 1px rgba(153,153,153,0.5);	
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
 	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );	
+	transition: box-shadow 0.2s linear;
+	-webkit-transition: box-shadow 0.2s linear;
 }
 
 .submitButton:hover {	
 	box-shadow:inset 0px 0px 2px 2px rgba(121,187,255,0.5);
+}
+
+.inputBox {
+	outline: none;
+	border-radius: 2px;
+	border: 1px solid #BBB;
+	padding: 4px 4px;
+	transition: box-shadow 0.15s linear, border 0.15s linear;
+	webkit-transition: box-shadow 0.15s linear, border 0.15s linear;
+}
+
+.inputBox:hover {
+	box-shadow: inset 0px 0px 2px 1px rgba(55,141,229,0.4);
+	border: 1px solid #999;
+}
+
+.inputBox:focus {
+	box-shadow: inset 0px 0px 2px 1px rgba(55,141,229,0.4);
+	border: 1px solid #378de5;
 }

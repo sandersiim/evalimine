@@ -185,12 +185,12 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 			}
 			
 			if(voteSystem.userInfo.cardFirstName && voteSystem.userInfo.cardLastName) {
-				$("#oldPasswordBlock").css("visibility", "hidden");
+				$("#oldPasswordBlock").css("display", "none");
 				$("#applicationFirstName").val(voteSystem.userInfo.cardFirstName);
 				$("#applicationLastName").val(voteSystem.userInfo.cardLastName);
 			}
 			else {
-				$("#oldPasswordBlock").css("visibility", "visible");
+				$("#oldPasswordBlock").css("display", "block");
 				$("#oldPassword").val("");
 				$("#applicationFirstName").val("");
 				$("#applicationLastName").val("");

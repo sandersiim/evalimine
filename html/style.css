@@ -13,7 +13,7 @@ a:visited {
 
 a:active {
 	border: 0;
-	background: #7DA4FF;
+	text-shadow: 0px 0px 10px #7DA4FF;
 }
 
 h3.errorMessage {
@@ -90,7 +90,6 @@ h3.errorMessage {
 	cursor: pointer;
 	-webkit-user-select: none; /* Chrome/Safari */        
 	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* IE10+ */
 
 	background-color:#ededed;		
 }
@@ -161,7 +160,6 @@ h3.errorMessage {
 	color: #333;
 	-webkit-user-select: none; /* Chrome/Safari */        
 	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* IE10+ */
 	font-size: 1em;
 
 	background-color:#ededed;		
@@ -250,23 +248,25 @@ h3.errorMessage {
 }
 
 .myDataInfoNameAndValue {
-	font-weight: bold;
+	font-weight: 500;
 	padding-bottom: 30px;
 	padding-left: 38px;
 }
 
 .myDataInfoNameAndValue a {
+	font-weight: bold;
 	float: left;
 }
 
 .myDataInfoName {
+	font-weight: bold;
 	float: left;
 	width: 170px;
 }
 
 .myDataInfoValue {
 	float: left;
-	color: #000;
+	color:black;
 }
 
 .myDataPhoto img {
@@ -313,7 +313,7 @@ h3.errorMessage {
 }
 
 #toVotingLink {
-	padding-left:15px;
+	margin-left:15px;
 }
 
 #uploaderDragDrop {
@@ -364,8 +364,7 @@ h3.errorMessage {
 }
 
 .errorMessage {
-	color: #F52A2A;
-	font-style: italic;
+	color: #F52A2A;	
 }
 
 .templateContainer {
