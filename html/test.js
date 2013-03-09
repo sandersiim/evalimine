@@ -1,3 +1,62 @@
+/*LOADER*/
+
+	var cSpeed=8;
+	var cWidth=75;
+	var cHeight=75;
+	var cTotalFrames=75;
+	var cFrameWidth=75;
+	var cImageSrc='images/sprites.gif';
+	
+	var cImageTimeout=false;
+	var cIndex=0;
+	var cXpos=0;
+	var SECONDS_BETWEEN_FRAMES=0;
+	
+	function startAnimation(){
+		
+		document.getElementById('loaderImage').style.backgroundImage='url('+cImageSrc+')';
+		document.getElementById('loaderImage').style.width=cWidth+'px';
+		document.getElementById('loaderImage').style.height=cHeight+'px';
+		
+		FPS = Math.round(100/cSpeed);
+		SECONDS_BETWEEN_FRAMES = 1 / FPS;
+		
+		setTimeout('continueAnimation()', SECONDS_BETWEEN_FRAMES/1000);
+		
+	}
+	
+	function continueAnimation(){
+		
+		cXpos += cFrameWidth;
+		//increase the index so we know which frame of our animation we are currently on
+		cIndex += 1;
+		 
+		//if our cIndex is higher than our total number of frames, we're at the end and should restart
+		if (cIndex >= cTotalFrames) {
+			cXpos =0;
+			cIndex=0;
+		}
+		
+		document.getElementById('loaderImage').style.backgroundPosition=(-cXpos)+'px 0';
+		
+		setTimeout('continueAnimation()', SECONDS_BETWEEN_FRAMES*1000);
+	}
+	
+	function imageLoader(s, fun)//Pre-loads the sprites image
+	{
+		clearTimeout(cImageTimeout);
+		cImageTimeout=0;
+		genImage = new Image();
+		genImage.onload=function (){cImageTimeout=setTimeout(fun, 0)};
+		genImage.onerror=new Function('alert(\'Could not load the image\')');
+		genImage.src=s;
+	}
+	
+	//The following code starts the animation
+	new imageLoader(cImageSrc, 'startAnimation()');
+
+/*--------------------------------------------------------------------*/
+
 var voteSystem = {}
 
 voteSystem.userInfo = {}
@@ -20,6 +79,8 @@ voteSystem.votedCandidateName = "";
 voteSystem.candidateViewState = null;
 voteSystem.partyViewState = null;
 voteSystem.regionSelectLoaded = false;
+
+voteSystem.timeoutId = null;
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
@@ -155,16 +216,15 @@ voteSystem.swapToTab = function(tabElement, tabParameters) {
 	
 	$.each($("#" + tabElement), function(index, newTab) {
 		voteSystem.addClassToElement(newTab, "visible");
+		voteSystem.resizeElements();
 		
 		if(voteSystem.tabCallbacks[newTab.id]) {
 			voteSystem.tabCallbacks[newTab.id](newTab, tabParameters);
 		}
 		
-		voteSystem.resizeTabContents(newTab);
 		voteSystem.updateHashSilently("#" + newTab.id + ((tabParameters.length > 0) ? "-" + tabParameters : ""));
 	});
 	
-	voteSystem.resizeElements();
 };
 
 voteSystem.jsonQuery = function(queryType, jsonObject, isPostQuery, doneFunction) {
@@ -431,7 +491,6 @@ voteSystem.loadRegionView = function() {
 	if(voteSystem.regionViewLoaded) return;
 	
 	voteSystem.regionViewLoaded = true;
-
 	voteSystem.regionListQuery.success(function(data) {
 		var listElement = $("#statsRegionList"), template = $("#regionTemplate");
 		listElement.html("");
@@ -641,7 +700,7 @@ voteSystem.loadPartyView = function(params) {
 			});
 		
 			voteSystem.partyViewState = params;
-		}
+		} 		
 	});
 };
 
@@ -757,6 +816,19 @@ voteSystem.confirmMessage = function(title, message, yesCallback) {
 	});
 };
 
+voteSystem.showLoader = function() {
+	$("#loaderBlock").css("display", "block");
+	$("#loaderBlock").width($(".tab.visible .tabContents").outerWidth());
+	$("#loaderBlock").height($(".tab.visible .tabContents").outerHeight());
+	$("#loaderBlock").css("top", $('.tab.visible .tabContents').offset().top);
+	$("#loaderBlock").css("left", $('.tab.visible .tabContents').offset().left);
+	$("#loaderImage").css("margin-top", (($(".tab.visible .tabContents").height()-75) / 2) + "px");	
+};
+
+voteSystem.hideLoader = function() {
+	$("#loaderBlock").css("display", "none");
+}
+
 //hints from: http://tjvantoll.com/2012/06/15/detecting-print-requests-with-javascript/
 voteSystem.configurePrinting = function() {
 	var beforePrint = function() {
@@ -791,18 +863,38 @@ voteSystem.initialise = function() {
 	});
 	
 	voteSystem.setTabActivateCB("tab_voting", function(tabElement) {
-		voteSystem.refreshVotingList();
+		if (voteSystem.timeoutId) {
+			window.clearTimeout(voteSystem.timeoutId);
+		}
+		voteSystem.showLoader();
+		voteSystem.timeoutId = window.setTimeout(voteSystem.hideLoader, 2000);
+		voteSystem.refreshVotingList();			
 	});	
 	
 	voteSystem.setTabActivateCB("tab_stats_regions", function(tabElement) {
+		if (voteSystem.timeoutId) {
+			window.clearTimeout(voteSystem.timeoutId);
+		}
+		voteSystem.showLoader();
+		voteSystem.timeoutId = window.setTimeout(voteSystem.hideLoader, 2000);
 		voteSystem.loadRegionView();
 	});
 	
 	voteSystem.setTabActivateCB("tab_stats_candidates", function(tabElement, parameters) {
+		if (voteSystem.timeoutId) {
+			window.clearTimeout(voteSystem.timeoutId);
+		}
+		voteSystem.showLoader();
+		voteSystem.timeoutId = window.setTimeout(voteSystem.hideLoader, 2000);
 		voteSystem.loadCandidateView(parameters);
 	});
 	
 	voteSystem.setTabActivateCB("tab_stats_parties", function(tabElement, parameters) {
+		if (voteSystem.timeoutId) {
+			window.clearTimeout(voteSystem.timeoutId);
+		}
+		voteSystem.showLoader();
+		voteSystem.timeoutId = window.setTimeout(voteSystem.hideLoader, 2000);
 		voteSystem.loadPartyView(parameters);
 	});
 
@@ -1096,3 +1188,4 @@ voteSystem.initialise = function() {
 $(document).ready(function() {
 	voteSystem.initialise();
 });
+
