@@ -945,25 +945,58 @@ voteSystem.initialise = function() {
 	
 	$("#changePassword").submit(function(event) {
 		$("#changePasswordErrorMessage").text("");
+		$("#oldPassword").removeClass("invalidInput");
+		$("#newPassword").removeClass("invalidInput");
+		$("#newPasswordConfirmation").removeClass("invalidInput");
 		
-		voteSystem.jsonQuery("changepass", {oldPassword:$("#oldPassword").val(), newPassword:$("#newPassword").val(), newPasswordRepeat:$("#newPasswordConfirmation").val()}, false, function(data) {
-			if(data.responseType == "status") {
-				voteSystem.removeClassFromElement($("#changePasswordErrorMessage")[0],"greenText");
-				if(data.statusCode < 0) $("#changePasswordErrorMessage").text("Süsteemi viga.");
-				else if(data.statusCode == 1) $("#changePasswordErrorMessage").text("Pole sisse logitud.");
-				else if(data.statusCode == 2) $("#changePasswordErrorMessage").text("Uus salasõna alla 5 tähemärgi.");
-				else if(data.statusCode == 3) $("#changePasswordErrorMessage").text("Uued salasõnad ei kattu.");
-				else if(data.statusCode == 4) $("#changePasswordErrorMessage").text("Vana salasõna ei ole õige.");
-				else if(data.statusCode == 10) {
-					voteSystem.addClassToElement($("#changePasswordErrorMessage")[0],"greenText");
-					$("#changePasswordErrorMessage").text("Salasõna edukalt muudetud.");
+		var queryData = {oldPassword:$("#oldPassword").val(), newPassword:$("#newPassword").val(), newPasswordRepeat:$("#newPasswordConfirmation").val()};
+		var errorMessage = "";
+		
+		if (queryData.oldPassword == "") {
+			errorMessage += "Vana salasõna on sisestamata. "; 
+			$("#oldPassword").addClass("invalidInput");
+		}
+		
+		if (queryData.newPassword == "") {
+			errorMessage += "Uus salasõna on sisestamata. "; 
+			$("#newPassword").addClass("invalidInput");
+		}
+		else if (queryData.newPassword.length < 5) {
+			errorMessage += "Uus salasõna peab olema vähemalt 5 tähemärki. ";
+			$("#newPassword").addClass("invalidInput");
+		}
+		
+		if (queryData.newPasswordRepeat == "") {
+			errorMessage += "Uue salasõna kordus on sisestamata. "; 
+			$("#newPasswordConfirmation").addClass("invalidInput");
+		}
+		else if (queryData.newPassword != queryData.newPasswordRepeat) {
+			errorMessage += "Uued salasõnad ei kattu. ";
+			$("#newPasswordConfirmation").addClass("invalidInput");
+		}
+		
+		$("#changePasswordErrorMessage").text(errorMessage);
+		
+		if (errorMessage == "") {
+			voteSystem.jsonQuery("changepass", queryData, false, function(data) {
+				if(data.responseType == "status") {
+					voteSystem.removeClassFromElement($("#changePasswordErrorMessage")[0],"greenText");
+					if(data.statusCode < 0) $("#changePasswordErrorMessage").text("Süsteemi viga.");
+					else if(data.statusCode == 1) $("#changePasswordErrorMessage").text("Pole sisse logitud.");
+					else if(data.statusCode == 2) $("#changePasswordErrorMessage").text("Uus salasõna alla 5 tähemärgi.");
+					else if(data.statusCode == 3) $("#changePasswordErrorMessage").text("Uued salasõnad ei kattu.");
+					else if(data.statusCode == 4) $("#changePasswordErrorMessage").text("Vana salasõna ei ole õige.");
+					else if(data.statusCode == 10) {
+						voteSystem.addClassToElement($("#changePasswordErrorMessage")[0],"greenText");
+						$("#changePasswordErrorMessage").text("Salasõna edukalt muudetud.");
+					}
+					
+					$("#oldPassword").val("");
+					$("#newPassword").val("");
+					$("#newPasswordConfirmation").val("");
 				}
-				
-				$("#oldPassword").val("");
-				$("#newPassword").val("");
-				$("#newPasswordConfirmation").val("");
-			}
-		});
+			});
+		}
 		
 		return false;
 	});
