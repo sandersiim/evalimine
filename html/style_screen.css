@@ -59,3 +59,7 @@
 	box-shadow: inset 0px 0px 2px 1px rgba(55,141,229,0.4);
 	border: 1px solid #378de5;
 }
+
+.invalidInput{
+	border: 1px solid #ff0000;
+}

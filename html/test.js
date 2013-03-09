@@ -1001,16 +1001,43 @@ voteSystem.initialise = function() {
 	
 	$("#applicationForm").submit( function(event) {
 		$("#applicationErrorMessage").text("");
+		$("#parties").removeClass("invalidInput");
+		$("#applicationFirstName").removeClass("invalidInput");
+		$("#applicationLastName").removeClass("invalidInput");		
 		
 		var selectedPartyId = $("#parties").val();
+		var newFirstName = $("#applicationFirstName").val();
+		var newLastName = $("#applicationLastName").val();
+		var errorMessage = "";
 		
 		if (selectedPartyId == "") {
-			$("#applicationErrorMessage").text("Palun valige partei.");
+			errorMessage += "Partei on valimata. "; 
+			$("#parties").addClass("invalidInput");
 		}
-		else {
+		
+		if (newFirstName == "") {
+			errorMessage += "Eesnimi on sisestamata. "; 
+			$("#applicationFirstName").addClass("invalidInput");
+		}
+		else if (newFirstName.length < 2 || newFirstName.length > 60) {
+			errorMessage += "Eesnimi pole pikkusega 2-60. ";
+			$("#applicationFirstName").addClass("invalidInput");
+		}
+		
+		if (newLastName == "") {
+			errorMessage += "Perenimi on sisestamata. "; 
+			$("#applicationLastName").addClass("invalidInput");
+		}
+		else if (newLastName.length < 2 || newLastName.length > 60) {
+			errorMessage += "Perenimi pole pikkusega 2-60. ";
+			$("#applicationLastName").addClass("invalidInput");
+		}
+		
+		
+		$("#applicationErrorMessage").text(errorMessage);
+		
+		if (errorMessage == "") {
 			var partyName = $("#parties").find(":selected").text();
-			var newFirstName = $("#applicationFirstName").val();
-			var newLastName = $("#applicationLastName").val();
 			var confirmText = "Kas olete kindel, et teie, " + newFirstName + " " + newLastName + ", soovite olla partei " + partyName + " kandidaat?";
 			var queryData = {partyId: selectedPartyId, firstName: newFirstName, lastName: newLastName};
 			
