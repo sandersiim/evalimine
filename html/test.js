@@ -985,8 +985,10 @@ voteSystem.initialise = function() {
 					else if(data.statusCode == 1) $("#changePasswordErrorMessage").text("Pole sisse logitud.");
 					else if(data.statusCode == 2) $("#changePasswordErrorMessage").text("Uus salasõna alla 5 tähemärgi.");
 					else if(data.statusCode == 3) $("#changePasswordErrorMessage").text("Uued salasõnad ei kattu.");
-					else if(data.statusCode == 4) $("#changePasswordErrorMessage").text("Vana salasõna ei ole õige.");
-					else if(data.statusCode == 10) {
+					else if(data.statusCode == 4) {
+						$("#changePasswordErrorMessage").text("Vana salasõna ei ole õige.");
+						$("#oldPassword").addClass("invalidInput");
+					} else if(data.statusCode == 10) {
 						voteSystem.addClassToElement($("#changePasswordErrorMessage")[0],"greenText");
 						$("#changePasswordErrorMessage").text("Salasõna edukalt muudetud.");
 					}
