@@ -541,8 +541,8 @@ voteSystem.addLineToRegionView = function(listElement, template, displayName, ke
 
 voteSystem.regionSortMethods = {
 	"sortRegionName_Asc" : function(a, b) {
-		if(a.displayName < b.displayName) return -1;
-		else if(a.displayName  > b.displayName) return 1;
+		if(a.displayName < b.displayName) return 1;
+		else if(a.displayName  > b.displayName) return -1;
 		else return 0;
 	}, 
 	
@@ -690,20 +690,20 @@ voteSystem.candidateSortMethods = {
 		var fullNameA = a.firstName + " " + a.lastName;
 		var fullNameB = b.firstName + " " + b.lastName;
 	
-		if(fullNameA < fullNameB) return -1;
-		else if(fullNameA > fullNameB) return 1;
+		if(fullNameA < fullNameB) return 1;
+		else if(fullNameA > fullNameB) return -1;
 		else return 0;
 	}, 
 	
 	"sortCandidateParty_Asc" : function(a, b) {
-		if(voteSystem.partyList[a.partyId].displayName < voteSystem.partyList[b.partyId].displayName) return -1;
-		else if(voteSystem.partyList[a.partyId].displayName > voteSystem.partyList[b.partyId].displayName) return 1;
+		if(voteSystem.partyList[a.partyId].displayName < voteSystem.partyList[b.partyId].displayName) return 1;
+		else if(voteSystem.partyList[a.partyId].displayName > voteSystem.partyList[b.partyId].displayName) return -1;
 		else return 0;
 	}, 
 	
 	"sortCandidateRegion_Asc" : function(a, b) {
-		if(voteSystem.regionList[a.regionId].displayName < voteSystem.regionList[b.regionId].displayName) return -1;
-		else if(voteSystem.regionList[a.regionId].displayName > voteSystem.regionList[b.regionId].displayName) return 1;
+		if(voteSystem.regionList[a.regionId].displayName < voteSystem.regionList[b.regionId].displayName) return 1;
+		else if(voteSystem.regionList[a.regionId].displayName > voteSystem.regionList[b.regionId].displayName) return -1;
 		else return 0;
 	}, 
 	
@@ -808,8 +808,8 @@ voteSystem.addLineToPartyView = function(listElement, template, partyName, keywo
 
 voteSystem.partySortMethods = {
 	"sortPartyName_Asc" : function(a, b) {
-		if(a.displayName < b.displayName) return -1;
-		else if(a.displayName  > b.displayName ) return 1;
+		if(a.displayName < b.displayName) return 1;
+		else if(a.displayName  > b.displayName ) return -1;
 		else return 0;
 	}, 
 	
@@ -1003,7 +1003,21 @@ voteSystem.showLoader = function() {
 
 voteSystem.hideLoader = function() {
 	$("#loaderBlock").css("display", "none");
-}
+};
+
+voteSystem.clearChangePasswordSection = function() {
+	$(".myDataChangePasswordSection .errorMessage").each(function(index, errorMessageItem) {
+		$(errorMessageItem).text("");
+	});
+
+	$(".myDataChangePasswordSection .inputBox.invalidInput").each( function(index, inputBoxItem) {
+		voteSystem.removeClassFromElement(inputBoxItem,"invalidInput");
+	});
+
+	$(".myDataChangePasswordSection .inputBox").each( function(index, inputBoxItem) {
+		$(inputBoxItem).val("");
+	});
+};
 
 //hints from: http://tjvantoll.com/2012/06/15/detecting-print-requests-with-javascript/
 voteSystem.configurePrinting = function() {
@@ -1080,6 +1094,10 @@ voteSystem.initialise = function() {
 		voteSystem.loadPartyView(parameters);
 	});
 
+	voteSystem.setTabActivateCB("tab_mydata", function() {
+		voteSystem.clearChangePasswordSection();
+	});
+
 	$("#loginByPassword").submit( function() {
 		$("#loginErrorMessage").text("");
 		
@@ -1125,7 +1143,7 @@ voteSystem.initialise = function() {
 		return true;
 	});
 	
-	$("#changePassword").submit(function(event) {
+	$("#changePasswordForm").submit(function(event) {
 		$("#changePasswordErrorMessage").text("");
 		$("#oldPassword").removeClass("invalidInput");
 		$("#newPassword").removeClass("invalidInput");

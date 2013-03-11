@@ -297,7 +297,11 @@ h3.errorMessage {
 }
 
 .myDataChangePasswordSection .inputBoxWithLabel {
-	padding-bottom: 15px;
+	padding-bottom: 12px;
+}
+
+#changePasswordForm {
+	float:left;
 }
 
 #applicationForm {
