@@ -377,6 +377,36 @@ h3.errorMessage {
 	display: none;
 }
 
+.statsSortingBar {
+	text-align: center;
+	padding-bottom: 5px;
+	font-size: 15px;
+}
+
+.statsSortingBar span {
+	font-size: 20px;
+	font-weight: bold;
+	color: #002288;
+	cursor: pointer;
+	border-radius: 3px;
+	border: 1px solid #dddddd;
+}
+
+.primarySortMethod {
+	border: 1px solid #000000 !important;
+	background: #cccc88;
+}
+
+.secondarySortMethod {
+	border: 1px solid #777777 !important;
+	background: #e7e7a4;
+}
+
+.tertiarySortMethod {
+	border: 1px solid #bbbbbb !important;
+	background: #f8f8bb;
+}
+
 .candidateForVoting {
 	width: 750px;
 	height: 80px;
@@ -643,7 +673,7 @@ h3.errorMessage {
 	color: #aaaaaa;
 }
 
-#regionViewFilter , #candidateViewRegionFilter, #candidateViewPartyFilter, #candidateViewNameFilter, #candidateViewOrdering, #partyViewRegionFilter {
+#regionViewFilter , #candidateViewRegionFilter, #candidateViewPartyFilter, #candidateViewNameFilter, #partyViewRegionFilter {
 	width: 170px;
 }
 

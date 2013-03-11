@@ -103,6 +103,58 @@ voteSystem.menuActiveTabParams = {
 	"menu_voting" : ""
 };
 
+voteSystem.sortItemList = function(itemList, sortMethods, sortMethodQueue) {
+	itemList.sort( function(a, b) {
+		for(var methodId in sortMethodQueue) {
+			var compareResult = sortMethods[sortMethodQueue[methodId]](a, b);
+			
+			if(compareResult != 0) return compareResult;
+		}
+		
+		return 0;
+	});
+};
+
+voteSystem.getUpdatedSortMethodQueue = function(newMethod, oldQueue, sortMethods) {
+	for(var methodName in sortMethods) {
+		$("#" + methodName).removeClass("primarySortMethod secondarySortMethod tertiarySortMethod");
+	}
+
+	var methodCriteria = newMethod.indexOf("_") >= 0 ? newMethod.substr(0, newMethod.indexOf("_")) : newMethod;
+	var newMethodList = [newMethod];
+	
+	for(var methodId in oldQueue) {
+		var methodName = oldQueue[methodId];
+		var currentMethodCriteria = methodName.indexOf("_") >= 0 ? methodName.substr(0, methodName.indexOf("_")) : methodName;
+		
+		if(currentMethodCriteria != methodCriteria && newMethodList.length < 3) {
+			newMethodList.push(methodName);
+		}
+	}
+	
+	if(newMethodList.length > 0) $("#" + newMethodList[0]).addClass("primarySortMethod");
+	if(newMethodList.length > 1) $("#" + newMethodList[1]).addClass("secondarySortMethod");
+	if(newMethodList.length > 2) $("#" + newMethodList[2]).addClass("tertiarySortMethod");
+	
+	return newMethodList;
+};
+
+voteSystem.sortMethodAttachClickHandler = function(methodName, sortMethods, sortQueueName, changeCallback) {
+	$("#" + methodName).click( function(event) {
+		voteSystem[sortQueueName] = voteSystem.getUpdatedSortMethodQueue(methodName, voteSystem[sortQueueName], sortMethods);
+
+		changeCallback();
+	});
+};
+
+voteSystem.initialiseSortingMethods = function(sortMethods, sortQueueName, changeCallback) {
+	for(var methodName in sortMethods) {
+		voteSystem.sortMethodAttachClickHandler(methodName, sortMethods, sortQueueName, changeCallback);
+	}
+	
+	voteSystem.getUpdatedSortMethodQueue(voteSystem[sortQueueName][0], voteSystem[sortQueueName], sortMethods);
+};
+
 voteSystem.resizeTabContents = function(tabElement) {
 	var nameBlock = $(tabElement).children(".tabNameLabel");
 	var multiNameBlock = $(tabElement).children(".tabNameLabelsMultiple");
@@ -487,28 +539,70 @@ voteSystem.addLineToRegionView = function(listElement, template, displayName, ke
 	listElement.append(element);
 };
 
+voteSystem.regionSortMethods = {
+	"sortRegionName_Asc" : function(a, b) {
+		if(a.displayName < b.displayName) return -1;
+		else if(a.displayName  > b.displayName) return 1;
+		else return 0;
+	}, 
+	
+	"sortRegionCandidateCount_Asc" : function(a, b) {
+		if(a.totalCandidates < b.totalCandidates) return -1;
+		else if(a.totalCandidates > b.totalCandidates) return 1;
+		else return 0;
+	}, 
+	
+	"sortCandidateVoterCount_Asc" : function(a, b) {
+		if(a.totalVoters < b.totalVoters) return -1;
+		else if(a.totalVoters > b.totalVoters) return 1;
+		else return 0;
+	}
+};
+
+voteSystem.regionSortMethods["sortRegionName_Desc"] = function(a, b) { return -voteSystem.regionSortMethods["sortRegionName_Asc"](a, b); };
+voteSystem.regionSortMethods["sortRegionCandidateCount_Desc"] = function(a, b) { return -voteSystem.regionSortMethods["sortRegionCandidateCount_Asc"](a, b); };
+voteSystem.regionSortMethods["sortCandidateVoterCount_Desc"] = function(a, b) { return -voteSystem.regionSortMethods["sortCandidateVoterCount_Asc"](a, b); };
+
+voteSystem.regionSortMethodQueue = ["sortRegionName_Asc"];
+
+voteSystem.currentRegionList = null;
+
+voteSystem.resortRegionView = function() {
+	if(!voteSystem.currentRegionList) return;
+	
+	voteSystem.sortItemList(voteSystem.currentRegionList, voteSystem.regionSortMethods, voteSystem.regionSortMethodQueue);
+	
+	var listElement = $("#statsRegionList"), template = $("#regionTemplate");
+	listElement.html("");
+	
+	var totalVoters = 0, totalCandidates = 0;
+	
+	for(var i = 0; i < voteSystem.currentRegionList.length; i++) {
+		totalVoters += voteSystem.currentRegionList[i].totalVoters;
+		totalCandidates += voteSystem.currentRegionList[i].totalCandidates;
+	}
+	
+	voteSystem.addLineToRegionView(listElement, template, "Kogu Eesti", "all", totalVoters, totalCandidates);
+	
+	for(var i = 0; i < voteSystem.currentRegionList.length; i++) {
+		var info = voteSystem.currentRegionList[i];
+	
+		voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
+	}
+}
+
 voteSystem.loadRegionView = function() {
 	if(voteSystem.regionViewLoaded) return;
 	
 	voteSystem.regionViewLoaded = true;
 	voteSystem.regionListQuery.success(function(data) {
-		var listElement = $("#statsRegionList"), template = $("#regionTemplate");
-		listElement.html("");
-		
-		var totalVoters = 0, totalCandidates = 0;
+		voteSystem.currentRegionList = [];
 		
 		for(var regionId in voteSystem.regionList) {
-			totalVoters += voteSystem.regionList[regionId].totalVoters;
-			totalCandidates += voteSystem.regionList[regionId].totalCandidates;
+			voteSystem.currentRegionList.push(voteSystem.regionList[regionId]);
 		}
 		
-		voteSystem.addLineToRegionView(listElement, template, "Kogu Eesti", "all", totalVoters, totalCandidates);
-		
-		for(var regionId in voteSystem.regionList) {
-			var info = voteSystem.regionList[regionId];
-		
-			voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
-		}
+		voteSystem.resortRegionView();
 	});
 };
 
@@ -591,6 +685,61 @@ voteSystem.addLineToCandidateView = function(listElement, template, candidateNam
 	voteSystem.wrapSpanInParent(regionWrapper);
 };
 
+voteSystem.candidateSortMethods = {
+	"sortCandidateName_Asc" : function(a, b) {
+		var fullNameA = a.firstName + " " + a.lastName;
+		var fullNameB = b.firstName + " " + b.lastName;
+	
+		if(fullNameA < fullNameB) return -1;
+		else if(fullNameA > fullNameB) return 1;
+		else return 0;
+	}, 
+	
+	"sortCandidateParty_Asc" : function(a, b) {
+		if(voteSystem.partyList[a.partyId].displayName < voteSystem.partyList[b.partyId].displayName) return -1;
+		else if(voteSystem.partyList[a.partyId].displayName > voteSystem.partyList[b.partyId].displayName) return 1;
+		else return 0;
+	}, 
+	
+	"sortCandidateRegion_Asc" : function(a, b) {
+		if(voteSystem.regionList[a.regionId].displayName < voteSystem.regionList[b.regionId].displayName) return -1;
+		else if(voteSystem.regionList[a.regionId].displayName > voteSystem.regionList[b.regionId].displayName) return 1;
+		else return 0;
+	}, 
+	
+	"sortCandidateVoteCount_Asc" : function(a, b) {
+		if(a.voteCount < b.voteCount) return -1;
+		else if(a.voteCount > b.voteCount) return 1;
+		else return 0;
+	}
+};
+
+voteSystem.candidateSortMethods["sortCandidateName_Desc"] = function(a, b) { return -voteSystem.candidateSortMethods["sortCandidateName_Asc"](a, b); };
+voteSystem.candidateSortMethods["sortCandidateParty_Desc"] = function(a, b) { return -voteSystem.candidateSortMethods["sortCandidateParty_Asc"](a, b); };
+voteSystem.candidateSortMethods["sortCandidateRegion_Desc"] = function(a, b) { return -voteSystem.candidateSortMethods["sortCandidateRegion_Asc"](a, b); };
+voteSystem.candidateSortMethods["sortCandidateVoteCount_Desc"] = function(a, b) { return -voteSystem.candidateSortMethods["sortCandidateVoteCount_Asc"](a, b); };
+
+voteSystem.candidateSortMethodQueue = ["sortCandidateVoteCount_Desc"];
+
+voteSystem.currentCandidateList = null;
+
+voteSystem.resortCandidateView = function() {
+	if(!voteSystem.currentCandidateList) return;
+	
+	var listElement = $("#statsCandidateList"), template = $("#candidateStatsTemplate");
+	listElement.html("");
+	
+	voteSystem.sortItemList(voteSystem.currentCandidateList, voteSystem.candidateSortMethods, voteSystem.candidateSortMethodQueue);
+	
+	for(var i = 0; i < voteSystem.currentCandidateList.length; i++) {
+		var info = voteSystem.currentCandidateList[i];
+		var partyName = voteSystem.partyList[info.partyId].displayName;
+		var regionName = voteSystem.regionList[info.regionId].displayName;
+		
+		voteSystem.addLineToCandidateView(listElement, template, info.firstName + " " + info.lastName, partyName, regionName, info.voteCount);
+	}
+}
+
 voteSystem.loadCandidateView = function(params) {
 	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).done( function() {
 		if(voteSystem.candidateViewState == null) {
@@ -622,16 +771,9 @@ voteSystem.loadCandidateView = function(params) {
 				
 				voteSystem.jsonQuery("candidates", queryData, false, function(data) {
 					if(data.responseType == "candidates" && data.candidateList) {
-						var listElement = $("#statsCandidateList"), template = $("#candidateStatsTemplate");
-						listElement.html("");
+						voteSystem.currentCandidateList = data.candidateList;
 						
-						for(var i = 0; i < data.candidateList.length; i++) {
-							var info = data.candidateList[i];
-							var partyName = voteSystem.partyList[info.partyId].displayName;
-							var regionName = voteSystem.regionList[info.regionId].displayName;
-							
-							voteSystem.addLineToCandidateView(listElement, template, info.firstName + " " + info.lastName, partyName, regionName, info.voteCount);
-						}
+						voteSystem.resortCandidateView();
 					}
 				});
 								
@@ -664,6 +806,50 @@ voteSystem.addLineToPartyView = function(listElement, template, partyName, keywo
 	listElement.append(element);
 };
 
+voteSystem.partySortMethods = {
+	"sortPartyName_Asc" : function(a, b) {
+		if(a.displayName < b.displayName) return -1;
+		else if(a.displayName  > b.displayName ) return 1;
+		else return 0;
+	}, 
+	
+	"sortPartyVoteCount_Asc" : function(a, b) {
+		if(a.voteCount < b.voteCount) return -1;
+		else if(a.voteCount > b.voteCount) return 1;
+		else return 0;
+	}
+};
+
+voteSystem.partySortMethods["sortPartyName_Desc"] = function(a, b) { return -voteSystem.partySortMethods["sortPartyName_Asc"](a, b); };
+voteSystem.partySortMethods["sortPartyVoteCount_Desc"] = function(a, b) { return -voteSystem.partySortMethods["sortPartyVoteCount_Asc"](a, b); };
+
+voteSystem.partySortMethodQueue = ["sortPartyVoteCount_Desc"];
+
+voteSystem.currentPartyList = null;
+
+voteSystem.resortPartyView = function() {
+	if(!voteSystem.currentPartyList) return;
+	
+	var paramList = voteSystem.partyViewState.split("-");
+	var findRegionId = voteSystem.regionFromKeyword(paramList[0]);
+	
+	var listElement = $("#statsPartyList"), template = $("#partyTemplate"), totalVotes = 0;
+	listElement.html("");
+	
+	voteSystem.sortItemList(voteSystem.currentPartyList, voteSystem.partySortMethods, voteSystem.partySortMethodQueue);
+	
+	for(var i = 0; i < voteSystem.currentPartyList.length; i++) {
+		totalVotes += voteSystem.currentPartyList[i].voteCount;
+	}
+	
+	for(var i = 0; i < voteSystem.currentPartyList.length; i++) {
+		var percentage = parseFloat(Math.round(((totalVotes > 0) ? voteSystem.currentPartyList[i].voteCount / totalVotes : 0) * 1000) / 10).toFixed(1) + "%";
+		var regionKeyword = voteSystem.keywordFromRegion(findRegionId);
+		
+		voteSystem.addLineToPartyView(listElement, template, voteSystem.currentPartyList[i].displayName, voteSystem.currentPartyList[i].keyword, regionKeyword, voteSystem.currentPartyList[i].voteCount, percentage);
+	}
+}
+
 voteSystem.loadPartyView = function(params) {
 	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).done( function() {
 		if(voteSystem.partyViewState == null) {
@@ -681,25 +867,15 @@ voteSystem.loadPartyView = function(params) {
 			
 			var queryData = {regionId: findRegionId, orderId: 4};
 			
+			voteSystem.partyViewState = params;
+			
 			voteSystem.jsonQuery("parties", queryData, false, function(data) {
 				if(data.responseType == "parties" && data.partyList) {
-					var listElement = $("#statsPartyList"), template = $("#partyTemplate"), totalVotes = 0;
-					listElement.html("");
+					voteSystem.currentPartyList = data.partyList;
 					
-					for(var i = 0; i < data.partyList.length; i++) {
-						totalVotes += data.partyList[i].voteCount;
-					}
-					
-					for(var i = 0; i < data.partyList.length; i++) {
-						var percentage = parseFloat(Math.round(((totalVotes > 0) ? data.partyList[i].voteCount / totalVotes : 0) * 1000) / 10).toFixed(1) + "%";
-						var regionKeyword = voteSystem.keywordFromRegion(findRegionId);
-						
-						voteSystem.addLineToPartyView(listElement, template, data.partyList[i].displayName, data.partyList[i].keyword, regionKeyword, data.partyList[i].voteCount, percentage);
-					}
+					voteSystem.resortPartyView();
 				}
 			});
-		
-			voteSystem.partyViewState = params;
 		} 		
 	});
 };
@@ -871,6 +1047,8 @@ voteSystem.initialise = function() {
 		voteSystem.refreshVotingList();			
 	});	
 	
+	voteSystem.initialiseSortingMethods(voteSystem.regionSortMethods, "regionSortMethodQueue", voteSystem.resortRegionView);
+	
 	voteSystem.setTabActivateCB("tab_stats_regions", function(tabElement) {
 		if (voteSystem.timeoutId) {
 			window.clearTimeout(voteSystem.timeoutId);
@@ -880,6 +1058,8 @@ voteSystem.initialise = function() {
 		voteSystem.loadRegionView();
 	});
 	
+	voteSystem.initialiseSortingMethods(voteSystem.candidateSortMethods, "candidateSortMethodQueue", voteSystem.resortCandidateView);
+	
 	voteSystem.setTabActivateCB("tab_stats_candidates", function(tabElement, parameters) {
 		if (voteSystem.timeoutId) {
 			window.clearTimeout(voteSystem.timeoutId);
@@ -888,6 +1068,8 @@ voteSystem.initialise = function() {
 		voteSystem.timeoutId = window.setTimeout(voteSystem.hideLoader, 2000);
 		voteSystem.loadCandidateView(parameters);
 	});
+	
+	voteSystem.initialiseSortingMethods(voteSystem.partySortMethods, "partySortMethodQueue", voteSystem.resortPartyView);
 	
 	voteSystem.setTabActivateCB("tab_stats_parties", function(tabElement, parameters) {
 		if (voteSystem.timeoutId) {

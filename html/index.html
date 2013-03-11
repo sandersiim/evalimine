@@ -61,6 +61,11 @@
 								<div class="clear"></div>
 							</div>
 						</div>
+						<div class="statsSortingBar">
+							Nime j&auml;rgi: <span id="sortRegionName_Asc">&and;</span> / <span id="sortRegionName_Desc">&or;</span> &nbsp; &nbsp; 
+							Kandidaatide arvu j&auml;rgi: <span id="sortRegionCandidateCount_Asc">&and;</span> / <span id="sortRegionCandidateCount_Desc">&or;</span> &nbsp; &nbsp; 
+							H&auml;&auml;letajate arvu j&auml;rgi: <span id="sortCandidateVoterCount_Asc">&and;</span> / <span id="sortCandidateVoterCount_Desc">&or;</span> &nbsp; &nbsp; 
+						</div>
 						<div id="statsRegionList">
 						</div>
 					</div>
@@ -75,9 +80,6 @@
 					<div class="tabHeader">
 						<form method="GET" action="#">
 							<div id="candidateViewParams">
-								<select id="candidateViewOrdering">
-									<option value="all">Järjesta häälte arvu järgi</option>
-								</select>
 								<select id="candidateViewRegionFilter">
 									<option value="all">Kogu Eesti</option>
 								</select>
@@ -100,6 +102,12 @@
 								<div class="voteCount"></div>
 								<div class="clear"></div>
 							</div>
+						</div>
+						<div class="statsSortingBar">
+							Nime j&auml;rgi: <span id="sortCandidateName_Asc">&and;</span> / <span id="sortCandidateName_Desc">&or;</span> &nbsp; &nbsp; 
+							Partei j&auml;rgi: <span id="sortCandidateParty_Asc">&and;</span> / <span id="sortCandidateParty_Desc">&or;</span> &nbsp; &nbsp; 
+							Regiooni j&auml;rgi: <span id="sortCandidateRegion_Asc">&and;</span> / <span id="sortCandidateRegion_Desc">&or;</span> &nbsp; &nbsp; 
+							H&auml;&auml;lte arvu j&auml;rgi: <span id="sortCandidateVoteCount_Asc">&and;</span> / <span id="sortCandidateVoteCount_Desc">&or;</span> &nbsp; &nbsp; 
 						</div>
 						<div id="statsCandidateList">
 						</div>
@@ -134,6 +142,10 @@
 								<div class="votePercentage"></div>
 								<div class="clear"></div>
 							</div>
+						</div>
+						<div class="statsSortingBar">
+							Nime j&auml;rgi: <span id="sortPartyName_Asc">&and;</span> / <span id="sortPartyName_Desc">&or;</span> &nbsp; &nbsp; 
+							H&auml;&auml;lte arvu j&auml;rgi: <span id="sortPartyVoteCount_Asc">&and;</span> / <span id="sortPartyVoteCount_Desc">&or;</span> &nbsp; &nbsp; 
 						</div>
 						<div id="statsPartyList">
 						</div>
