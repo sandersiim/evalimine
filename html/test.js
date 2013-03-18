@@ -312,7 +312,7 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 		}
 		else {
 			$("#menu_mydata").text("Logi sisse");
-			
+			voteSystem.queryCandidateName = null;
 			voteSystem.setActiveTab("tab_login", "", false);
 			voteSystem.setActiveTab("tab_err_login", "", false);
 		}
