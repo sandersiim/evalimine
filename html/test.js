@@ -79,6 +79,7 @@ voteSystem.votedCandidateName = "";
 voteSystem.candidateViewState = null;
 voteSystem.partyViewState = null;
 voteSystem.regionSelectLoaded = false;
+voteSystem.candidateFilterDelay = null;
 
 voteSystem.timeoutId = null;
 
@@ -722,6 +723,27 @@ voteSystem.candidateSortMethods["sortCandidateVoteCount_Desc"] = function(a, b) 
 voteSystem.candidateSortMethodQueue = ["sortCandidateVoteCount_Desc"];
 
 voteSystem.currentCandidateList = null;
+voteSystem.filteredCandidateList = null;
+
+voteSystem.filterCandidateList = function(filterString) {
+	voteSystem.filteredCandidateList = [];
+	
+	filterString = filterString.toUpperCase();
+
+	for(var i = 0; i < voteSystem.currentCandidateList.length; i++) {
+		var compareString = (voteSystem.currentCandidateList[i].lastName + ", " + voteSystem.currentCandidateList[i].firstName).toUpperCase();
+		
+		if(compareString.substring(0, filterString.length) == filterString) {
+			voteSystem.filteredCandidateList.push(voteSystem.currentCandidateList[i]);
+		}
+	}
+};
+
+voteSystem.candidateNameFilterChanged = function() {
+	clearTimeout(voteSystem.candidateFilterDelay);
+	
+	voteSystem.candidateFilterDelay = setTimeout("voteSystem.resortCandidateView()", 200);
+}
 
 voteSystem.resortCandidateView = function() {
 	if(!voteSystem.currentCandidateList) return;
@@ -729,10 +751,11 @@ voteSystem.resortCandidateView = function() {
 	var listElement = $("#statsCandidateList"), template = $("#candidateStatsTemplate");
 	listElement.html("");
 	
-	voteSystem.sortItemList(voteSystem.currentCandidateList, voteSystem.candidateSortMethods, voteSystem.candidateSortMethodQueue);
+	voteSystem.filterCandidateList($("#candidateViewNameFilter").val() == "Filtreeri nimesid" ? "" : $("#candidateViewNameFilter").val());
+	voteSystem.sortItemList(voteSystem.filteredCandidateList, voteSystem.candidateSortMethods, voteSystem.candidateSortMethodQueue);
 	
-	for(var i = 0; i < voteSystem.currentCandidateList.length; i++) {
-		var info = voteSystem.currentCandidateList[i];
+	for(var i = 0; i < voteSystem.filteredCandidateList.length; i++) {
+		var info = voteSystem.filteredCandidateList[i];
 		var partyName = voteSystem.partyList[info.partyId].displayName;
 		var regionName = voteSystem.regionList[info.regionId].displayName;
 		
@@ -1410,6 +1433,12 @@ voteSystem.initialise = function() {
 			$("#candidateViewNameFilter").val("Filtreeri nimesid");
 		}
 	});
+	
+	$("#candidateViewNameFilter")
+		.change(voteSystem.candidateNameFilterChanged)
+		.keyup(voteSystem.candidateNameFilterChanged)
+		.keydown(voteSystem.candidateNameFilterChanged)
+		.keypress(voteSystem.candidateNameFilterChanged);
 	
 	$("#candidateViewRegionFilter").change(function(event) {
 		voteSystem.candidateFiltersChanged();
