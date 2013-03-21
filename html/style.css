@@ -36,7 +36,7 @@ h3.errorMessage {
 
 #logo {	
 	float:left;	
-	padding-top: 10px;
+	/*padding-top: 10px;*/
 }
 
 #header {
@@ -53,7 +53,7 @@ h3.errorMessage {
 
 #sitetitle {
 	float: left;
-	padding: 15px 44px 15px 44px;	
+	padding: 5px 44px 15px 44px;	
 }
 
 #sitetitle h1 {
