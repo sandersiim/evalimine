@@ -583,7 +583,7 @@ voteSystem.resortRegionView = function() {
 		totalCandidates += voteSystem.currentRegionList[i].totalCandidates;
 	}
 	
-	voteSystem.addLineToRegionView(listElement, template, "Kogu Eesti", "all", totalVoters, totalCandidates);
+	voteSystem.addLineToRegionView(listElement, template, "Kogu Rooma", "all", totalVoters, totalCandidates);
 	
 	for(var i = 0; i < voteSystem.currentRegionList.length; i++) {
 		var info = voteSystem.currentRegionList[i];
