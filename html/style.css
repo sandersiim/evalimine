@@ -7,6 +7,11 @@ body {
 	font-size: 62.5%;
 }
 
+#message {
+	color: black;
+	font-size: 2em;
+}
+
 a {
 	font-weight: bold;
 }
@@ -183,6 +188,7 @@ h3.errorMessage {
 	margin: 0 auto;
 	height: 19px;
 	border-top: 1px solid #CCC;
+	font-size: 1.3em; 
 }
 
 .tab {
