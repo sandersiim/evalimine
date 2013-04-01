@@ -28,8 +28,10 @@ $(document).ready(function() {
 		var queryData = $("#testerQueryContents").val();
 		
 		if(queryData == "") queryData = "{}";
-
-		$.ajax("../dyn/" + queryType + "?json=" + encodeURIComponent(queryData), {dataType: "text"}).done(function(data) {
+		
+		var ref = ($("#testerQueryMethod").val() == "POST") ? $.post("../dyn/" + queryType, {"json": queryData}, function() { }, "text") : $.get("../dyn/" + queryType, {"json": queryData}, function() { }, "text");
+		
+		ref.done(function(data) {
 			$("#testerResult").text(data);
 		});
 		
@@ -110,6 +112,7 @@ $(document).ready(function() {
 			var items = $(this).children("span");
 			$("#testerQueryType").val($(items[0]).text());
 			$("#testerQueryContents").val($(items[1]).text());
+			$("#testerQueryMethod").val($(this).hasClass("dataPost") ? "POST" : "GET");
 			
 			return false;
 		});

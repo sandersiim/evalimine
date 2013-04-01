@@ -281,7 +281,8 @@ voteSystem.swapToTab = function(tabElement, tabParameters) {
 };
 
 voteSystem.jsonQuery = function(queryType, jsonObject, isPostQuery, doneFunction) {
-	return $.ajax("dyn/" + queryType + "?json=" + JSON.stringify(jsonObject), {type: isPostQuery ? "POST" : "GET", dataType: "json"}).done(doneFunction);
+	if(isPostQuery) return $.post("dyn/" + queryType, {"json": JSON.stringify(jsonObject)}, function() { }, "json").done(doneFunction);
+	else return $.get("dyn/" + queryType, {"json": JSON.stringify(jsonObject)}, function() { }, "json").done(doneFunction);
 };
 
 voteSystem.setLoggedInStatus = function(isLoggedIn) {
@@ -442,7 +443,7 @@ voteSystem.requestTabActivationOnStatus = function() {
 voteSystem.voteForCandidate = function(candidateId) {
 	var queryData = {voteCandidateId: candidateId};
 	
-	voteSystem.jsonQuery("vote", queryData, false, function(data) {
+	voteSystem.jsonQuery("vote", queryData, true, function(data) {
 		if(data.responseType == "status") {
 			if(data.statusCode == 10 || data.statusCode == 11) {
 				voteSystem.userInfo.userInfo.votedCandidateId = candidateId;
@@ -1124,7 +1125,7 @@ voteSystem.initialise = function() {
 	$("#loginByPassword").submit( function() {
 		$("#loginErrorMessage").text("");
 		
-		voteSystem.jsonQuery("login", {username:$("#username").val(), password:$("#password").val()}, false, function(data) {
+		voteSystem.jsonQuery("login", {username:$("#username").val(), password:$("#password").val()}, true, function(data) {
 			if(data.responseType == "userInfo") {
 				voteSystem.applyUserInfo(data);
 				voteSystem.redirectBasedOnUserInfo();
@@ -1201,7 +1202,7 @@ voteSystem.initialise = function() {
 		$("#changePasswordErrorMessage").text(errorMessage);
 		
 		if (errorMessage == "") {
-			voteSystem.jsonQuery("changepass", queryData, false, function(data) {
+			voteSystem.jsonQuery("changepass", queryData, true, function(data) {
 				if(data.responseType == "status") {
 					voteSystem.removeClassFromElement($("#changePasswordErrorMessage")[0],"greenText");
 					if(data.statusCode < 0) $("#changePasswordErrorMessage").text("Süsteemi viga.");
@@ -1235,7 +1236,7 @@ voteSystem.initialise = function() {
 			var regionName = $("#regions").find(":selected").text();
 			voteSystem.confirmMessage("Kinnita", "Kas olete kindel, et soovite oma piirkonnaks määrata "+regionName+"? "+
 				"Pärast kinnitamist ei saa te enam oma piirkonda muuta.", function() {
-				voteSystem.jsonQuery("setregion", {regionId:selectedRegionId}, false, function(data) {
+				voteSystem.jsonQuery("setregion", {regionId:selectedRegionId}, true, function(data) {
 					if(data.responseType == "status") {
 						if(data.statusCode < 0) $("#setRegionErrorMessage").text("Süsteemi viga.");
 						else if(data.statusCode == 1) $("#setRegionErrorMessage").text("Pole sisse logitud.");
@@ -1300,7 +1301,7 @@ voteSystem.initialise = function() {
 			var queryData = {partyId: selectedPartyId, firstName: newFirstName, lastName: newLastName};
 			
 			voteSystem.confirmMessage("Kinnita kandidatuur", confirmText, function() {
-				voteSystem.jsonQuery("application", queryData, false, function(data) {
+				voteSystem.jsonQuery("application", queryData, true, function(data) {
 					if(data.responseType == "status") {
 						if(data.statusCode < 0) $("#applicationErrorMessage").text("Süsteemi viga.");
 						else if(data.statusCode == 100) $("#applicationErrorMessage").text("Eesnimi pole pikkusega 2-60.");
@@ -1324,7 +1325,7 @@ voteSystem.initialise = function() {
 	});
 	
 	$("#logoutForm").submit(function(event) {
-		voteSystem.jsonQuery("logout", {}, false, function(data) {
+		voteSystem.jsonQuery("logout", {}, true, function(data) {
 			voteSystem.applyUserInfo({userInfo:null, candidateInfo:null});
 		});
 		
