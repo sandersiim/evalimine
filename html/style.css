@@ -686,10 +686,6 @@ h3.errorMessage {
 	float: right;
 }
 
-#candidateViewNameFilter, #regionViewFilter {
-	color: #aaaaaa;
-}
-
 #regionViewFilter , #candidateViewRegionFilter, #candidateViewPartyFilter, #candidateViewNameFilter, #partyViewRegionFilter {
 	width: 170px;
 }

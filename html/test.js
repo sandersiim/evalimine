@@ -470,7 +470,7 @@ voteSystem.refreshVotingList = function() {
 		voteSystem.partyListQuery.success(function() {
 			if(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]) {
 				var regionName = voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"];
-				$("#tab_voting .tabNameLabel").text("HÃ¤Ã¤letamine - Sinu piirkond: " + regionName);
+				$("#tab_voting .tabNameLabel").text("Hääletamine - Sinu piirkond: " + regionName);
 			}
 		});
 	}
@@ -503,7 +503,7 @@ voteSystem.refreshVotingList = function() {
 					element.find(".voteGiveForm").submit(function() {
 						var candidateId = $(this).children(".voteCandidateId").val();
 						
-						voteSystem.confirmMessage("Kinnita hÃ¤Ã¤l", "Kas oled kindel, et soovid anda sellele kandidaadile oma hÃ¤Ã¤le?", function() {
+						voteSystem.confirmMessage("Kinnita hääl", "Kas oled kindel, et soovid anda sellele kandidaadile oma hääle?", function() {
 							voteSystem.voteForCandidate(candidateId);
 						});
 						
@@ -515,7 +515,7 @@ voteSystem.refreshVotingList = function() {
 				else if(selectedId == info.candidateId) {
 					element.find(".voteGiveForm").css("display", "none");
 					element.find(".voteCancelForm").submit(function() {
-						voteSystem.confirmMessage("Kinnita tÃ¼histus", "Kas oled kindel, et soovid oma hÃ¤Ã¤lt tÃ¼histada?", function() {
+						voteSystem.confirmMessage("Kinnita tühistus", "Kas oled kindel, et soovid oma häält tühistada?", function() {
 							voteSystem.voteForCandidate(0);
 						});
 						
@@ -540,7 +540,7 @@ voteSystem.addLineToRegionView = function(listElement, template, displayName, ke
 	element.get().id = "";
 	element.find(".regionName").text(displayName);
 	element.find(".regionCandidateCount").text(candidateCount + " kandidaati");
-	element.find(".regionVoterCount").text(voterCount + " hÃ¤Ã¤letajat");
+	element.find(".regionVoterCount").text(voterCount + " hääletajat");
 	element.find(".regionPartyStats").attr("href", "#tab_stats_parties-" + keyword);
 	element.find(".regionCandidateStats").attr("href", "#tab_stats_candidates-" + keyword + "-all");
 	
@@ -763,7 +763,7 @@ voteSystem.resortCandidateView = function() {
 	var listElement = $("#statsCandidateList"), template = $("#candidateStatsTemplate");
 	listElement.html("");
 	
-	voteSystem.filterCandidateList($("#candidateViewNameFilter").val() == "Perekonnanimi, Eesnimi" ? "" : $("#candidateViewNameFilter").val());
+	voteSystem.filterCandidateList($("#candidateViewNameFilter").val());
 	voteSystem.sortItemList(voteSystem.filteredCandidateList, voteSystem.candidateSortMethods, voteSystem.candidateSortMethodQueue);
 	
 	for(var i = 0; i < voteSystem.filteredCandidateList.length; i++) {
@@ -839,7 +839,7 @@ voteSystem.addLineToPartyView = function(listElement, template, partyName, keywo
 	element.get().id = "";
 	element.find(".partyName").text(partyName);
 	element.find(".candidatesLink").attr("href", "#tab_stats_candidates-" + regionKeyword + "-" + keyword);
-	element.find(".voteCount").text(voteCount + " hÃ¤Ã¤lt");
+	element.find(".voteCount").text(voteCount + " häält");
 	element.find(".votePercentage").text(votePercentage);
 	
 	listElement.append(element);
@@ -972,14 +972,14 @@ voteSystem.refreshMyDataInfo = function() {
 					voteSystem.queryCandidateName(voteSystem.userInfo.userInfo.votedCandidateId);
 				}
 				voteSystem.candidateNameQuery.success(function() {
-					$("#myDataVoting").html("<span class=\"greenText\">HÃ¤Ã¤l antud: </span>"+voteSystem.votedCandidateName);
+					$("#myDataVoting").html("<span class=\"greenText\">Hääl antud: </span>"+voteSystem.votedCandidateName);
 				});				
 				$("#toVotingLink").remove();
 			} else {
 				voteSystem.addClassToElement($("#myDataVoting")[0],"errorMessage" );
-				$("#myDataVoting").text("Te pole oma hÃ¤Ã¤lt veel andnud!");
+				$("#myDataVoting").text("Te pole oma häält veel andnud!");
 				if (!$("#toVotingLink")[0]) {
-					$("#myDataVoting").after("<a id=\"toVotingLink\" href=\"#tab_voting\">Mine hÃ¤Ã¤letama</a>");	
+					$("#myDataVoting").after("<a id=\"toVotingLink\" href=\"#tab_voting\">Mine hääletama</a>");	
 				}			
 			}
 			if ( voteSystem.userInfo.candidateInfo) {
@@ -1001,15 +1001,15 @@ voteSystem.refreshMyDataInfo = function() {
 			$("#toApplicationLink").remove();
 			$("#toVotingLink").remove();
 			voteSystem.addClassToElement($("#myDataRegion")[0],"errorMessage" );
-			$("#myDataRegion").text("Teil on piirkond mÃ¤Ã¤ramata!");
+			$("#myDataRegion").text("Teil on piirkond määramata!");
 			$("#myDataApplyRegion").text("");			
 			if (!$("#toSetRegionLink")[0]) {
-				$("#myDataRegion").after("<a id=\"toSetRegionLink\" href=\"linkButton\">MÃ¤Ã¤ra piirkond</a>");
+				$("#myDataRegion").after("<a id=\"toSetRegionLink\" href=\"linkButton\">Määra piirkond</a>");
 			}
 			voteSystem.addClassToElement($("#myDataApplication")[0],"greyText");
 			voteSystem.addClassToElement($("#myDataVoting")[0],"greyText");
-			$("#myDataApplication").text("Kandideerimiseks peate piirkonna mÃ¤Ã¤rama.");
-			$("#myDataVoting").text("HÃ¤Ã¤letamiseks peate piirkonna mÃ¤Ã¤rama.");
+			$("#myDataApplication").text("Kandideerimiseks peate piirkonna määrama.");
+			$("#myDataVoting").text("Hääletamiseks peate piirkonna määrama.");
 		}		
 	} 
 };
@@ -1147,7 +1147,7 @@ voteSystem.initialise = function() {
 			}
 			else if(data.responseType == "status") {
 				if(data.statusCode < 0) {
-					$("#loginErrorMessage").text("SÃ¼steemi viga.");
+					$("#loginErrorMessage").text("Süsteemi viga.");
 				}
 				else if(data.statusCode == 1) {
 					$("#loginErrorMessage").text("Vale kasutajanimi/parool.");
@@ -1172,7 +1172,7 @@ voteSystem.initialise = function() {
 					$("#loginByIdCard").submit();
 				}
 				else {
-					$("#authErrorMessage").text("Sessiooni tuvastamine ebaÃµnnestus.");
+					$("#authErrorMessage").text("Sessiooni tuvastamine ebaõnnestus.");
 				}
 			});
 			
@@ -1192,25 +1192,25 @@ voteSystem.initialise = function() {
 		var errorMessage = "";
 		
 		if (queryData.oldPassword == "") {
-			errorMessage += "Vana salasÃµna on sisestamata. "; 
+			errorMessage += "Vana salasõna on sisestamata. "; 
 			$("#oldPassword").addClass("invalidInput");
 		}
 		
 		if (queryData.newPassword == "") {
-			errorMessage += "Uus salasÃµna on sisestamata. "; 
+			errorMessage += "Uus salasõna on sisestamata. "; 
 			$("#newPassword").addClass("invalidInput");
 		}
 		else if (queryData.newPassword.length < 5) {
-			errorMessage += "Uus salasÃµna peab olema vÃ¤hemalt 5 tÃ¤hemÃ¤rki. ";
+			errorMessage += "Uus salasõna peab olema vähemalt 5 tähemärki. ";
 			$("#newPassword").addClass("invalidInput");
 		}
 		
 		if (queryData.newPasswordRepeat == "") {
-			errorMessage += "Uue salasÃµna kordus on sisestamata. "; 
+			errorMessage += "Uue salasõna kordus on sisestamata. "; 
 			$("#newPasswordConfirmation").addClass("invalidInput");
 		}
 		else if (queryData.newPassword != queryData.newPasswordRepeat) {
-			errorMessage += "Uued salasÃµnad ei kattu. ";
+			errorMessage += "Uued salasõnad ei kattu. ";
 			$("#newPasswordConfirmation").addClass("invalidInput");
 		}
 		
@@ -1220,16 +1220,16 @@ voteSystem.initialise = function() {
 			voteSystem.jsonQuery("changepass", queryData, true, function(data) {
 				if(data.responseType == "status") {
 					voteSystem.removeClassFromElement($("#changePasswordErrorMessage")[0],"greenText");
-					if(data.statusCode < 0) $("#changePasswordErrorMessage").text("SÃ¼steemi viga.");
+					if(data.statusCode < 0) $("#changePasswordErrorMessage").text("Süsteemi viga.");
 					else if(data.statusCode == 1) $("#changePasswordErrorMessage").text("Pole sisse logitud.");
-					else if(data.statusCode == 2) $("#changePasswordErrorMessage").text("Uus salasÃµna alla 5 tÃ¤hemÃ¤rgi.");
-					else if(data.statusCode == 3) $("#changePasswordErrorMessage").text("Uued salasÃµnad ei kattu.");
+					else if(data.statusCode == 2) $("#changePasswordErrorMessage").text("Uus salasõna alla 5 tähemärgi.");
+					else if(data.statusCode == 3) $("#changePasswordErrorMessage").text("Uued salasõnad ei kattu.");
 					else if(data.statusCode == 4) {
-						$("#changePasswordErrorMessage").text("Vana salasÃµna ei ole Ãµige.");
+						$("#changePasswordErrorMessage").text("Vana salasõna ei ole õige.");
 						$("#oldPassword").addClass("invalidInput");
 					} else if(data.statusCode == 10) {
 						voteSystem.addClassToElement($("#changePasswordErrorMessage")[0],"greenText");
-						$("#changePasswordErrorMessage").text("SalasÃµna edukalt muudetud.");
+						$("#changePasswordErrorMessage").text("Salasõna edukalt muudetud.");
 					}
 					
 					$("#oldPassword").val("");
@@ -1249,11 +1249,11 @@ voteSystem.initialise = function() {
 			$("#setRegionErrorMessage").text("Palun valige piirkond");
 		} else {
 			var regionName = $("#regions").find(":selected").text();
-			voteSystem.confirmMessage("Kinnita", "Kas olete kindel, et soovite oma piirkonnaks mÃ¤Ã¤rata "+regionName+"? "+
-				"PÃ¤rast kinnitamist ei saa te enam oma piirkonda muuta.", function() {
+			voteSystem.confirmMessage("Kinnita", "Kas olete kindel, et soovite oma piirkonnaks määrata "+regionName+"? "+
+				"Pärast kinnitamist ei saa te enam oma piirkonda muuta.", function() {
 				voteSystem.jsonQuery("setregion", {regionId:selectedRegionId}, true, function(data) {
 					if(data.responseType == "status") {
-						if(data.statusCode < 0) $("#setRegionErrorMessage").text("SÃ¼steemi viga.");
+						if(data.statusCode < 0) $("#setRegionErrorMessage").text("Süsteemi viga.");
 						else if(data.statusCode == 1) $("#setRegionErrorMessage").text("Pole sisse logitud.");
 						else if(data.statusCode == 3) $("#setRegionErrorMessage").text("Seda piirkonda pole olemas.");
 						else if(data.statusCode == 10) {
@@ -1318,11 +1318,11 @@ voteSystem.initialise = function() {
 			voteSystem.confirmMessage("Kinnita kandidatuur", confirmText, function() {
 				voteSystem.jsonQuery("application", queryData, true, function(data) {
 					if(data.responseType == "status") {
-						if(data.statusCode < 0) $("#applicationErrorMessage").text("SÃ¼steemi viga.");
+						if(data.statusCode < 0) $("#applicationErrorMessage").text("Süsteemi viga.");
 						else if(data.statusCode == 100) $("#applicationErrorMessage").text("Eesnimi pole pikkusega 2-60.");
 						else if(data.statusCode == 101) $("#applicationErrorMessage").text("Perekonnanimi pole pikkusega 2-60.");
 						else if(data.statusCode == 1) $("#applicationErrorMessage").text("Pole sisse logitud.");
-						else if(data.statusCode == 2) $("#applicationErrorMessage").text("Piirkonda pole mÃ¤Ã¤ratud.");
+						else if(data.statusCode == 2) $("#applicationErrorMessage").text("Piirkonda pole määratud.");
 						else if(data.statusCode == 3) $("#applicationErrorMessage").text("Olete juba kandidaat.");
 						else if(data.statusCode == 4) $("#applicationErrorMessage").text("Sellist parteid ei eksisteeri.");
 						else $("#applicationErrorMessage").text("Tundmatu viga.");
@@ -1356,7 +1356,7 @@ voteSystem.initialise = function() {
 	});
 	
 	if(window.location.hash == "#authSessionError") {
-		$("#authErrorMessage").text("Serveri sessiooni tuvastamine ebaÃµnnestus.");
+		$("#authErrorMessage").text("Serveri sessiooni tuvastamine ebaõnnestus.");
 		
 		window.location.hash = "";
 	}
@@ -1418,38 +1418,7 @@ voteSystem.initialise = function() {
 		return false;
 	});
 	
-	
-	
-	$("#regionViewFilter").focus(function(event) {
-		if($("#regionViewFilter").val() == "Filtreeri piirkondi") {
-			$("#regionViewFilter").val("");
-		}
 		
-		$("#regionViewFilter").css("color", "#000000");
-	});
-	
-	$("#regionViewFilter").blur(function(event) {
-		if($("#regionViewFilter").val() == "") {
-			$("#regionViewFilter").css("color", "#aaaaaa");
-			$("#regionViewFilter").val("Filtreeri piirkondi");
-		}
-	});
-	
-	$("#candidateViewNameFilter").focus(function(event) {
-		if($("#candidateViewNameFilter").val() == "Perekonnanimi, Eesnimi") {
-			$("#candidateViewNameFilter").val("");
-		}
-		
-		$("#candidateViewNameFilter").css("color", "#000000");
-	});
-	
-	$("#candidateViewNameFilter").blur(function(event) {
-		if($("#candidateViewNameFilter").val() == "") {
-			$("#candidateViewNameFilter").css("color", "#aaaaaa");
-			$("#candidateViewNameFilter").val("Perekonnanimi, Eesnimi");
-		}
-	});
-	
 	$("#candidateViewNameFilter")
 		.change(voteSystem.candidateNameFilterChanged)
 		.keyup(voteSystem.candidateNameFilterChanged)
