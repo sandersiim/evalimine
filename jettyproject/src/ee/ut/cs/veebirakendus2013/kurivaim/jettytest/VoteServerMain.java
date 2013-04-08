@@ -63,6 +63,7 @@ public class VoteServerMain {
 		ResourceHandler resourceHandler = new ResourceHandlerWrapper();
 		resourceHandler.setResourceBase("../html/");
 		resourceHandler.setCacheControl("max-age=3153600, public");
+		resourceHandler.getMimeTypes().addMimeMapping("cache.manifest", "text/cache-manifest");
 		
 		GzipHandler gzipHandler = new GzipHandler();
 		gzipHandler.setHandler(resourceHandler);

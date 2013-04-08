@@ -7,7 +7,7 @@ import org.eclipse.jetty.util.resource.Resource;
 
 public class ResourceHandlerWrapper extends ResourceHandler {
 	protected void doResponseHeaders(HttpServletResponse response, Resource resource, String mimeType) {
-		if(mimeType.equals("text/html")) {
+		if ( mimeType != null && mimeType.equals("text/html") ) {
 			mimeType = "text/html; charset=UTF-8";
 		}
 		
