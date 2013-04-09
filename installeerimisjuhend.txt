@@ -1,0 +1,8 @@
+Installeerimisjuhend KuriVaim e-valimiste rakendusele
+
+1. Lae alla rakenduse lähtekood GitHubist: https://github.com/sandersiim/evalimine
+2. Installeeri endale MySQL andmebaas (Windowsis nt. WampServer - http://www.wampserver.com/en/)
+3. Käivita kaustas evalimine/sqlimport olevad SQL käsud andmebaasis(mõlemad failid). (WampServeri puhul saab seda teha phpMyAdmin kaudu - localhost/phpmyadmin -> Import)
+4. Impordi Eclipse'i Java projekt kaustas evalimine/jettyproject.
+5. Käivita Eclipse'is klass VoteServerMain.
+6. Rakendus on nüüd installeeritavas arvutis kättesaadav urlilt localhost:8080
