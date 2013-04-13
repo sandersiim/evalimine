@@ -1,3 +1,13 @@
+Storage.prototype.setObject = function(key, value) {
+    this.setItem(key, JSON.stringify(value));
+}
+
+Storage.prototype.getObject = function(key) {
+    var value = this.getItem(key);
+    return value && JSON.parse(value);
+}
+
+
 /*LOADER*/
 
 	var cSpeed=8;
@@ -73,9 +83,11 @@ voteSystem.tabCallbacks = {};
 voteSystem.menuList = ["menu_statistics", "menu_mydata", "menu_help", "menu_voting"];
 voteSystem.partyList = {};
 voteSystem.regionList = {};
+voteSystem.candidateList = {};
 voteSystem.partyListQuery = null;
 voteSystem.regionListQuery = null;
 voteSystem.candidateNameQuery = null;
+voteSystem.candidateListQuery = null;
 voteSystem.lastSeenHash = null;
 voteSystem.regionViewLoaded = false;
 voteSystem.regionViewLastFilter = "";
@@ -85,7 +97,6 @@ voteSystem.partyViewState = null;
 voteSystem.regionSelectLoaded = false;
 voteSystem.candidateFilterDelay = null;
 
-voteSystem.timeoutId = null;
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
@@ -284,9 +295,13 @@ voteSystem.swapToTab = function(tabElement, tabParameters) {
 	
 };
 
-voteSystem.jsonQuery = function(queryType, jsonObject, isPostQuery, doneFunction) {
-	if(isPostQuery) return $.post("dyn/" + queryType, {"json": JSON.stringify(jsonObject)}, function() { }, "json").done(doneFunction);
-	else return $.get("dyn/" + queryType, {"json": JSON.stringify(jsonObject)}, function() { }, "json").done(doneFunction);
+voteSystem.jsonQuery = function(queryType, jsonObject, isPostQuery, doneFunction, failFunction, alwaysFunction) {
+	if(isPostQuery) 
+		return $.post("dyn/" + queryType, {"json": JSON.stringify(jsonObject)}, function() { }, "json")
+			.done(doneFunction).fail(failFunction).always(alwaysFunction);
+	else 
+		return $.get("dyn/" + queryType, {"json": JSON.stringify(jsonObject)}, function() { }, "json")
+			.done(doneFunction).fail(failFunction).always(alwaysFunction);
 };
 
 voteSystem.setLoggedInStatus = function(isLoggedIn) {
@@ -331,6 +346,7 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 
 voteSystem.applyUserInfo = function(newUserInfo) {
 	voteSystem.userInfo = newUserInfo;
+	localStorage.setObject("userInfo", newUserInfo);
 	
 	if(newUserInfo.userInfo != null) {
 		voteSystem.setLoggedInStatus(true);
@@ -358,9 +374,10 @@ voteSystem.redirectBasedOnUserInfo = function() {
 }
 
 voteSystem.queryStatus = function() {
+	voteSystem.showLoader();
 	voteSystem.jsonQuery("status", {}, false, function(data) {
 		if(data.responseType == "userInfo") {
-			voteSystem.applyUserInfo(data);
+			voteSystem.applyUserInfo(data);			
 		}
 		
 		if(!voteSystem.initialTabSet) {
@@ -368,6 +385,17 @@ voteSystem.queryStatus = function() {
 		}
 		
 		voteSystem.requestTabActivationOnStatus();
+	}, function() {
+		if (localStorage.getObject("userInfo") ) {
+			voteSystem.applyUserInfo(localStorage.getObject("userInfo"));
+			if(!voteSystem.initialTabSet) {
+				voteSystem.redirectBasedOnUserInfo();
+			}
+			
+			voteSystem.requestTabActivationOnStatus();
+		}
+	}, function() {
+		voteSystem.hideLoader();
 	});
 };
 
@@ -379,8 +407,15 @@ voteSystem.queryParties = function() {
 			});
 			
 			voteSystem.loadApplicationPartyList();
+			localStorage.setObject("partyList", voteSystem.partyList);
 		}
-	});
+	}, function() {
+		if (localStorage.getObject("partyList")) {
+			voteSystem.partyList = localStorage.getObject("partyList");
+						
+			voteSystem.loadApplicationPartyList();
+		}
+	},null);
 };
 
 voteSystem.queryRegions = function() {
@@ -391,16 +426,44 @@ voteSystem.queryRegions = function() {
 			});
 			
 			voteSystem.loadSetRegionRegionList();
+			localStorage.setObject("regionList", voteSystem.regionList);
 		}
-	});
+	}, function() {
+		if (localStorage.getObject("regionList")) {
+			voteSystem.regionList = localStorage.getObject("regionList");
+						
+			voteSystem.loadSetRegionRegionList();
+		}
+	},null);
+};
+
+voteSystem.queryCandidates = function() {
+	voteSystem.candidateListQuery = voteSystem.jsonQuery("candidates", {count: 10000}, false, function(data) {
+		if(data.responseType == "candidates" && data.candidateList) {
+			$.each(data.candidateList, function(index, item) {
+				voteSystem.candidateList[item.candidateId] = item;
+			});
+			
+			localStorage.setObject("candidateList", voteSystem.candidateList);
+		}
+	}, function() {
+		if (localStorage.getObject("candidateList")) {
+			voteSystem.candidateList = localStorage.getObject("candidateList");						
+		}
+	},null);
 };
 
 voteSystem.queryCandidateName = function(_candidateId) {
 	voteSystem.candidateNameQuery = voteSystem.jsonQuery("candidate", {candidateId:_candidateId}, false, function(data) {
 		if(data.responseType == "candidate" && data.candidateInfo) {
 			voteSystem.votedCandidateName = data.candidateInfo.firstName + " " + data.candidateInfo.lastName;
+			localStorage["votedCandidateName"] = voteSystem.votedCandidateName;
 		}
-	});
+	}, function() {
+		if (localStorage["votedCandidateName"]) {
+			voteSystem.votedCandidateName = localStorage["votedCandidateName"];
+		}
+	}, null);
 };
 
 voteSystem.setTabActivateCB = function(tabName, callbackFunction) {
@@ -458,80 +521,109 @@ voteSystem.voteForCandidate = function(candidateId) {
 				alert(data.statusMessage);
 			}
 		}
-	});
+	},null,null);
 }
 
 voteSystem.refreshVotingList = function() {
-	var queryData = {regionId: voteSystem.userInfo.userInfo.voteRegionId, partyId: 0, namePrefix:"", orderId:0, startIndex: 0, count: 1000};
-	
 	voteSystem.showLoader();
 	
 	if(voteSystem.userInfo.userInfo["voteRegionId"]) {
-		voteSystem.partyListQuery.success(function() {
+		voteSystem.regionListQuery.done(function() {
 			if(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]) {
 				var regionName = voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"];
 				$("#tab_voting .tabNameLabel").text("Hääletamine - Sinu piirkond: " + regionName);
 			}
 		});
+		voteSystem.regionListQuery.fail(function() {
+			if ( localStorage.getObject("regionList") ) {
+				voteSystem.regionList = localStorage.getObject("regionList");
+				if(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]) {
+					var regionName = voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"];
+					$("#tab_voting .tabNameLabel").text("Hääletamine - Sinu piirkond: " + regionName);
+				}
+			}
+		});
 	}
 
-	voteSystem.jsonQuery("candidates", queryData, false, function(data) {
+	var populateCandidateList = function() {
 		var listElement = $("#votingCandidateList"), template = $("#candidateTemplate");
 		var selectedId = voteSystem.userInfo.userInfo.votedCandidateId;
 		listElement.html("");
+
+		var availableCandidates = [];
+
+		for (var candidateId in voteSystem.candidateList) {
+			if ( voteSystem.candidateList[candidateId].regionId == voteSystem.userInfo.userInfo.voteRegionId ) {
+				availableCandidates.push(voteSystem.candidateList[candidateId]);
+			}
+		}
 		
-		voteSystem.hideLoader();
-	
-		if(data.responseType == "candidates" && data.candidateList) {
-			for(var i = 0; i < data.candidateList.length; i++) {
-				var info = data.candidateList[i], element = template.clone();
-				
-				element.get().id = "";
-				element.find(".candidateName").text(info.firstName + " " + info.lastName);
-				element.find(".voteCount").text(info.voteCount);
-				element.find(".partyName").text(info.partyId);
-				element.find(".voteCandidateId").val(info.candidateId);
-				
-				voteSystem.partyListQuery.success(function() {
+		for(var i = 0; i < availableCandidates.length; i++) {
+			var info = availableCandidates[i], element = template.clone();
+			
+			element.get().id = "";
+			element.find(".candidateName").text(info.firstName + " " + info.lastName);
+			element.find(".voteCount").text(info.voteCount);
+			element.find(".partyName").text(info.partyId);
+			element.find(".voteCandidateId").val(info.candidateId);
+			
+			voteSystem.partyListQuery.done(function() {
+				if(voteSystem.partyList[info.partyId]) {
+					element.find(".partyName").text(voteSystem.partyList[info.partyId].displayName);
+				}
+			});
+			voteSystem.partyListQuery.fail(function() {
+				if (localStorage.getObject("partyList")) {
+					voteSystem.partyList = localStorage.getObject("partyList");
 					if(voteSystem.partyList[info.partyId]) {
 						element.find(".partyName").text(voteSystem.partyList[info.partyId].displayName);
 					}
+				}
+			});
+			
+			if(selectedId == 0) {
+				element.find(".voteCancelForm").css("display", "none");
+				element.find(".voteGiveForm").submit(function() {
+					var candidateId = $(this).children(".voteCandidateId").val();
+					
+					voteSystem.confirmMessage("Kinnita hääl", "Kas oled kindel, et soovid anda sellele kandidaadile oma hääle?", function() {
+						voteSystem.voteForCandidate(candidateId);
+					});
+					
+					return false;
 				});
 				
-				if(selectedId == 0) {
-					element.find(".voteCancelForm").css("display", "none");
-					element.find(".voteGiveForm").submit(function() {
-						var candidateId = $(this).children(".voteCandidateId").val();
-						
-						voteSystem.confirmMessage("Kinnita hääl", "Kas oled kindel, et soovid anda sellele kandidaadile oma hääle?", function() {
-							voteSystem.voteForCandidate(candidateId);
-						});
-						
-						return false;
-					});
-					
-					listElement.append(element);
-				}
-				else if(selectedId == info.candidateId) {
-					element.find(".voteGiveForm").css("display", "none");
-					element.find(".voteCancelForm").submit(function() {
-						voteSystem.confirmMessage("Kinnita tühistus", "Kas oled kindel, et soovid oma häält tühistada?", function() {
-							voteSystem.voteForCandidate(0);
-						});
-						
-						return false;
-					});
-					
-					listElement.prepend(element);
-				}
-				else {
-					element.find(".voteGiveForm").css("display", "none");
-					element.find(".voteCancelForm").css("display", "none");
-					listElement.append(element);
-				}
+				listElement.append(element);
 			}
+			else if(selectedId == info.candidateId) {
+				element.find(".voteGiveForm").css("display", "none");
+				element.find(".voteCancelForm").submit(function() {
+					voteSystem.confirmMessage("Kinnita tühistus", "Kas oled kindel, et soovid oma häält tühistada?", function() {
+						voteSystem.voteForCandidate(0);
+					});
+					
+					return false;
+				});
+				
+				listElement.prepend(element);
+			}
+			else {
+				element.find(".voteGiveForm").css("display", "none");
+				element.find(".voteCancelForm").css("display", "none");
+				listElement.append(element);
+			}
+		}	
+		voteSystem.hideLoader();
+	}
+
+	voteSystem.candidateListQuery.done(populateCandidateList);
+	voteSystem.candidateListQuery.fail( function() {
+		if ( localStorage.getObject("candidateList") ) {
+			voteSystem.candidateList = localStorage.getObject("candidateList");
+			populateCandidateList();
 		}
-	});
+	}); 
+	
 };
 
 voteSystem.addLineToRegionView = function(listElement, template, displayName, keyword, voterCount, candidateCount) {
@@ -607,7 +699,8 @@ voteSystem.loadRegionView = function() {
 	voteSystem.showLoader();
 	
 	voteSystem.regionViewLoaded = true;
-	voteSystem.regionListQuery.success(function(data) {
+
+	voteSystem.regionListQuery.done(function(data) {
 		voteSystem.currentRegionList = [];
 		
 		for(var regionId in voteSystem.regionList) {
@@ -616,6 +709,20 @@ voteSystem.loadRegionView = function() {
 		
 		voteSystem.resortRegionView();
 		voteSystem.hideLoader();
+	});
+
+	voteSystem.regionListQuery.fail(function(data) {
+		if ( localStorage.getObject("regionList") ) {
+			voteSystem.regionList = localStorage.getObject("regionList");
+			voteSystem.currentRegionList = [];
+		
+			for(var regionId in voteSystem.regionList) {
+				voteSystem.currentRegionList.push(voteSystem.regionList[regionId]);
+			}
+			
+			voteSystem.resortRegionView();
+			voteSystem.hideLoader();
+		}
 	});
 };
 
@@ -777,8 +884,8 @@ voteSystem.resortCandidateView = function() {
 
 voteSystem.loadCandidateView = function(params) {
 	voteSystem.showLoader();
-	
-	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).done( function() {
+
+	var regionAndPartyQuerySuccesful = function() {
 		if(voteSystem.candidateViewState == null) {
 			for(var regionId in voteSystem.regionList) {
 				$("#candidateViewRegionFilter").append($("<option>", {
@@ -803,7 +910,7 @@ voteSystem.loadCandidateView = function(params) {
 			var partyKeyword = voteSystem.keywordFromParty(findPartyId);
 			var sanitizedParamString = regionKeyword + "-" + partyKeyword;
 			
-			if(sanitizedParamString  != voteSystem.candidateViewState) {
+			if(sanitizedParamString != voteSystem.candidateViewState) {
 				var queryData = {regionId: findRegionId, partyId: findPartyId, namePrefix: "", orderId: 4, startIndex: 0, count: 1000};
 				
 				voteSystem.jsonQuery("candidates", queryData, false, function(data) {
@@ -811,25 +918,65 @@ voteSystem.loadCandidateView = function(params) {
 						voteSystem.currentCandidateList = data.candidateList;
 						
 						voteSystem.resortCandidateView();
+						localStorage.setObject("candidates-"+findRegionId+"-"+findPartyId,data.candidateList);
 					}
-				});
+					voteSystem.hideLoader();
+				}, function() {
+					if (localStorage.getObject("candidates-"+findRegionId+"-"+findPartyId)) {
+						voteSystem.currentCandidateList = localStorage.getObject("candidates-"+findRegionId+"-"+findPartyId);
+						
+						voteSystem.resortCandidateView();
+					} else if (localStorage.getObject("candidateList")) {
+						voteSystem.candidateList = localStorage.getObject("candidateList");
+						voteSystem.currentCandidateList = [];
+
+						for ( var candidateId in voteSystem.candidateList ) {
+							if ( (findRegionId == 0 || voteSystem.candidateList[candidateId].regionId == findRegionId) &&
+								(findPartyId == 0 || voteSystem.candidateList[candidateId].partyId == findPartyId) ) {
+								voteSystem.currentCandidateList.push(voteSystem.candidateList[candidateId]);
+							}
+						}
+						voteSystem.resortCandidateView();
+						localStorage.setObject("candidates-"+findRegionId+"-"+findPartyId,voteSystem.currentCandidateList);
+					}
+					voteSystem.hideLoader();
+				}, null);
 								
 				voteSystem.candidateViewState = sanitizedParamString;
 				
 				$("#candidateViewRegionFilter").val(regionKeyword);
 				$("#candidateViewPartyFilter").val(partyKeyword);
+			} else {
+				voteSystem.hideLoader();
 			}
-		}
+		} else {
+			voteSystem.hideLoader();
+		}		
 		
-		voteSystem.hideLoader();
+	};
+	
+	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).then( regionAndPartyQuerySuccesful, function() {
+		if ( localStorage.getObject("regionList") && localStorage.getObject("partyList") ) {
+			voteSystem.regionList = localStorage.getObject("regionList");
+			voteSystem.partyList = localStorage.getObject("partyList");
+			regionAndPartyQuerySuccesful();
+		}
 	});
 };
 
 voteSystem.candidateFiltersChanged = function() {
-	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).done( function() {
+	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).then( function() {
 		var regionKeyword = $("#candidateViewRegionFilter").val(), partyKeyword = $("#candidateViewPartyFilter").val();
 		
 		window.location.hash = "#tab_stats_candidates-" + regionKeyword + "-" + partyKeyword;
+	}, function() {
+		if ( localStorage.getObject("regionList") && localStorage.getObject("partyList") ) {
+			voteSystem.regionList = localStorage.getObject("regionList");
+			voteSystem.partyList = localStorage.getObject("partyList");
+			var regionKeyword = $("#candidateViewRegionFilter").val(), partyKeyword = $("#candidateViewPartyFilter").val();
+		
+			window.location.hash = "#tab_stats_candidates-" + regionKeyword + "-" + partyKeyword;
+		}
 	});
 };
 
@@ -891,8 +1038,8 @@ voteSystem.resortPartyView = function() {
 
 voteSystem.loadPartyView = function(params) {
 	voteSystem.showLoader();
-	
-	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).done( function() {
+
+	var regionAndPartyQuerySuccesful = function() {
 		if(voteSystem.partyViewState == null) {
 			for(var regionId in voteSystem.regionList) {
 				$("#partyViewRegionFilter").append($("<option>", {
@@ -915,24 +1062,66 @@ voteSystem.loadPartyView = function(params) {
 					voteSystem.currentPartyList = data.partyList;
 					
 					voteSystem.resortPartyView();
+					localStorage.setObject("parties-"+findRegionId,data.partyList);
 				}
-			});
+				voteSystem.hideLoader();
+			}, function() {
+				if ( localStorage.getObject("parties-"+findRegionId) ) {
+					voteSystem.currentPartyList = localStorage.getObject("parties-"+findRegionId);
+					voteSystem.resortPartyView();
+				} else if ( localStorage.getObject("candidateList") ) {
+					voteSystem.candidateList = localStorage.getObject("candidateList");
+					if ( findRegionId == 0 ) {
+						voteSystem.currentPartyList = voteSystem.partyList.partyList;
+					} else {
+						for ( var partyId in voteSystem.currentPartyList ) {
+							voteSystem.currentPartyList[partyId].voteCount = 0;
+						}
+						for ( var candidateId in voteSystem.candidateList ) {
+							if ( voteSystem.candidateList[candidateId].regionId == findRegionId ) {
+								voteSystem.currentPartyList[voteSystem.candidateList[candidateId].partyId].voteCount += voteSystem.candidateList[candidateId].voteCount;
+							}
+						}
+					}
+					localStorage.setObject("parties-"+findRegionId,voteSystem.currentPartyList);
+					voteSystem.resortPartyView();
+				}
+				voteSystem.hideLoader();
+
+			}, null);
+		} else {
+			voteSystem.hideLoader();
 		}
-		
-		voteSystem.hideLoader();
+				
+	};
+	
+	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).then( regionAndPartyQuerySuccesful, function() {
+		if ( localStorage.getObject("regionList") && localStorage.getObject("partyList") ) {
+			voteSystem.regionList = localStorage.getObject("regionList");
+			voteSystem.partyList = localStorage.getObject("partyList");
+			regionAndPartyQuerySuccesful();
+		}
 	});
 };
 
 voteSystem.partyFiltersChanged = function() {
-	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).done( function() {
+	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).then( function() {
 		var regionKeyword = $("#partyViewRegionFilter").val();
 		
 		window.location.hash = "#tab_stats_parties-" + regionKeyword;
+	}, function() {
+		if ( localStorage.getObject("regionList") && localStorage.getObject("partyList") ) {
+			voteSystem.regionList = localStorage.getObject("regionList");
+			voteSystem.partyList = localStorage.getObject("partyList");
+			var regionKeyword = $("#partyViewRegionFilter").val();
+		
+			window.location.hash = "#tab_stats_parties-" + regionKeyword;
+		}
 	});
 };
 
 voteSystem.loadSetRegionRegionList = function(params) {
-	voteSystem.regionListQuery.success( function() {
+	voteSystem.regionListQuery.done( function() {
 		for(var regionId in voteSystem.regionList) {
 			$("#regions").append($("<option>", {
 				value: voteSystem.regionList[regionId].regionId,
@@ -940,15 +1129,37 @@ voteSystem.loadSetRegionRegionList = function(params) {
 			}));
 		}
 	});
+	voteSystem.regionListQuery.fail( function() {
+		if ( localStorage.getObject("regionList")) {
+			voteSystem.regionList = localStorage.getObject("regionList");
+			for(var regionId in voteSystem.regionList) {
+				$("#regions").append($("<option>", {
+					value: voteSystem.regionList[regionId].regionId,
+					text: voteSystem.regionList[regionId].displayName
+				}));
+			}
+		}
+	});
 };
 
 voteSystem.loadApplicationPartyList = function(params) {
-	voteSystem.partyListQuery.success( function() {
+	voteSystem.partyListQuery.done( function() {
 		for(var partyId in voteSystem.partyList) {
 			$("#parties").append($("<option>", {
 				value: voteSystem.partyList[partyId].partyId,
 				text: voteSystem.partyList[partyId].displayName
 			}));
+		}
+	});
+	voteSystem.partyListQuery.fail( function() {
+		if ( localStorage.getObject("partyList")) {
+			voteSystem.partyList = localStorage.getObject("partyList");
+			for(var partyId in voteSystem.partyList) {
+				$("#parties").append($("<option>", {
+					value: voteSystem.partyList[partyId].partyId,
+					text: voteSystem.partyList[partyId].displayName
+				}));
+			}
 		}
 	});
 };
@@ -960,20 +1171,32 @@ voteSystem.refreshMyDataInfo = function() {
 			voteSystem.removeClassFromElement($("#myDataApplication")[0],"greyText");
 			voteSystem.removeClassFromElement($("#myDataVoting")[0],"greyText");
 			voteSystem.removeClassFromElement($("#myDataRegion")[0],"errorMessage" );			
-			voteSystem.regionListQuery.success(function() {
+			voteSystem.regionListQuery.done(function() {
 				$("#myDataRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
 				$("#myDataApplyRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
+			});
+			voteSystem.regionListQuery.fail(function() {
+				if ( localStorage.getObject("regionList") ) {
+					voteSystem.regionList = localStorage.getObject("regionList");
+					$("#myDataRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
+					$("#myDataApplyRegion").text(voteSystem.regionList[voteSystem.userInfo.userInfo["voteRegionId"]]["displayName"]);
+				}
 			});
 			
 			$("#toSetRegionLink").remove();
 			if ( voteSystem.userInfo.userInfo.votedCandidateId ) {
 				voteSystem.removeClassFromElement($("#myDataVoting")[0],"errorMessage" );
-				if ( !voteSystem.votedCandidateName ) {
+				if ( !voteSystem.votedCandidateName ) {					 
 					voteSystem.queryCandidateName(voteSystem.userInfo.userInfo.votedCandidateId);
 				}
-				voteSystem.candidateNameQuery.success(function() {
+				voteSystem.candidateNameQuery.done(function() {
 					$("#myDataVoting").html("<span class=\"greenText\">Hääl antud: </span>"+voteSystem.votedCandidateName);
-				});				
+				});	
+				voteSystem.candidateNameQuery.fail(function() {
+					if ( localStorage["votedCandidateName"] ) {
+						$("#myDataVoting").html("<span class=\"greenText\">Hääl antud: </span>"+localStorage["votedCandidateName"]);
+					}
+				});		
 				$("#toVotingLink").remove();
 			} else {
 				voteSystem.addClassToElement($("#myDataVoting")[0],"errorMessage" );
@@ -1090,46 +1313,31 @@ voteSystem.initialise = function() {
 	voteSystem.queryRegions();
 	voteSystem.queryStatus();
 	voteSystem.queryParties();	
+	voteSystem.queryCandidates();
 	
 	$(".menuitem").click( function() {
 		voteSystem.setActiveMenuItem(this);
 	});
 	
 	voteSystem.setTabActivateCB("tab_voting", function(tabElement) {
-		if (voteSystem.timeoutId) {
-			window.clearTimeout(voteSystem.timeoutId);
-		}
-		
 		voteSystem.refreshVotingList();			
 	});	
 	
 	voteSystem.initialiseSortingMethods(voteSystem.regionSortMethods, "regionSortMethodQueue", voteSystem.resortRegionView);
 	
 	voteSystem.setTabActivateCB("tab_stats_regions", function(tabElement) {
-		if (voteSystem.timeoutId) {
-			window.clearTimeout(voteSystem.timeoutId);
-		}
-		
 		voteSystem.loadRegionView();
 	});
 	
 	voteSystem.initialiseSortingMethods(voteSystem.candidateSortMethods, "candidateSortMethodQueue", voteSystem.resortCandidateView);
 	
 	voteSystem.setTabActivateCB("tab_stats_candidates", function(tabElement, parameters) {
-		if (voteSystem.timeoutId) {
-			window.clearTimeout(voteSystem.timeoutId);
-		}
-
 		voteSystem.loadCandidateView(parameters);
 	});
 	
 	voteSystem.initialiseSortingMethods(voteSystem.partySortMethods, "partySortMethodQueue", voteSystem.resortPartyView);
 	
 	voteSystem.setTabActivateCB("tab_stats_parties", function(tabElement, parameters) {
-		if (voteSystem.timeoutId) {
-			window.clearTimeout(voteSystem.timeoutId);
-		}
-
 		voteSystem.loadPartyView(parameters);
 	});
 
@@ -1153,7 +1361,7 @@ voteSystem.initialise = function() {
 					$("#loginErrorMessage").text("Vale kasutajanimi/parool.");
 				}
 			}
-		});
+		},null,null);
 		
 		return false;
 	});
@@ -1236,7 +1444,7 @@ voteSystem.initialise = function() {
 					$("#newPassword").val("");
 					$("#newPasswordConfirmation").val("");
 				}
-			});
+			},null,null);
 		}
 		
 		return false;
@@ -1264,7 +1472,7 @@ voteSystem.initialise = function() {
 							voteSystem.setActiveTab("tab_voting", "", false);
 						}						
 					}
-				});
+				},null,null);
 			});
 
 			return false;			
@@ -1332,7 +1540,7 @@ voteSystem.initialise = function() {
 						voteSystem.refreshMyDataInfo();
 						voteSystem.setActiveTab("tab_mydata", "", false);
 					}
-				});
+				},null,null);
 			});
 		}
 
@@ -1342,7 +1550,7 @@ voteSystem.initialise = function() {
 	$("#logoutForm").submit(function(event) {
 		voteSystem.jsonQuery("logout", {}, true, function(data) {
 			voteSystem.applyUserInfo({userInfo:null, candidateInfo:null});
-		});
+		},null,null);
 		
 		return false;
 	});
@@ -1370,7 +1578,7 @@ voteSystem.initialise = function() {
 			else {
 				$("#authenticationResult").text("Tundmatu viga.");
 			}
-		});
+		},null,null);
 		
 		window.location.hash = "";
 	}
