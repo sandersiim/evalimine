@@ -3,7 +3,8 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Base site</title>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../jquery.min.js"></script>
+		<script type="text/javascript" src="../jquery.websocket.js"></script>
 		<script type="text/javascript" src="jsontester.js"></script>
 		<link rel="stylesheet" media="screen" href="style.css" />
 		<link rel="stylesheet" media="print" href="style_print.css" />
@@ -50,7 +51,9 @@
 			<input type="hidden" name="testPage" value="1" />
 			<input type="submit" value="ID card authentication" /> <br />
 			
-			<span id="authenticationResult">No results yet.</span>
+			<span id="authenticationResult">No results yet.</span> <br />
+			
+			<textarea id="webSocketData"></textarea>
 		</form>
 	</body>
 </html>

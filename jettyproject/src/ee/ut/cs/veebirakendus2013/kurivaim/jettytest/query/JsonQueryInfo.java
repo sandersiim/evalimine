@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryCandidateInfo;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryUserInfo;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.websocket.LiveSocketHandler;
 
 public class JsonQueryInfo {
 	
@@ -21,12 +22,16 @@ public class JsonQueryInfo {
 	private final JsonQueryHandler queryHandler;
 	private final MysqlConnectionHandler sqlHandler;
 	private final boolean isPostQuery;
+	private final LiveSocketHandler liveSocketHandler;
+	private final Gson gson;
 	
-	public JsonQueryInfo(HttpServletRequest request, HttpServletResponse response, JsonQueryHandler queryHandler, MysqlConnectionHandler sqlHandler) {
+	public JsonQueryInfo(HttpServletRequest request, HttpServletResponse response, JsonQueryHandler queryHandler, MysqlConnectionHandler sqlHandler, LiveSocketHandler liveSocketHandler) {
 		this.request = request;
 		this.response = response;
 		this.queryHandler = queryHandler;
 		this.sqlHandler = sqlHandler;
+		this.liveSocketHandler = liveSocketHandler;
+		this.gson = new GsonBuilder().serializeNulls().create();
 		
 		isPostQuery = request.getMethod().equals("POST");
 		
@@ -49,8 +54,6 @@ public class JsonQueryInfo {
 		JsonQueryInterface jsonQuery = null;
 		int errorIndex = 1;
 		String errorString = "Malformed query.";
-		
-		Gson gson = new GsonBuilder().serializeNulls().create();
 		
 		if(jsonString != null) {
 			try {
@@ -151,5 +154,17 @@ public class JsonQueryInfo {
 		}
 		
 		return null;
+	}
+	
+	public void doLiveBroadcast(Object broadcastObject) {
+		if(liveSocketHandler == null) return;
+		
+		try {
+			liveSocketHandler.broadcastMessage(gson.toJson(broadcastObject));
+		}
+		catch (Exception e) {
+			System.out.println("Live broadcast failure: ");
+			e.printStackTrace();
+		}
 	}
 }

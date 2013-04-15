@@ -1,6 +1,7 @@
 package ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryCandidateInfo;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlQueryUserInfo;
 
 public class JsonQueryTypeVote implements JsonQueryInterface {
@@ -17,6 +18,8 @@ public class JsonQueryTypeVote implements JsonQueryInterface {
 			}
 			
 			MysqlQueryUserInfo userInfo = queryInfo.getLoggedInUserInfo();
+			JsonResponseInterface successResponse = null;
+			int affectedCandidateId = voteCandidateId;
 			
 			if(userInfo == null) {
 				return new JsonResponseTypeStatus(1, "voteAction", "Voting failed - not logged in.");
@@ -26,12 +29,14 @@ public class JsonQueryTypeVote implements JsonQueryInterface {
 					return new JsonResponseTypeStatus(2, "voteAction", "Voting failed - already voted.");
 				}
 				else {
+					affectedCandidateId = userInfo.getVotedCandidateId();
+					
 					int affected = sqlHandler.simpleUpdateQuery("UPDATE ev_users AS a JOIN ev_candidates AS b ON b.id = a.votedCandidateId SET " +
 							"a.votedCandidateId = 0, b.voteCount = b.voteCount - 1 WHERE a.id = " + userInfo.getUserId());
 					
 					if(affected < 0) return new JsonResponseTypeStatus(-1, "voteAction", "Vote cancel failed - database query error.");
 					else if(affected == 0) return new JsonResponseTypeStatus(7, "voteAction", "Vote cancel failed - no matching rows.");
-					else return new JsonResponseTypeStatus(11, "voteAction", "Sucessfully cancelled vote.");
+					else successResponse = new JsonResponseTypeStatus(11, "voteAction", "Sucessfully cancelled vote.");
 				}
 			}
 			else {
@@ -45,9 +50,13 @@ public class JsonQueryTypeVote implements JsonQueryInterface {
 					
 					if(affected < 0) return new JsonResponseTypeStatus(-1, "voteAction", "Voting failed - database query error.");
 					else if(affected == 0) return new JsonResponseTypeStatus(6, "voteAction", "Voting failed - no such candidate in your region.");
-					else return new JsonResponseTypeStatus(10, "voteAction", "Successfully voted.");
+					else successResponse = new JsonResponseTypeStatus(10, "voteAction", "Successfully voted.");
 				}
 			}
+			
+			queryInfo.doLiveBroadcast(new JsonResponseTypeCandidate(new MysqlQueryCandidateInfo(sqlHandler).querySingleByCandidateId(affectedCandidateId)));
+			
+			return successResponse;
 		}
 		catch(Exception e) {
 			e.printStackTrace(); //TODO: when logging system is present, log this error

@@ -882,9 +882,13 @@ voteSystem.resortCandidateView = function() {
 	}
 }
 
-voteSystem.loadCandidateView = function(params) {
-	voteSystem.showLoader();
+voteSystem.refreshCandidateViewData = function() {
+	if(voteSystem.candidateViewState != null) {
+		voteSystem.loadCandidateView(voteSystem.candidateViewState);
+	}
+}
 
+voteSystem.loadCandidateView = function(params) {
 	var regionAndPartyQuerySuccesful = function() {
 		if(voteSystem.candidateViewState == null) {
 			for(var regionId in voteSystem.regionList) {
@@ -902,56 +906,30 @@ voteSystem.loadCandidateView = function(params) {
 			}
 		}
 		
-		if(params != voteSystem.candidateViewState) {
-			var paramList = params.split("-");
-			var findRegionId = voteSystem.regionFromKeyword(paramList[0]);
-			var findPartyId = voteSystem.partyFromKeyword(paramList[1]);
-			var regionKeyword = voteSystem.keywordFromRegion(findRegionId);
-			var partyKeyword = voteSystem.keywordFromParty(findPartyId);
-			var sanitizedParamString = regionKeyword + "-" + partyKeyword;
-			
-			if(sanitizedParamString != voteSystem.candidateViewState) {
-				var queryData = {regionId: findRegionId, partyId: findPartyId, namePrefix: "", orderId: 4, startIndex: 0, count: 1000};
-				
-				voteSystem.jsonQuery("candidates", queryData, false, function(data) {
-					if(data.responseType == "candidates" && data.candidateList) {
-						voteSystem.currentCandidateList = data.candidateList;
-						
-						voteSystem.resortCandidateView();
-						localStorage.setObject("candidates-"+findRegionId+"-"+findPartyId,data.candidateList);
-					}
-					voteSystem.hideLoader();
-				}, function() {
-					if (localStorage.getObject("candidates-"+findRegionId+"-"+findPartyId)) {
-						voteSystem.currentCandidateList = localStorage.getObject("candidates-"+findRegionId+"-"+findPartyId);
-						
-						voteSystem.resortCandidateView();
-					} else if (localStorage.getObject("candidateList")) {
-						voteSystem.candidateList = localStorage.getObject("candidateList");
-						voteSystem.currentCandidateList = [];
-
-						for ( var candidateId in voteSystem.candidateList ) {
-							if ( (findRegionId == 0 || voteSystem.candidateList[candidateId].regionId == findRegionId) &&
-								(findPartyId == 0 || voteSystem.candidateList[candidateId].partyId == findPartyId) ) {
-								voteSystem.currentCandidateList.push(voteSystem.candidateList[candidateId]);
-							}
-						}
-						voteSystem.resortCandidateView();
-						localStorage.setObject("candidates-"+findRegionId+"-"+findPartyId,voteSystem.currentCandidateList);
-					}
-					voteSystem.hideLoader();
-				}, null);
-								
-				voteSystem.candidateViewState = sanitizedParamString;
-				
-				$("#candidateViewRegionFilter").val(regionKeyword);
-				$("#candidateViewPartyFilter").val(partyKeyword);
-			} else {
-				voteSystem.hideLoader();
+		var paramList = params.split("-");
+		var findRegionId = voteSystem.regionFromKeyword(paramList[0]);
+		var findPartyId = voteSystem.partyFromKeyword(paramList[1]);
+		var regionKeyword = voteSystem.keywordFromRegion(findRegionId);
+		var partyKeyword = voteSystem.keywordFromParty(findPartyId);
+		var sanitizedParamString = regionKeyword + "-" + partyKeyword;
+		
+		//might as well always update since no queries are made, this function can easily be used to "refresh" after websocket update then
+		
+		voteSystem.currentCandidateList = [];
+		
+		for ( var candidateId in voteSystem.candidateList ) {
+			if ( (findRegionId == 0 || voteSystem.candidateList[candidateId].regionId == findRegionId) &&
+				(findPartyId == 0 || voteSystem.candidateList[candidateId].partyId == findPartyId) ) {
+				voteSystem.currentCandidateList.push(voteSystem.candidateList[candidateId]);
 			}
-		} else {
-			voteSystem.hideLoader();
-		}		
+		}
+		
+		voteSystem.resortCandidateView();
+		
+		voteSystem.candidateViewState = sanitizedParamString;
+		
+		$("#candidateViewRegionFilter").val(regionKeyword);
+		$("#candidateViewPartyFilter").val(partyKeyword);
 		
 	};
 	
@@ -959,6 +937,7 @@ voteSystem.loadCandidateView = function(params) {
 		if ( localStorage.getObject("regionList") && localStorage.getObject("partyList") ) {
 			voteSystem.regionList = localStorage.getObject("regionList");
 			voteSystem.partyList = localStorage.getObject("partyList");
+			
 			regionAndPartyQuerySuccesful();
 		}
 	});
@@ -1062,7 +1041,7 @@ voteSystem.loadPartyView = function(params) {
 					voteSystem.currentPartyList = data.partyList;
 					
 					voteSystem.resortPartyView();
-					localStorage.setObject("parties-"+findRegionId,data.partyList);
+					localStorage.setObject("parties-"+findRegionId, data.partyList);
 				}
 				voteSystem.hideLoader();
 			}, function() {
@@ -1285,6 +1264,43 @@ voteSystem.clearChangePasswordSection = function() {
 	});
 };
 
+voteSystem.updateCandidateStats = function(info) {
+	if(voteSystem.candidateList == null) return;
+
+	var voteDifference = info.voteCount - ((info.candidateId in voteSystem.candidateList) ? voteSystem.candidateList[info.candidateId].voteCount : 0);
+	
+	if(voteSystem.regionList != null && voteSystem.partyList != null && voteSystem.currentPartyList != null) {
+		var currentRegion = voteSystem.regionFromKeyword(voteSystem.partyViewState);
+		
+		if(currentRegion == 0 || currentRegion == info.regionId) {
+			for(var i = 0; i < voteSystem.currentPartyList.length; i++) {
+				if(voteSystem.currentPartyList[i].partyId == info.partyId) {
+					voteSystem.currentPartyList[i].voteCount += voteDifference;
+					voteSystem.resortPartyView();
+					break;
+				}
+			}
+		}
+	}
+
+	voteSystem.candidateList[info.candidateId] = info;
+	localStorage.setObject("candidateList", voteSystem.candidateList);
+	
+	voteSystem.refreshCandidateViewData();
+}
+
+voteSystem.setupWebsocket = function() {
+	var ws = $.websocket("ws://" + window.location.hostname + ":8081/test", {
+		open: function() {},
+		close: function() {},
+		events: {
+			candidate: function(data) {
+				voteSystem.updateCandidateStats(data.candidateInfo);
+			}
+		}
+	}, "vote-broadcaster");
+};
+
 //hints from: http://tjvantoll.com/2012/06/15/detecting-print-requests-with-javascript/
 voteSystem.configurePrinting = function() {
 	var beforePrint = function() {
@@ -1310,9 +1326,10 @@ voteSystem.configurePrinting = function() {
 };
 
 voteSystem.initialise = function() {
+	voteSystem.setupWebsocket();
 	voteSystem.queryRegions();
 	voteSystem.queryStatus();
-	voteSystem.queryParties();	
+	voteSystem.queryParties();
 	voteSystem.queryCandidates();
 	
 	$(".menuitem").click( function() {

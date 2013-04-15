@@ -117,4 +117,16 @@ $(document).ready(function() {
 			return false;
 		});
 	});
+	
+	var ws = $.websocket("ws://" + window.location.hostname + ":8081/", {
+		open: function() {},
+		close: function() {},
+		events: {
+			candidate: function(data) {
+				var info = data.candidateInfo;
+				
+				$("#webSocketData").val($("#webSocketData").val() + info.firstName + " " + info.lastName + "\n");
+			}
+		}
+	}, "vote-broadcaster");
 });

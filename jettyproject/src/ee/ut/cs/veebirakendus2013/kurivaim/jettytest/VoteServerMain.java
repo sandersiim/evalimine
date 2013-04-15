@@ -27,21 +27,25 @@ import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.IdCardServlet;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.MultiPartFilterWrapper;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.ResourceHandlerWrapper;
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.servlets.VoteServlet;
+import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.websocket.LiveSocketHandler;
 
 public class VoteServerMain {
 	public static void main(String[] args) throws Exception {
 		MysqlConnectionHandler sqlHandler = new MysqlConnectionHandler();
 		
-		Server mainServer = createMainServer(sqlHandler);
+		LiveSocketHandler liveSocketHandler = new LiveSocketHandler();
+		Server mainServer = createMainServer(sqlHandler, liveSocketHandler);
 		Server idCheckServer = createIdCheckServer(sqlHandler, (SessionManager)mainServer.getAttribute("sessionManager"));
+		Server liveServer = createLiveUpdateServer(liveSocketHandler);
 		
 		mainServer.join();
 		idCheckServer.join();
+		liveServer.join();
 		
 		sqlHandler.disconnect();
 	}
 	
-	private static Server createMainServer(MysqlConnectionHandler sqlHandler) throws Exception {
+	private static Server createMainServer(MysqlConnectionHandler sqlHandler, LiveSocketHandler liveSocketHandler) throws Exception {
 		Server server = new Server(8080);
 		
 		FilterHolder filterHolder = new FilterHolder(new MultiPartFilterWrapper());
@@ -53,7 +57,7 @@ public class VoteServerMain {
 		
 		ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		contextHandler.setContextPath("/dyn");
-		contextHandler.addServlet(new ServletHolder(new VoteServlet(sqlHandler)), "/*");
+		contextHandler.addServlet(new ServletHolder(new VoteServlet(sqlHandler, liveSocketHandler)), "/*");
 		contextHandler.setAttribute("javax.servlet.context.tempdir", new File("../temp"));
 		contextHandler.addFilter(filterHolder, "/photo", EnumSet.of(DispatcherType.REQUEST));
 		contextHandler.addFilter(filterGzip, "/*", EnumSet.of(DispatcherType.REQUEST));
@@ -78,7 +82,6 @@ public class VoteServerMain {
 		return server;
 	}
 	
-	//works with Jetty 9.0.0.M4, but not with 9.0.0.M5 or 9.0.0.R0 (current)
 	public static Server createIdCheckServer(MysqlConnectionHandler sqlHandler, SessionManager mainSessionManager) throws Exception {
 		Server server = new Server();
 		
@@ -113,6 +116,15 @@ public class VoteServerMain {
 		handlers.addHandler(contextHandler);
 		
 		server.setHandler(handlers);
+		server.start();
+		
+		return server;
+	}
+	
+	public static Server createLiveUpdateServer(LiveSocketHandler liveSocketHandler) throws Exception {
+		Server server = new Server(8081);
+		server.setHandler(liveSocketHandler);
+		
 		server.start();
 		
 		return server;
