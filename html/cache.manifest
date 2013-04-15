@@ -15,6 +15,7 @@ CACHE:
 /images/sprites.gif
 
 /jquery.min.js
+/jquery.websocket.js
 /json3.min.js
 
 NETWORK:
