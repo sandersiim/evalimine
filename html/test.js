@@ -889,6 +889,7 @@ voteSystem.refreshCandidateViewData = function() {
 }
 
 voteSystem.loadCandidateView = function(params) {
+	voteSystem.showLoader();
 	var regionAndPartyQuerySuccesful = function() {
 		if(voteSystem.candidateViewState == null) {
 			for(var regionId in voteSystem.regionList) {
@@ -930,15 +931,18 @@ voteSystem.loadCandidateView = function(params) {
 		
 		$("#candidateViewRegionFilter").val(regionKeyword);
 		$("#candidateViewPartyFilter").val(partyKeyword);
-		
+		voteSystem.hideLoader();
 	};
 	
 	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).then( regionAndPartyQuerySuccesful, function() {
-		if ( localStorage.getObject("regionList") && localStorage.getObject("partyList") ) {
+		if ( localStorage.getObject("regionList") && localStorage.getObject("partyList") && localStorage.getObject("candidateList") ) {
 			voteSystem.regionList = localStorage.getObject("regionList");
 			voteSystem.partyList = localStorage.getObject("partyList");
+			voteSystem.candidateList = localStorage.getObject("candidateList");
 			
 			regionAndPartyQuerySuccesful();
+		} else {
+			voteSystem.hideLoader();
 		}
 	});
 };
@@ -1050,18 +1054,24 @@ voteSystem.loadPartyView = function(params) {
 					voteSystem.resortPartyView();
 				} else if ( localStorage.getObject("candidateList") ) {
 					voteSystem.candidateList = localStorage.getObject("candidateList");
-					if ( findRegionId == 0 ) {
-						voteSystem.currentPartyList = voteSystem.partyList.partyList;
-					} else {
-						for ( var partyId in voteSystem.currentPartyList ) {
-							voteSystem.currentPartyList[partyId].voteCount = 0;
-						}
-						for ( var candidateId in voteSystem.candidateList ) {
-							if ( voteSystem.candidateList[candidateId].regionId == findRegionId ) {
-								voteSystem.currentPartyList[voteSystem.candidateList[candidateId].partyId].voteCount += voteSystem.candidateList[candidateId].voteCount;
-							}
+					voteSystem.currentPartyList = [];
+					var partyListIndexes = {};
+					var counter = 0;
+					for ( var partyId in voteSystem.partyList ) {
+						voteSystem.currentPartyList.push(voteSystem.partyList[partyId]);
+						partyListIndexes[partyId] = counter;
+						counter++;
+					}
+					
+					for ( var i = 0; i<voteSystem.currentPartyList.length; i++ ) {
+						voteSystem.currentPartyList[i].voteCount = 0;
+					}
+					for ( var candidateId in voteSystem.candidateList ) {
+						if ( voteSystem.candidateList[candidateId].regionId == findRegionId || findRegionId == 0 ) {
+							voteSystem.currentPartyList[partyListIndexes[voteSystem.candidateList[candidateId].partyId]].voteCount += voteSystem.candidateList[candidateId].voteCount;
 						}
 					}
+					
 					localStorage.setObject("parties-"+findRegionId,voteSystem.currentPartyList);
 					voteSystem.resortPartyView();
 				}
