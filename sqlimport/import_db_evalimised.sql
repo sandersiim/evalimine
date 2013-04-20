@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 26, 2013 at 01:44 AM
+-- Generation Time: Apr 20, 2013 at 09:49 AM
 -- Server version: 5.5.24-log
 -- PHP Version: 5.4.3
 
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `ev_candidates` (
   `firstName` varchar(63) NOT NULL,
   `lastName` varchar(63) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=45 ;
 
 --
 -- Dumping data for table `ev_candidates`
@@ -65,7 +65,7 @@ INSERT INTO `ev_candidates` (`id`, `userId`, `regionId`, `partyId`, `voteCount`,
 (10, 1001, 2, 4, 144, 'Augustus', 'Caesar'),
 (11, 1002, 3, 2, 69, 'Gaius', 'Acilius'),
 (12, 1003, 4, 3, 81, 'Aemilia', 'Scaura'),
-(13, 1004, 5, 3, 77, 'Sextus', 'Calpurnius'),
+(13, 1004, 5, 3, 78, 'Sextus', 'Calpurnius'),
 (14, 1005, 6, 4, 142, 'Arusanius', 'Messius'),
 (15, 1006, 7, 3, 93, 'Titus', 'Quinctius'),
 (16, 1007, 8, 5, 11, 'Gaius', 'Longinus'),
@@ -81,7 +81,8 @@ INSERT INTO `ev_candidates` (`id`, `userId`, `regionId`, `partyId`, `voteCount`,
 (26, 1016, 2, 1, 49, 'Spurius', 'Tricipitinus'),
 (27, 1017, 3, 2, 105, 'Macrobius', 'Ambrosius'),
 (28, 1018, 4, 3, 68, 'Gnaeus', 'Octavius'),
-(29, 1019, 5, 3, 34, 'Paulus', 'Orosius');
+(29, 1019, 5, 3, 34, 'Paulus', 'Orosius'),
+(44, 1023, 15, 5, 33, 'Aplus', 'Peetus');
 
 -- --------------------------------------------------------
 
@@ -122,27 +123,28 @@ CREATE TABLE IF NOT EXISTS `ev_regions` (
   `mapCoordsY` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `keyword` (`keyword`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
 
 --
 -- Dumping data for table `ev_regions`
 --
 
 INSERT INTO `ev_regions` (`id`, `keyword`, `displayName`, `mapCoordsX`, `mapCoordsY`) VALUES
-(1, 'porta_capena', 'Porta Capena', 0, 0),
-(2, 'caelimontium', 'Caelimontium', 0, 0),
-(3, 'isis_et_seraphis', 'Isis et Seraphis', 0, 0),
-(4, 'templum_pacis', 'Templum Pacis', 0, 0),
-(5, 'esquiliae', 'Esquiliae', 0, 0),
-(6, 'alta_semita', 'Alta Semita', 0, 0),
-(7, 'via_lata', 'Via Lata', 0, 0),
-(8, 'forum_romanum', 'Forum Romanum', 0, 0),
-(9, 'circus_flaminius', 'Circus Flaminius', 0, 0),
-(10, 'palatium', 'Palatium', 0, 0),
-(11, 'circus_maximus', 'Circus Maximus', 0, 0),
-(12, 'piscina_publica', 'Piscina Publica', 0, 0),
-(13, 'aventinus', 'Aventinus', 0, 0),
-(14, 'transtiberim', 'Transtiberim', 0, 0);
+(1, 'harju', 'Harjumaa', 0, 0),
+(2, 'hiiu', 'Hiiumaa', 0, 0),
+(3, 'idaviru', 'Ida-Virumaa', 0, 0),
+(4, 'jogeva', 'Jõgevamaa', 0, 0),
+(5, 'jarva', 'Järvamaa', 0, 0),
+(6, 'laane', 'Läänemaa', 0, 0),
+(7, 'laaneviru', 'Lääne-Virumaa', 0, 0),
+(8, 'polva', 'Põlvamaa', 0, 0),
+(9, 'parnu', 'Pärnumaa', 0, 0),
+(10, 'rapla', 'Raplamaa', 0, 0),
+(11, 'saare', 'Saaremaa', 0, 0),
+(12, 'tartu', 'Tartumaa', 0, 0),
+(13, 'valga', 'Valgamaa', 0, 0),
+(14, 'viljandi', 'Viljandimaa', 0, 0),
+(15, 'voru', 'Võrumaa', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -158,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `ev_users` (
   `votedCandidateId` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=31 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1024 ;
 
 --
 -- Dumping data for table `ev_users`
@@ -169,7 +171,7 @@ INSERT INTO `ev_users` (`id`, `username`, `password`, `voteRegionId`, `votedCand
 (1001, '1001', 'A114489FB19F59AB059B6CCB20134187D516C08C', 2, 10),
 (1002, '1002', 'A114489FB19F59AB059B6CCB20134187D516C08C', 3, 0),
 (1003, '1003', 'A114489FB19F59AB059B6CCB20134187D516C08C', 4, 0),
-(1004, '1004', 'A114489FB19F59AB059B6CCB20134187D516C08C', 5, 0),
+(1004, '1004', 'A114489FB19F59AB059B6CCB20134187D516C08C', 5, 13),
 (1005, '1005', 'A114489FB19F59AB059B6CCB20134187D516C08C', 6, 0),
 (1006, '1006', 'A114489FB19F59AB059B6CCB20134187D516C08C', 7, 0),
 (1007, '1007', 'A114489FB19F59AB059B6CCB20134187D516C08C', 8, 0),
@@ -187,7 +189,8 @@ INSERT INTO `ev_users` (`id`, `username`, `password`, `voteRegionId`, `votedCand
 (1019, '1019', 'A114489FB19F59AB059B6CCB20134187D516C08C', 5, 0),
 (1020, '1020', 'A114489FB19F59AB059B6CCB20134187D516C08C', 1, 0),
 (1021, '1021', 'A114489FB19F59AB059B6CCB20134187D516C08C', 1, 24),
-(1022, '1022', 'A114489FB19F59AB059B6CCB20134187D516C08C', 1, 0);
+(1022, '1022', 'A114489FB19F59AB059B6CCB20134187D516C08C', 1, 0),
+(1023, '1023', 'A114489FB19F59AB059B6CCB20134187D516C08C', 15, 0);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
