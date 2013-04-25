@@ -17,6 +17,7 @@ CACHE:
 /jquery.min.js
 /jquery.websocket.js
 /json3.min.js
+/infobox_packed.js
 
 NETWORK:
 *

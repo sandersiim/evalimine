@@ -9,8 +9,10 @@
 		<script type="text/javascript" src="jquery.min.js"></script>
 		<script type="text/javascript" src="jquery.websocket.js"></script>
 		<script type="text/javascript" src="json3.min.js"></script>
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOndw7O5qKP51vfOyfvYs0JxeC3gSUig8&sensor=false"></script>
 		<script src="overthrow.js"></script>
-		<script type="text/javascript" src="test.js"></script>
+		<script src="infobox_packed.js"></script>
+		<script type="text/javascript" src="test.js"></script>		
 	</head>
 	<body>
 		<div id="mainblock">			
@@ -161,6 +163,10 @@
 						<a href="#tab_stats_parties">Statistika parteide lõikes</a> | 
 						<a href="#tab_stats_map" class="selected">Statistika kaardil</a>
 					</div>
+					<div class="tabContents overthrow">
+						<div id="map_canvas"></div>
+					</div>
+
 				</div>
 				<div id="tab_voting" class="tab">
 					<div class="tabNameLabel">Hääletamine</div>

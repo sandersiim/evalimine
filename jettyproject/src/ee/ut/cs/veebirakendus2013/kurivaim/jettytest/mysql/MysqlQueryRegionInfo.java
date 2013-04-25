@@ -14,8 +14,8 @@ public class MysqlQueryRegionInfo {
 	private int regionId;
 	private String keyword;
 	private String displayName;
-	private int mapCoordsX;
-	private int mapCoordsY;
+	private double latitude;
+	private double longitude;
 	private int totalVoters;
 	private int totalCandidates;
 	
@@ -80,8 +80,8 @@ public class MysqlQueryRegionInfo {
 		regionId = results.getInt("id");
 		keyword = results.getString("keyword");
 		displayName = results.getString("displayName");
-		mapCoordsX = results.getInt("mapCoordsX");
-		mapCoordsY = results.getInt("mapCoordsY");
+		latitude = results.getDouble("latitude");
+		longitude = results.getDouble("longitude");
 		totalVoters = results.getInt("totalVoters");
 		totalCandidates = results.getInt("totalCandidates");
 		
@@ -109,13 +109,13 @@ public class MysqlQueryRegionInfo {
 	}
 	
 	
-	public int getMapCoordsX() {
-		return mapCoordsX;
+	public double getLatitude() {
+		return latitude;
 	}
 	
 	
-	public int getMapCoordsY() {
-		return mapCoordsY;
+	public double getLongitude() {
+		return longitude;
 	}
 	
 	public int getTotalVoters() {

@@ -97,6 +97,8 @@ voteSystem.partyViewState = null;
 voteSystem.regionSelectLoaded = false;
 voteSystem.candidateFilterDelay = null;
 
+voteSystem.map = null;
+voteSystem.mapMarkers = {};
 
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
@@ -1335,13 +1337,61 @@ voteSystem.configurePrinting = function() {
 	window.onafterprint = afterPrint;
 };
 
+voteSystem.initializeMap = function() {
+    var mapOptions = {
+        center: new google.maps.LatLng(58.5673, 24.7990),
+        zoom: 7,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    voteSystem.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+    var geocoder = new google.maps.Geocoder();
+	
+	voteSystem.regionListQuery.done( function() {
+		for(var regionId in voteSystem.regionList) {
+	      	voteSystem.mapMarkers[regionId] = new google.maps.Marker({
+		    	map : voteSystem.map,
+		    	position: new google.maps.LatLng(voteSystem.regionList[regionId].latitude,voteSystem.regionList[regionId].longitude),
+		    	title: voteSystem.regionList[regionId].displayName
+	   	 	});	    
+	   	 	var myOptions = {
+                 content: voteSystem.regionList[regionId].displayName
+                ,pixelOffset: new google.maps.Size(-50, 0)
+                ,zIndex: null
+                ,boxStyle: { 
+                	background: "white",
+                  opacity: 0.75
+                  ,width: "100px"
+                 }
+                ,infoBoxClearance: new google.maps.Size(1, 1)
+                ,pane: "floatPane"
+                ,enableEventPropagation: false
+	        };
+
+	        var ib = new InfoBox(myOptions);
+	        ib.open(voteSystem.map, voteSystem.mapMarkers[regionId]); 
+
+	        console.log(regionId);
+	        google.maps.event.addListener(voteSystem.mapMarkers[regionId], 'click', function() {
+			   ib.open(voteSystem.map, voteSystem.mapMarkers[regionId]);
+
+			});
+		  			
+		}    
+	} );
+	
+}
+
+
 voteSystem.initialise = function() {
 	voteSystem.setupWebsocket();
 	voteSystem.queryRegions();
 	voteSystem.queryStatus();
 	voteSystem.queryParties();
-	voteSystem.queryCandidates();
-	
+	voteSystem.queryCandidates();	
+
+	voteSystem.initializeMap();
+
 	$(".menuitem").click( function() {
 		voteSystem.setActiveMenuItem(this);
 	});
@@ -1696,7 +1746,7 @@ voteSystem.initialise = function() {
 	voteSystem.configurePrinting();
 };
 
+
 $(document).ready(function() {
 	voteSystem.initialise();
 });
-
