@@ -1345,41 +1345,62 @@ voteSystem.initializeMap = function() {
     };
     voteSystem.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 
-    var geocoder = new google.maps.Geocoder();
-	
 	voteSystem.regionListQuery.done( function() {
 		for(var regionId in voteSystem.regionList) {
-	      	voteSystem.mapMarkers[regionId] = new google.maps.Marker({
-		    	map : voteSystem.map,
-		    	position: new google.maps.LatLng(voteSystem.regionList[regionId].latitude,voteSystem.regionList[regionId].longitude),
-		    	title: voteSystem.regionList[regionId].displayName
-	   	 	});	    
-	   	 	var myOptions = {
-                 content: voteSystem.regionList[regionId].displayName
-                ,pixelOffset: new google.maps.Size(-50, 0)
-                ,zIndex: null
-                ,boxStyle: { 
-                	background: "white",
-                  opacity: 0.75
-                  ,width: "100px"
-                 }
-                ,infoBoxClearance: new google.maps.Size(1, 1)
-                ,pane: "floatPane"
-                ,enableEventPropagation: false
-	        };
-
-	        var ib = new InfoBox(myOptions);
-	        ib.open(voteSystem.map, voteSystem.mapMarkers[regionId]); 
-
-	        console.log(regionId);
-	        google.maps.event.addListener(voteSystem.mapMarkers[regionId], 'click', function() {
-			   ib.open(voteSystem.map, voteSystem.mapMarkers[regionId]);
-
-			});
-		  			
+	      	voteSystem.addMarkerToRegion(regionId);		  			
 		}    
 	} );
 	
+}
+
+voteSystem.addMarkerToRegion = function(regionId) {
+	voteSystem.mapMarkers[regionId] = new google.maps.Marker({
+    	map : voteSystem.map,
+    	position: new google.maps.LatLng(voteSystem.regionList[regionId].latitude,voteSystem.regionList[regionId].longitude),
+    	title: voteSystem.regionList[regionId].displayName
+	 });	    
+
+	var queryData = {regionId: regionId, orderId: 4};
+				
+	voteSystem.jsonQuery("parties", queryData, false, function(data) {
+		if(data.responseType == "parties" && data.partyList) {
+			var totalVotes = 0;
+			var maxVoteCount = 0;
+			var winnerParty = null;
+			for(var i = 0; i < data.partyList.length; i++) {
+				totalVotes += data.partyList[i].voteCount;
+				if ( data.partyList[i].voteCount > maxVoteCount ) {
+					maxVoteCount = data.partyList[i].voteCount;
+					winnerParty = data.partyList[i].displayName;
+				}
+			}
+			
+			var percentage = parseFloat(Math.round(((totalVotes > 0) ? maxVoteCount / totalVotes : 0) * 1000) / 10).toFixed(1) + "%";
+				
+			var myOptions = {
+			     content: voteSystem.regionList[regionId].displayName+"\n"+winnerParty+" - "+percentage.toString()
+			    ,pixelOffset: new google.maps.Size(-50, 0)
+			    ,boxStyle: { 
+			    	background: "white",
+			      	opacity: 0.75,
+			      	width: "100px"
+			     }
+			    ,infoBoxClearance: new google.maps.Size(1, 1)
+			    ,pane: "floatPane"
+			    ,enableEventPropagation: false
+		    };
+
+		    var ib = new InfoBox(myOptions);
+		    ib.open(voteSystem.map, voteSystem.mapMarkers[regionId]); 
+
+		    var marker = voteSystem.mapMarkers[regionId]
+		    google.maps.event.addListener(marker, 'click', function() {
+			   ib.open(voteSystem.map,marker);
+			});
+		}
+
+	});
+ 	
 }
 
 
