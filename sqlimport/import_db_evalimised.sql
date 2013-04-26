@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 20, 2013 at 09:49 AM
+-- Generation Time: Apr 26, 2013 at 06:50 PM
 -- Server version: 5.5.24-log
 -- PHP Version: 5.4.3
 
@@ -82,6 +82,10 @@ INSERT INTO `ev_candidates` (`id`, `userId`, `regionId`, `partyId`, `voteCount`,
 (27, 1017, 3, 2, 105, 'Macrobius', 'Ambrosius'),
 (28, 1018, 4, 3, 68, 'Gnaeus', 'Octavius'),
 (29, 1019, 5, 3, 34, 'Paulus', 'Orosius'),
+(30, 1030, 1, 3, 31, 'Esteticus', 'Lipicus'),
+(31, 1031, 7, 1, 55, 'Pioneerus', 'Roppus'),
+(32, 1032, 10, 5, 12, 'Marcus', 'Cicero'),
+(33, 1033, 3, 4, 29, 'Paslicus', 'Samblic'),
 (44, 1023, 15, 5, 33, 'Aplus', 'Peetus');
 
 -- --------------------------------------------------------
@@ -94,6 +98,7 @@ CREATE TABLE IF NOT EXISTS `ev_parties` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `keyword` varchar(31) NOT NULL,
   `displayName` varchar(63) NOT NULL,
+  `color` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `keyword` (`keyword`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
@@ -102,12 +107,12 @@ CREATE TABLE IF NOT EXISTS `ev_parties` (
 -- Dumping data for table `ev_parties`
 --
 
-INSERT INTO `ev_parties` (`id`, `keyword`, `displayName`) VALUES
-(1, 'legion', 'Leegionärid'),
-(2, 'germaanid', 'Germaani hõimud'),
-(3, 'filosoofid', 'Filosoofid'),
-(4, 'pax', 'Pax Romana'),
-(5, 'ryytlid', 'Templirüütlid');
+INSERT INTO `ev_parties` (`id`, `keyword`, `displayName`, `color`) VALUES
+(1, 'legion', 'Leegionärid', 'red'),
+(2, 'germaanid', 'Germaani hõimud', '#B38C62'),
+(3, 'filosoofid', 'Filosoofid', '#435BF7'),
+(4, 'pax', 'Pax Romana', 'white'),
+(5, 'ryytlid', 'Templirüütlid', 'orange');
 
 -- --------------------------------------------------------
 
@@ -119,8 +124,8 @@ CREATE TABLE IF NOT EXISTS `ev_regions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `keyword` varchar(31) NOT NULL,
   `displayName` varchar(63) NOT NULL,
-  `mapCoordsX` int(11) NOT NULL,
-  `mapCoordsY` int(11) NOT NULL,
+  `latitude` double NOT NULL,
+  `longitude` double NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `keyword` (`keyword`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
@@ -129,22 +134,22 @@ CREATE TABLE IF NOT EXISTS `ev_regions` (
 -- Dumping data for table `ev_regions`
 --
 
-INSERT INTO `ev_regions` (`id`, `keyword`, `displayName`, `mapCoordsX`, `mapCoordsY`) VALUES
-(1, 'harju', 'Harjumaa', 0, 0),
-(2, 'hiiu', 'Hiiumaa', 0, 0),
-(3, 'idaviru', 'Ida-Virumaa', 0, 0),
-(4, 'jogeva', 'Jõgevamaa', 0, 0),
-(5, 'jarva', 'Järvamaa', 0, 0),
-(6, 'laane', 'Läänemaa', 0, 0),
-(7, 'laaneviru', 'Lääne-Virumaa', 0, 0),
-(8, 'polva', 'Põlvamaa', 0, 0),
-(9, 'parnu', 'Pärnumaa', 0, 0),
-(10, 'rapla', 'Raplamaa', 0, 0),
-(11, 'saare', 'Saaremaa', 0, 0),
-(12, 'tartu', 'Tartumaa', 0, 0),
-(13, 'valga', 'Valgamaa', 0, 0),
-(14, 'viljandi', 'Viljandimaa', 0, 0),
-(15, 'voru', 'Võrumaa', 0, 0);
+INSERT INTO `ev_regions` (`id`, `keyword`, `displayName`, `latitude`, `longitude`) VALUES
+(1, 'harju', 'Harjumaa', 59.4301993, 24.7438055),
+(2, 'hiiu', 'Hiiumaa', 58.9915704, 22.7239216),
+(3, 'idaviru', 'Ida-Virumaa', 59.3583172, 27.4129738),
+(4, 'jogeva', 'Jõgevamaa', 58.7458582, 26.3978809),
+(5, 'jarva', 'Järvamaa', 58.8856169, 25.5718254),
+(6, 'laane', 'Läänemaa', 58.9468339, 23.5315637),
+(7, 'laaneviru', 'Lääne-Virumaa', 59.3494849, 26.3479999),
+(8, 'polva', 'Põlvamaa', 58.0532036, 27.0515559),
+(9, 'parnu', 'Pärnumaa', 58.383701, 24.4962052),
+(10, 'rapla', 'Raplamaa', 59.0244395, 24.7703227),
+(11, 'saare', 'Saaremaa', 58.2524238, 22.485269),
+(12, 'tartu', 'Tartumaa', 58.3734987, 26.7196335),
+(13, 'valga', 'Valgamaa', 57.7775553, 26.0337268),
+(14, 'viljandi', 'Viljandimaa', 58.3631104, 25.5947057),
+(15, 'voru', 'Võrumaa', 57.8481018, 26.9943342);
 
 -- --------------------------------------------------------
 
@@ -160,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `ev_users` (
   `votedCandidateId` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1024 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1034 ;
 
 --
 -- Dumping data for table `ev_users`
@@ -190,7 +195,11 @@ INSERT INTO `ev_users` (`id`, `username`, `password`, `voteRegionId`, `votedCand
 (1020, '1020', 'A114489FB19F59AB059B6CCB20134187D516C08C', 1, 0),
 (1021, '1021', 'A114489FB19F59AB059B6CCB20134187D516C08C', 1, 24),
 (1022, '1022', 'A114489FB19F59AB059B6CCB20134187D516C08C', 1, 0),
-(1023, '1023', 'A114489FB19F59AB059B6CCB20134187D516C08C', 15, 0);
+(1023, '1023', 'A114489FB19F59AB059B6CCB20134187D516C08C', 15, 0),
+(1030, '1030', 'A114489FB19F59AB059B6CCB20134187D516C08C', 1, 0),
+(1031, '1031', 'A114489FB19F59AB059B6CCB20134187D516C08C', 7, 0),
+(1032, '1032', 'A114489FB19F59AB059B6CCB20134187D516C08C', 10, 0),
+(1033, '1033', 'A114489FB19F59AB059B6CCB20134187D516C08C', 3, 0);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

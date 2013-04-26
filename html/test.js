@@ -1345,7 +1345,11 @@ voteSystem.initializeMap = function() {
     };
     voteSystem.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 
-	voteSystem.regionListQuery.done( function() {
+	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).then( function() {
+		for ( var partyId in voteSystem.partyList ) {
+			$("#mapLegend").append('<div class="legendItem"><div class="legendColor" id="'+voteSystem.partyList[partyId].keyword+'">'+voteSystem.partyList[partyId].displayName+'</div></div>');
+			$("#"+voteSystem.partyList[partyId].keyword).css("background",voteSystem.partyList[partyId].color );
+		}
 		for(var regionId in voteSystem.regionList) {
 	      	voteSystem.addMarkerToRegion(regionId);		  			
 		}    
@@ -1361,33 +1365,40 @@ voteSystem.addMarkerToRegion = function(regionId) {
 	 });	    
 
 	var queryData = {regionId: regionId, orderId: 4};
-				
+
 	voteSystem.jsonQuery("parties", queryData, false, function(data) {
 		if(data.responseType == "parties" && data.partyList) {
 			var totalVotes = 0;
 			var maxVoteCount = 0;
-			var winnerParty = null;
+			var winnerPartyId = null;
 			for(var i = 0; i < data.partyList.length; i++) {
 				totalVotes += data.partyList[i].voteCount;
 				if ( data.partyList[i].voteCount > maxVoteCount ) {
 					maxVoteCount = data.partyList[i].voteCount;
-					winnerParty = data.partyList[i].displayName;
+					winnerPartyId = data.partyList[i].partyId;
 				}
 			}
+
+			var partyColor = voteSystem.partyList[winnerPartyId]["color"];
+			var partyName = voteSystem.partyList[winnerPartyId].displayName;
 			
 			var percentage = parseFloat(Math.round(((totalVotes > 0) ? maxVoteCount / totalVotes : 0) * 1000) / 10).toFixed(1) + "%";
+
+			var content = "<div class=infoBoxText>"+
+							partyName+" "+percentage.toString()+
+							"</div>"
 				
 			var myOptions = {
-			     content: voteSystem.regionList[regionId].displayName+"\n"+winnerParty+" - "+percentage.toString()
-			    ,pixelOffset: new google.maps.Size(-50, 0)
-			    ,boxStyle: { 
-			    	background: "white",
-			      	opacity: 0.75,
-			      	width: "100px"
-			     }
-			    ,infoBoxClearance: new google.maps.Size(1, 1)
-			    ,pane: "floatPane"
-			    ,enableEventPropagation: false
+			    content: content,
+			    pixelOffset: new google.maps.Size(-40, 0),
+			    boxClass: "infoBox",
+			    boxStyle: { 
+			    	background: partyColor,
+			    	width: "80px"
+			    },
+			    infoBoxClearance: new google.maps.Size(1, 1),
+			    pane: "floatPane",
+			    enableEventPropagation: false
 		    };
 
 		    var ib = new InfoBox(myOptions);

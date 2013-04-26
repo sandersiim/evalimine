@@ -13,6 +13,7 @@ public class MysqlQueryPartyInfo {
 	private String keyword;
 	private String displayName;
 	private int voteCount;
+	private String color;
 	
 	private transient final MysqlConnectionHandler sqlHandler;
 	
@@ -60,7 +61,8 @@ public class MysqlQueryPartyInfo {
 			String regionFilter = (queryRegionId > 0) ? " AND b.regionId = " + queryRegionId : "";
 			
 			statement = sqlHandler.getConnection().prepareStatement(
-					"SELECT a.id AS id, a.keyword AS keyword, a.displayName AS displayName, COALESCE(SUM(b.voteCount), 0) AS voteCount FROM ev_parties AS a " +
+					"SELECT a.id AS id, a.keyword AS keyword, a.displayName AS displayName, a.color AS color," +
+							" COALESCE(SUM(b.voteCount), 0) AS voteCount FROM ev_parties AS a " +
 					"LEFT JOIN ev_candidates AS b ON a.id = b.partyId" + regionFilter + " GROUP BY a.id" + orderingString);
 			
 			return fillMultiDataFromResults(statement.executeQuery());
@@ -78,7 +80,8 @@ public class MysqlQueryPartyInfo {
 		PreparedStatement statement = null;
 		
 		try {
-			statement = sqlHandler.getConnection().prepareStatement("SELECT id, keyword, displayName, 0 AS voteCount FROM ev_parties");
+			statement =
+					sqlHandler.getConnection().prepareStatement("SELECT id, keyword, displayName, color, 0 AS voteCount FROM ev_parties");
 			
 			return fillMultiDataFromResults(statement.executeQuery());
 		} catch (SQLException e) {
@@ -116,6 +119,7 @@ public class MysqlQueryPartyInfo {
 		keyword = results.getString("keyword");
 		displayName = results.getString("displayName");
 		voteCount = results.getInt("voteCount");
+		color = results.getString("color");
 		
 		return this;
 	}
