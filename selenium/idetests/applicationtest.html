@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://maxorator.com:8080/" />
+<title>seletest2</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">seletest2</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=menu_mydata</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>1022</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=password</td>
+	<td>testpass</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#loginByPassword input[type=submit]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=menu_mydata</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>window.$(&quot;.myDataInfo .myDataInfoNameAndValue:last-of-type a&quot;).text()</td>
+	<td>Kandideeri oma piirkonnas</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=.myDataInfo .myDataInfoNameAndValue:last-of-type a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#applicationFirstName</td>
+	<td>Toomas</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#applicationLastName</td>
+	<td>Palk</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>css=#applicationForm .dropbox select</td>
+	<td>index=1</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#applyButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=confirmBoxYes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementNotPresent</td>
+	<td>css=.myDataInfo .myDataInfoNameAndValue:last-of-type a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>window.$(&quot;#myDataName&quot;).text()</td>
+	<td>Toomas Palk</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=menu_voting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>window.$(&quot;#votingCandidateList&quot;).html().indexOf(&quot;Toomas Palk&quot;) != -1</td>
+	<td>true</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/querytest/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=testerQueryMethod</td>
+	<td>POST</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=testerQueryType</td>
+	<td>adminlogin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=testerQueryContents</td>
+	<td>{adminUsername:&quot;mainadmin&quot;, adminPassword:&quot;testpass&quot;}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#testerForm input[type=submit]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=testerQueryType</td>
+	<td>adminremovecandidate</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=testerQueryContents</td>
+	<td>{userId:1022, candidateId:0}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#testerForm input[type=submit]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

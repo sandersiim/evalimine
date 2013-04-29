@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://maxorator.com:8080/" />
+<title>seletest1</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">seletest1</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=menu_mydata</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>1022</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=password</td>
+	<td>testpass</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#loginByPassword input[type=submit]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=menu_voting</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>window.$(&quot;#votingCandidateList .candidateForVoting:nth-of-type(1) .action .voteGiveForm&quot;).css(&quot;display&quot;)</td>
+	<td>block</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>window.$(window.$(&quot;#votingCandidateList .candidateName&quot;)[0]).text();</td>
+	<td>voteName</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>window.$(window.$(&quot;#votingCandidateList .voteCount&quot;)[0]).text();</td>
+	<td>voteCount</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#votingCandidateList .candidateForVoting:nth-of-type(1) .action .voteGiveForm input[type=submit]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=confirmBoxYes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>window.$(&quot;#votingCandidateList .candidateForVoting:nth-of-type(1) .action .voteGiveForm&quot;).css(&quot;display&quot;)</td>
+	<td>none</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>window.$(&quot;#votingCandidateList .candidateForVoting:nth-of-type(1) .action .voteCancelForm&quot;).css(&quot;display&quot;)</td>
+	<td>block</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>window.$(window.$(&quot;#votingCandidateList .candidateName&quot;)[0]).text();</td>
+	<td>${voteName}</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>parseInt(window.$(window.$(&quot;#votingCandidateList .voteCount&quot;)[0]).text())-1;</td>
+	<td>${voteCount}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#votingCandidateList .candidateForVoting:nth-of-type(1) div.action form.voteCancelForm input[type=submit]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=confirmBoxYes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>300</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>window.$(&quot;#votingCandidateList .candidateForVoting:nth-of-type(1) .action .voteGiveForm&quot;).css(&quot;display&quot;)</td>
+	<td>block</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>window.$(&quot;#votingCandidateList .candidateForVoting:nth-of-type(1) .action .voteCancelForm&quot;).css(&quot;display&quot;)</td>
+	<td>none</td>
+</tr>
+</tbody></table>
+</body>
+</html>

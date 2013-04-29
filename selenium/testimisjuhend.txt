@@ -1,0 +1,3 @@
+Kui Ant on installitud, siis Seleniumi testid saab käivitada kaustas "/selenium/javatester" käsu "ant" kasutamisel (vaikimisi kasutab õiget skripti ja targetit).
+
+"/selenium/idetests" kaustas on analoogilised testid Selenium IDE-s kasutamiseks.

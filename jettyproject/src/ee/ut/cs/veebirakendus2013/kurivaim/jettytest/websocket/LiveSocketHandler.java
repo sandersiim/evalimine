@@ -30,24 +30,16 @@ public class LiveSocketHandler extends WebSocketHandler {
 	}
 	
 	public void addToClientList(LiveUpdaterSocket socket) {
-		System.out.println("new client");
-		
 		socketContainer.add(socket);
 	}
 	
 	public void removeFromClientList(LiveUpdaterSocket socket) {
-		System.out.println("dead client");
-		
 		socketContainer.remove(socket);
 	}
 	
 	public void broadcastMessage(String message) {
-		System.out.println("broadcasting " + message);
-		
 		for(LiveUpdaterSocket socket : socketContainer) {
 			socket.getSession().getRemote().sendStringByFuture(message);
-			
-			System.out.println("client...");
 		}
 	}
 }

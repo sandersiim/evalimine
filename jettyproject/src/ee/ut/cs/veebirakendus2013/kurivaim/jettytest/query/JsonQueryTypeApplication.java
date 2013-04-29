@@ -71,7 +71,11 @@ public class JsonQueryTypeApplication implements JsonQueryInterface {
 					else {
 						String cardFirstName = queryInfo.getSessionStringParameter("firstName"), cardLastName = queryInfo.getSessionStringParameter("lastName");
 						
-						return new JsonResponseTypeUserInfo("applyAction", userInfo, queryInfo.getLoggedInCandidateInfo(), cardFirstName, cardLastName);
+						MysqlQueryCandidateInfo newCandidateInfo = queryInfo.getLoggedInCandidateInfo();
+						
+						queryInfo.doLiveBroadcast(new JsonResponseTypeCandidate(newCandidateInfo));
+						
+						return new JsonResponseTypeUserInfo("applyAction", userInfo, newCandidateInfo, cardFirstName, cardLastName);
 					}
 				}
 			}

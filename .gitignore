@@ -10,3 +10,5 @@ tmp/
 *.swp
 *~.nib
 local.properties
+junit-results/
+build/
