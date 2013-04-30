@@ -1,84 +1,72 @@
+/* global Storage, $, google, alert, InfoBox */
+/* jslint curly: false */ /* can do "if() then;" without braces */
+/* jslint eqeq: true */ /* allow double equals */
+/* jshint -W069 */ /* don't whine about not using dot notation - dot notation makes less sense in places where JSHint suggests it */
+/* jshint -W089 */ /* no if filter required in for(var a in b) since I use continue instead */
+/* jshint -W083 */ /* functions within a loop - this is deliberate so each fn has the scope of that loop instance */
+/* jshint -W098 */ /* don't whine about arguments that are never used - it's better than just omitting them */
+/* jshint -W035 */ /* allow empty blocks - for some unimplemented/commented stuff */
+/* jshint -W004 */ /* no 'already defined' errors - JSHint wrongly handles for(var ...), so gives invalid warnings */
+/* jshint strict: false */
+
 Storage.prototype.setObject = function(key, value) {
-    this.setItem(key, JSON.stringify(value));
-}
+	this.setItem(key, JSON.stringify(value));
+};
 
 Storage.prototype.getObject = function(key) {
-    var value = this.getItem(key);
-    return value && JSON.parse(value);
-}
+	var value = this.getItem(key);
+	return value && JSON.parse(value);
+};
 
-
-/*LOADER*/
-
-	var cSpeed=8;
-	var cWidth=75;
-	var cHeight=75;
-	var cTotalFrames=75;
-	var cFrameWidth=75;
-	var cImageSrc='images/sprites.gif';
+var imageLoader = { cSpeed: 8, cWidth: 75, cHeight: 75, cTotalFrames: 75, cFrameWidth: 75, cImageSrc: "images/sprites.gif",
+	cImageTimeout: false, cIndex: 0, cXpos: 0, secondsBetweenFrames: 0, FPS: 0, genImage: null};
 	
-	var cImageTimeout=false;
-	var cIndex=0;
-	var cXpos=0;
-	var SECONDS_BETWEEN_FRAMES=0;
+imageLoader.initialise = function() {
+	clearTimeout(imageLoader.cImageTimeout);
+	imageLoader.cImageTimeout = 0;
+	imageLoader.genImage = new Image();
+	imageLoader.genImage.onload = function() { imageLoader.cImageTimeout = setTimeout(imageLoader.startAnimation, 0); };
+	imageLoader.genImage.onerror = function() { alert("Could not load the image"); };
+	imageLoader.genImage.src = imageLoader.cImageSrc;
+};
+
+imageLoader.startAnimation = function() {
+	document.getElementById("loaderImage").style.backgroundImage = "url('" + imageLoader.cImageSrc + "')";
+	document.getElementById("loaderImage").style.width = imageLoader.cWidth + "px";
+	document.getElementById("loaderImage").style.height = imageLoader.cHeight + "px";
 	
-	function startAnimation(){
-		
-		document.getElementById('loaderImage').style.backgroundImage='url('+cImageSrc+')';
-		document.getElementById('loaderImage').style.width=cWidth+'px';
-		document.getElementById('loaderImage').style.height=cHeight+'px';
-		
-		FPS = Math.round(100/cSpeed);
-		SECONDS_BETWEEN_FRAMES = 1 / FPS;
-		
-		setTimeout('continueAnimation()', SECONDS_BETWEEN_FRAMES/1000);
-		
+	imageLoader.FPS = Math.round(100 / imageLoader.cSpeed);
+	imageLoader.secondsBetweenFrames = 1 / imageLoader.FPS;
+	
+	setTimeout(imageLoader.continueAnimation, imageLoader.secondsBetweenFrames / 1000);
+};
+
+imageLoader.stopAnimation = function() {
+	imageLoader.cIndex = imageLoader.cTotalFrames;
+};
+
+imageLoader.continueAnimation = function() {
+	imageLoader.cXpos += imageLoader.cFrameWidth;
+	imageLoader.cIndex += 1;
+	
+	if (imageLoader.cIndex >= imageLoader.cTotalFrames) {
+		imageLoader.cXpos = 0;
+		imageLoader.cIndex = 0;
 	}
 	
-	function stopAnimation() {
-		cIndex = cTotalFrames;
-	}
+	document.getElementById("loaderImage").style.backgroundPosition = (-imageLoader.cXpos) + "px 0";
 	
-	function continueAnimation(){
-		
-		cXpos += cFrameWidth;
-		//increase the index so we know which frame of our animation we are currently on
-		cIndex += 1;
-		 
-		//if our cIndex is higher than our total number of frames, we're at the end and should restart
-		if (cIndex >= cTotalFrames) {
-			cXpos =0;
-			cIndex=0;
-		}
-		
-		document.getElementById('loaderImage').style.backgroundPosition=(-cXpos)+'px 0';
-		
-		setTimeout('continueAnimation()', SECONDS_BETWEEN_FRAMES*1000);
-	}
-	
-	function imageLoader(s, fun)//Pre-loads the sprites image
-	{
-		clearTimeout(cImageTimeout);
-		cImageTimeout=0;
-		genImage = new Image();
-		genImage.onload=function (){cImageTimeout=setTimeout(fun, 0)};
-		genImage.onerror=new Function('alert(\'Could not load the image\')');
-		genImage.src=s;
-	}
-	
-	//The following code starts the animation
-	new imageLoader(cImageSrc, 'startAnimation()');
+	setTimeout(imageLoader.continueAnimation, imageLoader.secondsBetweenFrames * 1000);
+};
 
-/*--------------------------------------------------------------------*/
+var voteSystem = {};
 
-var voteSystem = {}
-
-voteSystem.userInfo = {}
+voteSystem.userInfo = {};
 voteSystem.loggedIn = false;
 voteSystem.initialTabSet = false;
 voteSystem.delayedTabName = null;
 voteSystem.delayedTabParams = null;
-voteSystem.activeMenuItem = "menu_mydata"
+voteSystem.activeMenuItem = "menu_mydata";
 voteSystem.tabCallbacks = {};
 voteSystem.menuList = ["menu_statistics", "menu_mydata", "menu_help", "menu_voting"];
 voteSystem.partyList = {};
@@ -124,9 +112,11 @@ voteSystem.menuActiveTabParams = {
 voteSystem.sortItemList = function(itemList, sortMethods, sortMethodQueue) {
 	itemList.sort( function(a, b) {
 		for(var methodId in sortMethodQueue) {
+			if(!sortMethodQueue.hasOwnProperty(methodId)) continue;
+			
 			var compareResult = sortMethods[sortMethodQueue[methodId]](a, b);
 			
-			if(compareResult != 0) return compareResult;
+			if(compareResult !== 0) return compareResult;
 		}
 		
 		return 0;
@@ -135,6 +125,8 @@ voteSystem.sortItemList = function(itemList, sortMethods, sortMethodQueue) {
 
 voteSystem.getUpdatedSortMethodQueue = function(newMethod, oldQueue, sortMethods) {
 	for(var methodName in sortMethods) {
+		if(!sortMethods.hasOwnProperty(methodName)) continue;
+		
 		$("#" + methodName).removeClass("primarySortMethod secondarySortMethod tertiarySortMethod");
 	}
 
@@ -142,6 +134,8 @@ voteSystem.getUpdatedSortMethodQueue = function(newMethod, oldQueue, sortMethods
 	var newMethodList = [newMethod];
 	
 	for(var methodId in oldQueue) {
+		if(!oldQueue.hasOwnProperty(methodId)) continue;
+		
 		var methodName = oldQueue[methodId];
 		var currentMethodCriteria = methodName.indexOf("_") >= 0 ? methodName.substr(0, methodName.indexOf("_")) : methodName;
 		
@@ -167,6 +161,8 @@ voteSystem.sortMethodAttachClickHandler = function(methodName, sortMethods, sort
 
 voteSystem.initialiseSortingMethods = function(sortMethods, sortQueueName, changeCallback) {
 	for(var methodName in sortMethods) {
+		if(!sortMethods.hasOwnProperty(methodName)) continue;
+		
 		voteSystem.sortMethodAttachClickHandler(methodName, sortMethods, sortQueueName, changeCallback);
 	}
 	
@@ -189,7 +185,7 @@ voteSystem.resizeTabContents = function(tabElement) {
 		
 		contentsBlock.height(heightRemaining);
 	}
-}
+};
 
 voteSystem.resizeElements = function() {
 	$("#mainblock").height(Math.max($(window).height() - ($("#mainblock").outerHeight(true) - $("#mainblock").height()), 630)-1);
@@ -236,7 +232,7 @@ voteSystem.setActiveMenuItem = function(newMenuSelection) {
 	voteSystem.activeMenuItem = newMenuSelection.id;
 
 	voteSystem.changeActiveMenuClass(newMenuSelection);
-	voteSystem.swapToActiveTabForMenuItem(newMenuSelection)
+	voteSystem.swapToActiveTabForMenuItem(newMenuSelection);
 };
 
 voteSystem.swapToActiveTabForMenuItem = function(selectedMenu) {
@@ -312,7 +308,7 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 			$("#menu_mydata").text("Minu andmed");
 			voteSystem.setActiveTab("tab_mydata", "", false);
 			
-			if(voteSystem.userInfo.userInfo.voteRegionId == 0) {
+			if(voteSystem.userInfo.userInfo.voteRegionId === 0) {
 				voteSystem.setActiveTab("tab_err_region", "", false);
 			}
 			else {
@@ -344,13 +340,13 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 	voteSystem.refreshMyDataInfo();
 	
 	voteSystem.loggedIn = isLoggedIn;
-}
+};
 
 voteSystem.applyUserInfo = function(newUserInfo) {
 	voteSystem.userInfo = newUserInfo;
 	localStorage.setObject("userInfo", newUserInfo);
 	
-	if(newUserInfo.userInfo != null) {
+	if(newUserInfo.userInfo !== null) {
 		voteSystem.setLoggedInStatus(true);
 	}
 	else {
@@ -363,17 +359,17 @@ voteSystem.redirectBasedOnUserInfo = function() {
 	
 	var redirectTab = null;
 	
-	if(voteSystem.userInfo.userInfo.voteRegionId == 0) {
+	if(voteSystem.userInfo.userInfo.voteRegionId === 0) {
 		redirectTab = "tab_mydata";
 	}
-	else if(voteSystem.userInfo.userInfo.votedCandidateId == 0) {
+	else if(voteSystem.userInfo.userInfo.votedCandidateId === 0) {
 		redirectTab = "tab_voting";
 	}
 	
 	if(redirectTab) {
 		voteSystem.setActiveTab(redirectTab, "", true);
 	}
-}
+};
 
 voteSystem.queryStatus = function() {
 	voteSystem.showLoader();
@@ -450,9 +446,9 @@ voteSystem.queryCandidates = function() {
 		}
 	}, function() {
 		if (localStorage.getObject("candidateList")) {
-			voteSystem.candidateList = localStorage.getObject("candidateList");						
+			voteSystem.candidateList = localStorage.getObject("candidateList");
 		}
-	},null);
+	}, null);
 };
 
 voteSystem.queryCandidateName = function(_candidateId) {
@@ -523,8 +519,8 @@ voteSystem.voteForCandidate = function(candidateId) {
 				alert(data.statusMessage);
 			}
 		}
-	},null,null);
-}
+	}, null, null);
+};
 
 voteSystem.refreshVotingList = function() {
 	voteSystem.showLoader();
@@ -555,6 +551,8 @@ voteSystem.refreshVotingList = function() {
 		var availableCandidates = [];
 
 		for (var candidateId in voteSystem.candidateList) {
+			if(!voteSystem.candidateList.hasOwnProperty(candidateId)) continue;
+			
 			if ( voteSystem.candidateList[candidateId].regionId == voteSystem.userInfo.userInfo.voteRegionId ) {
 				availableCandidates.push(voteSystem.candidateList[candidateId]);
 			}
@@ -583,7 +581,7 @@ voteSystem.refreshVotingList = function() {
 				}
 			});
 			
-			if(selectedId == 0) {
+			if(selectedId === 0) {
 				element.find(".voteCancelForm").css("display", "none");
 				element.find(".voteGiveForm").submit(function() {
 					var candidateId = $(this).children(".voteCandidateId").val();
@@ -616,7 +614,7 @@ voteSystem.refreshVotingList = function() {
 			}
 		}	
 		voteSystem.hideLoader();
-	}
+	};
 
 	voteSystem.candidateListQuery.done(populateCandidateList);
 	voteSystem.candidateListQuery.fail( function() {
@@ -693,7 +691,7 @@ voteSystem.resortRegionView = function() {
 	
 		voteSystem.addLineToRegionView(listElement, template, info.displayName, info.keyword, info.totalVoters, info.totalCandidates);
 	}
-}
+};
 
 voteSystem.loadRegionView = function() {
 	if(voteSystem.regionViewLoaded) return;
@@ -706,6 +704,8 @@ voteSystem.loadRegionView = function() {
 		voteSystem.currentRegionList = [];
 		
 		for(var regionId in voteSystem.regionList) {
+			if(!voteSystem.regionList.hasOwnProperty(regionId)) continue;
+			
 			voteSystem.currentRegionList.push(voteSystem.regionList[regionId]);
 		}
 		
@@ -719,6 +719,8 @@ voteSystem.loadRegionView = function() {
 			voteSystem.currentRegionList = [];
 		
 			for(var regionId in voteSystem.regionList) {
+				if(!voteSystem.regionList.hasOwnProperty(regionId)) continue;
+				
 				voteSystem.currentRegionList.push(voteSystem.regionList[regionId]);
 			}
 			
@@ -731,6 +733,8 @@ voteSystem.loadRegionView = function() {
 voteSystem.regionFromKeyword = function(keyword) {
 	if(keyword && keyword.length > 0) {	
 		for(var regionId in voteSystem.regionList) {
+			if(!voteSystem.regionList.hasOwnProperty(regionId)) continue;
+			
 			if(keyword == voteSystem.regionList[regionId].keyword) {
 				return regionId;
 			}
@@ -752,6 +756,8 @@ voteSystem.keywordFromRegion = function(regionId) {
 voteSystem.partyFromKeyword = function(keyword) {
 	if(keyword && keyword.length > 0) {	
 		for(var partyId in voteSystem.partyList) {
+			if(!voteSystem.partyList.hasOwnProperty(partyId)) continue;
+			
 			if(keyword == voteSystem.partyList[partyId].keyword) {
 				return partyId;
 			}
@@ -863,8 +869,8 @@ voteSystem.filterCandidateList = function(filterString) {
 voteSystem.candidateNameFilterChanged = function() {
 	clearTimeout(voteSystem.candidateFilterDelay);
 	
-	voteSystem.candidateFilterDelay = setTimeout("voteSystem.resortCandidateView()", 200);
-}
+	voteSystem.candidateFilterDelay = setTimeout(voteSystem.resortCandidateView, 200);
+};
 
 voteSystem.resortCandidateView = function() {
 	if(!voteSystem.currentCandidateList) return;
@@ -882,19 +888,22 @@ voteSystem.resortCandidateView = function() {
 		
 		voteSystem.addLineToCandidateView(listElement, template, info.firstName + " " + info.lastName, partyName, regionName, info.voteCount);
 	}
-}
+};
 
 voteSystem.refreshCandidateViewData = function() {
-	if(voteSystem.candidateViewState != null) {
+	if(voteSystem.candidateViewState !== null) {
 		voteSystem.loadCandidateView(voteSystem.candidateViewState);
 	}
-}
+};
 
 voteSystem.loadCandidateView = function(params) {
 	voteSystem.showLoader();
+	
 	var regionAndPartyQuerySuccesful = function() {
-		if(voteSystem.candidateViewState == null) {
+		if(voteSystem.candidateViewState === null) {
 			for(var regionId in voteSystem.regionList) {
+				if(!voteSystem.regionList.hasOwnProperty(regionId)) continue;
+				
 				$("#candidateViewRegionFilter").append($("<option>", {
 					value: voteSystem.regionList[regionId].keyword,
 					text: voteSystem.regionList[regionId].displayName
@@ -902,6 +911,8 @@ voteSystem.loadCandidateView = function(params) {
 			}
 			
 			for(var partyId in voteSystem.partyList) {
+				if(!voteSystem.partyList.hasOwnProperty(partyId)) continue;
+				
 				$("#candidateViewPartyFilter").append($("<option>", {
 					value: voteSystem.partyList[partyId].keyword,
 					text: voteSystem.partyList[partyId].displayName
@@ -921,8 +932,10 @@ voteSystem.loadCandidateView = function(params) {
 		voteSystem.currentCandidateList = [];
 		
 		for ( var candidateId in voteSystem.candidateList ) {
-			if ( (findRegionId == 0 || voteSystem.candidateList[candidateId].regionId == findRegionId) &&
-				(findPartyId == 0 || voteSystem.candidateList[candidateId].partyId == findPartyId) ) {
+			if(!voteSystem.candidateList.hasOwnProperty(candidateId)) continue;
+			
+			if ( (findRegionId === 0 || voteSystem.candidateList[candidateId].regionId == findRegionId) &&
+				(findPartyId === 0 || voteSystem.candidateList[candidateId].partyId == findPartyId) ) {
 				voteSystem.currentCandidateList.push(voteSystem.candidateList[candidateId]);
 			}
 		}
@@ -933,10 +946,11 @@ voteSystem.loadCandidateView = function(params) {
 		
 		$("#candidateViewRegionFilter").val(regionKeyword);
 		$("#candidateViewPartyFilter").val(partyKeyword);
+		
 		voteSystem.hideLoader();
 	};
 	
-	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).then( regionAndPartyQuerySuccesful, function() {
+	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery, voteSystem.candidateListQuery).then( regionAndPartyQuerySuccesful, function() {
 		if ( localStorage.getObject("regionList") && localStorage.getObject("partyList") && localStorage.getObject("candidateList") ) {
 			voteSystem.regionList = localStorage.getObject("regionList");
 			voteSystem.partyList = localStorage.getObject("partyList");
@@ -1019,14 +1033,16 @@ voteSystem.resortPartyView = function() {
 		
 		voteSystem.addLineToPartyView(listElement, template, voteSystem.currentPartyList[i].displayName, voteSystem.currentPartyList[i].keyword, regionKeyword, voteSystem.currentPartyList[i].voteCount, percentage);
 	}
-}
+};
 
 voteSystem.loadPartyView = function(params) {
 	voteSystem.showLoader();
 
 	var regionAndPartyQuerySuccesful = function() {
-		if(voteSystem.partyViewState == null) {
+		if(voteSystem.partyViewState === null) {
 			for(var regionId in voteSystem.regionList) {
+				if(!voteSystem.regionList.hasOwnProperty(regionId)) continue;
+				
 				$("#partyViewRegionFilter").append($("<option>", {
 					value: voteSystem.regionList[regionId].keyword,
 					text: voteSystem.regionList[regionId].displayName
@@ -1060,6 +1076,8 @@ voteSystem.loadPartyView = function(params) {
 					var partyListIndexes = {};
 					var counter = 0;
 					for ( var partyId in voteSystem.partyList ) {
+						if(!voteSystem.partyList.hasOwnProperty(partyId)) continue;
+						
 						voteSystem.currentPartyList.push(voteSystem.partyList[partyId]);
 						partyListIndexes[partyId] = counter;
 						counter++;
@@ -1069,7 +1087,9 @@ voteSystem.loadPartyView = function(params) {
 						voteSystem.currentPartyList[i].voteCount = 0;
 					}
 					for ( var candidateId in voteSystem.candidateList ) {
-						if ( voteSystem.candidateList[candidateId].regionId == findRegionId || findRegionId == 0 ) {
+						if(!voteSystem.candidateList.hasOwnProperty(candidateId)) continue;
+						
+						if ( voteSystem.candidateList[candidateId].regionId === findRegionId || findRegionId === 0 ) {
 							voteSystem.currentPartyList[partyListIndexes[voteSystem.candidateList[candidateId].partyId]].voteCount += voteSystem.candidateList[candidateId].voteCount;
 						}
 					}
@@ -1114,6 +1134,8 @@ voteSystem.partyFiltersChanged = function() {
 voteSystem.loadSetRegionRegionList = function(params) {
 	voteSystem.regionListQuery.done( function() {
 		for(var regionId in voteSystem.regionList) {
+			if(!voteSystem.regionList.hasOwnProperty(regionId)) continue;
+			
 			$("#regions").append($("<option>", {
 				value: voteSystem.regionList[regionId].regionId,
 				text: voteSystem.regionList[regionId].displayName
@@ -1124,6 +1146,8 @@ voteSystem.loadSetRegionRegionList = function(params) {
 		if ( localStorage.getObject("regionList")) {
 			voteSystem.regionList = localStorage.getObject("regionList");
 			for(var regionId in voteSystem.regionList) {
+				if(!voteSystem.regionList.hasOwnProperty(regionId)) continue;
+				
 				$("#regions").append($("<option>", {
 					value: voteSystem.regionList[regionId].regionId,
 					text: voteSystem.regionList[regionId].displayName
@@ -1136,6 +1160,8 @@ voteSystem.loadSetRegionRegionList = function(params) {
 voteSystem.loadApplicationPartyList = function(params) {
 	voteSystem.partyListQuery.done( function() {
 		for(var partyId in voteSystem.partyList) {
+			if(!voteSystem.partyList.hasOwnProperty(partyId)) continue;
+			
 			$("#parties").append($("<option>", {
 				value: voteSystem.partyList[partyId].partyId,
 				text: voteSystem.partyList[partyId].displayName
@@ -1146,6 +1172,8 @@ voteSystem.loadApplicationPartyList = function(params) {
 		if ( localStorage.getObject("partyList")) {
 			voteSystem.partyList = localStorage.getObject("partyList");
 			for(var partyId in voteSystem.partyList) {
+				if(!voteSystem.partyList.hasOwnProperty(partyId)) continue;
+				
 				$("#parties").append($("<option>", {
 					value: voteSystem.partyList[partyId].partyId,
 					text: voteSystem.partyList[partyId].displayName
@@ -1277,14 +1305,14 @@ voteSystem.clearChangePasswordSection = function() {
 };
 
 voteSystem.updateCandidateStats = function(info) {
-	if(voteSystem.candidateList == null) return;
+	if(voteSystem.candidateList === null) return;
 
 	var voteDifference = info.voteCount - ((info.candidateId in voteSystem.candidateList) ? voteSystem.candidateList[info.candidateId].voteCount : 0);
 	
-	if(voteSystem.regionList != null && voteSystem.partyList != null && voteSystem.currentPartyList != null) {
+	if(voteSystem.regionList !== null && voteSystem.partyList !== null && voteSystem.currentPartyList !== null) {
 		var currentRegion = voteSystem.regionFromKeyword(voteSystem.partyViewState);
 		
-		if(currentRegion == 0 || currentRegion == info.regionId) {
+		if(currentRegion === 0 || currentRegion == info.regionId) {
 			for(var i = 0; i < voteSystem.currentPartyList.length; i++) {
 				if(voteSystem.currentPartyList[i].partyId == info.partyId) {
 					voteSystem.currentPartyList[i].voteCount += voteDifference;
@@ -1299,7 +1327,7 @@ voteSystem.updateCandidateStats = function(info) {
 	localStorage.setObject("candidateList", voteSystem.candidateList);
 	
 	voteSystem.refreshCandidateViewData();
-}
+};
 
 voteSystem.setupWebsocket = function() {
 	var ws = $.websocket("ws://" + window.location.hostname + ":8081/test", {
@@ -1338,31 +1366,36 @@ voteSystem.configurePrinting = function() {
 };
 
 voteSystem.initializeMap = function() {
-    var mapOptions = {
-        center: new google.maps.LatLng(58.5673, 24.7990),
-        zoom: 7,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    voteSystem.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	var mapOptions = {
+		center: new google.maps.LatLng(58.5673, 24.7990),
+		zoom: 7,
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	
+	voteSystem.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 
 	$.when(voteSystem.regionListQuery, voteSystem.partyListQuery).then( function() {
 		for ( var partyId in voteSystem.partyList ) {
+			if(!voteSystem.partyList.hasOwnProperty(partyId)) continue;
+			
 			$("#mapLegend").append('<div class="legendItem"><div class="legendColor" id="'+voteSystem.partyList[partyId].keyword+'">'+voteSystem.partyList[partyId].displayName+'</div></div>');
 			$("#"+voteSystem.partyList[partyId].keyword).css("background",voteSystem.partyList[partyId].color );
 		}
 		for(var regionId in voteSystem.regionList) {
-	      	voteSystem.addMarkerToRegion(regionId);		  			
-		}    
+			if(!voteSystem.regionList.hasOwnProperty(regionId)) continue;
+			
+			voteSystem.addMarkerToRegion(regionId);
+		}
 	} );
 	
-}
+};
 
 voteSystem.addMarkerToRegion = function(regionId) {
 	voteSystem.mapMarkers[regionId] = new google.maps.Marker({
-    	map : voteSystem.map,
-    	position: new google.maps.LatLng(voteSystem.regionList[regionId].latitude,voteSystem.regionList[regionId].longitude),
-    	title: voteSystem.regionList[regionId].displayName
-	 });	    
+		map : voteSystem.map,
+		position: new google.maps.LatLng(voteSystem.regionList[regionId].latitude,voteSystem.regionList[regionId].longitude),
+		title: voteSystem.regionList[regionId].displayName
+	});
 
 	var queryData = {regionId: regionId, orderId: 4};
 
@@ -1384,35 +1417,32 @@ voteSystem.addMarkerToRegion = function(regionId) {
 			
 			var percentage = parseFloat(Math.round(((totalVotes > 0) ? maxVoteCount / totalVotes : 0) * 1000) / 10).toFixed(1) + "%";
 
-			var content = "<div class=infoBoxText>"+
-							partyName+" "+percentage.toString()+
-							"</div>"
+			var content = "<div class=infoBoxText>" + partyName + " " + percentage.toString() + "</div>";
 				
 			var myOptions = {
-			    content: content,
-			    pixelOffset: new google.maps.Size(-40, 0),
-			    boxClass: "infoBox",
-			    boxStyle: { 
-			    	background: partyColor,
-			    	width: "80px"
-			    },
-			    infoBoxClearance: new google.maps.Size(1, 1),
-			    pane: "floatPane",
-			    enableEventPropagation: false
-		    };
+				content: content,
+				pixelOffset: new google.maps.Size(-40, 0),
+				boxClass: "infoBox",
+				boxStyle: { 
+					background: partyColor,
+					width: "80px"
+				},
+				infoBoxClearance: new google.maps.Size(1, 1),
+				pane: "floatPane",
+				enableEventPropagation: false
+			};
 
-		    var ib = new InfoBox(myOptions);
-		    ib.open(voteSystem.map, voteSystem.mapMarkers[regionId]); 
+			var ib = new InfoBox(myOptions);
+			ib.open(voteSystem.map, voteSystem.mapMarkers[regionId]); 
 
-		    var marker = voteSystem.mapMarkers[regionId]
-		    google.maps.event.addListener(marker, 'click', function() {
-			   ib.open(voteSystem.map,marker);
+			var marker = voteSystem.mapMarkers[regionId];
+			google.maps.event.addListener(marker, 'click', function() {
+				ib.open(voteSystem.map,marker);
 			});
 		}
 
 	});
- 	
-}
+};
 
 
 voteSystem.initialise = function() {
@@ -1420,7 +1450,8 @@ voteSystem.initialise = function() {
 	voteSystem.queryRegions();
 	voteSystem.queryStatus();
 	voteSystem.queryParties();
-	voteSystem.queryCandidates();	
+	voteSystem.queryCandidates();
+	imageLoader.initialise();
 
 	voteSystem.initializeMap();
 
@@ -1482,7 +1513,7 @@ voteSystem.initialise = function() {
 		
 		this.action = "https://" + window.location.hostname + ":8443/";
 		
-		if(sessionId.length == 0) {
+		if(sessionId.length === 0) {
 			$.ajax("../dyn/sessionid", {dataType: "json"}).done(function(data) {
 				if(data.responseType && data.responseType == "status" && data.statusComponent && data.statusComponent == "sessionId" && data.statusMessage && data.statusMessage.length > 0) {
 					$("#authSessionId").val(data.statusMessage);
@@ -1508,12 +1539,12 @@ voteSystem.initialise = function() {
 		var queryData = {oldPassword:$("#oldPassword").val(), newPassword:$("#newPassword").val(), newPasswordRepeat:$("#newPasswordConfirmation").val()};
 		var errorMessage = "";
 		
-		if (queryData.oldPassword == "") {
+		if (queryData.oldPassword === "") {
 			errorMessage += "Vana salasõna on sisestamata. "; 
 			$("#oldPassword").addClass("invalidInput");
 		}
 		
-		if (queryData.newPassword == "") {
+		if (queryData.newPassword === "") {
 			errorMessage += "Uus salasõna on sisestamata. "; 
 			$("#newPassword").addClass("invalidInput");
 		}
@@ -1522,7 +1553,7 @@ voteSystem.initialise = function() {
 			$("#newPassword").addClass("invalidInput");
 		}
 		
-		if (queryData.newPasswordRepeat == "") {
+		if (queryData.newPasswordRepeat === "") {
 			errorMessage += "Uue salasõna kordus on sisestamata. "; 
 			$("#newPasswordConfirmation").addClass("invalidInput");
 		}
@@ -1533,7 +1564,7 @@ voteSystem.initialise = function() {
 		
 		$("#changePasswordErrorMessage").text(errorMessage);
 		
-		if (errorMessage == "") {
+		if (errorMessage === "") {
 			voteSystem.jsonQuery("changepass", queryData, true, function(data) {
 				if(data.responseType == "status") {
 					voteSystem.removeClassFromElement($("#changePasswordErrorMessage")[0],"greenText");
@@ -1562,7 +1593,7 @@ voteSystem.initialise = function() {
 	$("#setRegionForm").submit( function(event) {
 		$("#setRegionErrorMessage").text("");
 		var selectedRegionId = $("#regions").val();
-		if (selectedRegionId == "") {
+		if (selectedRegionId === "") {
 			$("#setRegionErrorMessage").text("Palun valige piirkond");
 		} else {
 			var regionName = $("#regions").find(":selected").text();
@@ -1601,12 +1632,12 @@ voteSystem.initialise = function() {
 		var newLastName = $("#applicationLastName").val();
 		var errorMessage = "";
 		
-		if (selectedPartyId == "") {
+		if (selectedPartyId === "") {
 			errorMessage += "Partei on valimata. "; 
 			$("#parties").addClass("invalidInput");
 		}
 		
-		if (newFirstName == "") {
+		if (newFirstName === "") {
 			errorMessage += "Eesnimi on sisestamata. "; 
 			$("#applicationFirstName").addClass("invalidInput");
 		}
@@ -1615,7 +1646,7 @@ voteSystem.initialise = function() {
 			$("#applicationFirstName").addClass("invalidInput");
 		}
 		
-		if (newLastName == "") {
+		if (newLastName === "") {
 			errorMessage += "Perenimi on sisestamata. "; 
 			$("#applicationLastName").addClass("invalidInput");
 		}
@@ -1627,7 +1658,7 @@ voteSystem.initialise = function() {
 		
 		$("#applicationErrorMessage").text(errorMessage);
 		
-		if (errorMessage == "") {
+		if (errorMessage === "") {
 			var partyName = $("#parties").find(":selected").text();
 			var confirmText = "Kas olete kindel, et teie, " + newFirstName + " " + newLastName + ", soovite olla partei " + partyName + " kandidaat?";
 			var queryData = {partyId: selectedPartyId, firstName: newFirstName, lastName: newLastName};
@@ -1681,7 +1712,7 @@ voteSystem.initialise = function() {
 		$("#authenticationResult").text("Vea tuvastamine...");
 		
 		voteSystem.jsonQuery("status", {statusType: "authStatus"}, false, function(data) {
-			if(data.responseType == "status" && data.userInfo != null) {
+			if(data.responseType == "status" && data.userInfo !== null) {
 				$("#authenticationResult").text("Veateade: " + data.statusMessage);
 			}
 			else {
@@ -1691,7 +1722,7 @@ voteSystem.initialise = function() {
 		
 		window.location.hash = "";
 	}
-	else if(window.location.hash.indexOf("#tab_") == 0) {
+	else if(window.location.hash.indexOf("#tab_") === 0) {
 		var hashString = window.location.hash.substr(1);
 		var dashPosition = hashString.indexOf("-");
 		
@@ -1707,7 +1738,7 @@ voteSystem.initialise = function() {
 	
 	$(window).on("hashchange", function() {
 		if(voteSystem.lastSeenHash != window.location.hash) {
-			if(window.location.hash.indexOf("#tab_") == 0) {
+			if(window.location.hash.indexOf("#tab_") === 0) {
 				var hashString = window.location.hash.substr(1);
 				var dashPosition = hashString.indexOf("-");
 				

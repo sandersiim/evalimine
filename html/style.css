@@ -65,7 +65,7 @@ h3.errorMessage {
 
 #sitetitle {
 	float: left;
-	padding: 5px 44px 15px 44px;	
+	padding: 5px 44px 15px 34px;
 }
 
 #sitetitle h1 {
@@ -821,4 +821,8 @@ h3.errorMessage {
 	float: left;
 	width: 10px;
 	color: red;
+}
+
+#hiddenLog {
+	display: none;
 }
