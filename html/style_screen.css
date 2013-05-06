@@ -6,8 +6,8 @@
 	border-bottom: 2px solid #DDD;
 	background:#EEE;
 	transition: box-shadow 0.2s linear, background 0.2s linear, border 0.2s linear;
-	moz-transition: box-shadow 0.2s linear, background 0.2s linear, border 0.2s linear;
-	webkit-transition: box-shadow 0.2s linear, background 0.2s linear, border 0.2s linear;
+	-moz-transition: box-shadow 0.2s linear, background 0.2s linear, border 0.2s linear;
+	-webkit-transition: box-shadow 0.2s linear, background 0.2s linear, border 0.2s linear;
 }
 
 .menubar .menuitem:hover {	
@@ -16,8 +16,8 @@
 
 .menubar .menuitem:active {
 	transition: none;
-	moz-transition: none;
-	webkit-transition: none;
+	-moz-transition: none;
+	-webkit-transition: none;
 }
 
 .menubar .menuselected, .menubar .menuselected:hover, .menubar .menuselected:active {
@@ -47,7 +47,7 @@
 	border: 1px solid #BBB;
 	padding: 4px 4px;
 	transition: box-shadow 0.15s linear, border 0.15s linear;
-	webkit-transition: box-shadow 0.15s linear, border 0.15s linear;
+	-webkit-transition: box-shadow 0.15s linear, border 0.15s linear;
 }
 
 .inputBox:hover {
