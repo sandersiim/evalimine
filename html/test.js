@@ -88,6 +88,8 @@ voteSystem.candidateFilterDelay = null;
 voteSystem.map = null;
 voteSystem.mapMarkers = {};
 
+voteSystem.pageLoaded = $.Deferred();
+
 voteSystem.menuTabList = {
 	"menu_statistics" : ["tab_stats_regions", "tab_stats_candidates", "tab_stats_parties", "tab_stats_map"],
 	"menu_mydata" : ["tab_login", "tab_mydata", "tab_application", "tab_setregion"],
@@ -372,28 +374,37 @@ voteSystem.redirectBasedOnUserInfo = function() {
 };
 
 voteSystem.queryStatus = function() {
-	voteSystem.showLoader();
+	voteSystem.pageLoaded.done( function() {
+		voteSystem.showLoader();
+	});
+	
 	voteSystem.jsonQuery("status", {}, false, function(data) {
-		if(data.responseType == "userInfo") {
-			voteSystem.applyUserInfo(data);			
-		}
-		
-		if(!voteSystem.initialTabSet) {
-			voteSystem.redirectBasedOnUserInfo();
-		}
-		
-		voteSystem.requestTabActivationOnStatus();
-	}, function() {
-		if (localStorage.getObject("userInfo") ) {
-			voteSystem.applyUserInfo(localStorage.getObject("userInfo"));
+		voteSystem.pageLoaded.done( function() {
+			if(data.responseType == "userInfo") {
+				voteSystem.applyUserInfo(data);			
+			}
+			
 			if(!voteSystem.initialTabSet) {
 				voteSystem.redirectBasedOnUserInfo();
 			}
 			
 			voteSystem.requestTabActivationOnStatus();
-		}
+		});
 	}, function() {
-		voteSystem.hideLoader();
+		voteSystem.pageLoaded.done( function() {
+			if (localStorage.getObject("userInfo") ) {
+				voteSystem.applyUserInfo(localStorage.getObject("userInfo"));
+				if(!voteSystem.initialTabSet) {
+					voteSystem.redirectBasedOnUserInfo();
+				}
+				
+				voteSystem.requestTabActivationOnStatus();
+			}
+		});
+	}, function() {
+		voteSystem.pageLoaded.done( function() {
+			voteSystem.hideLoader();
+		});
 	});
 };
 
@@ -413,7 +424,7 @@ voteSystem.queryParties = function() {
 						
 			voteSystem.loadApplicationPartyList();
 		}
-	},null);
+	}, null);
 };
 
 voteSystem.queryRegions = function() {
@@ -1132,19 +1143,8 @@ voteSystem.partyFiltersChanged = function() {
 };
 
 voteSystem.loadSetRegionRegionList = function(params) {
-	voteSystem.regionListQuery.done( function() {
-		for(var regionId in voteSystem.regionList) {
-			if(!voteSystem.regionList.hasOwnProperty(regionId)) continue;
-			
-			$("#regions").append($("<option>", {
-				value: voteSystem.regionList[regionId].regionId,
-				text: voteSystem.regionList[regionId].displayName
-			}));
-		}
-	});
-	voteSystem.regionListQuery.fail( function() {
-		if ( localStorage.getObject("regionList")) {
-			voteSystem.regionList = localStorage.getObject("regionList");
+	voteSystem.pageLoaded.done( function() {
+		voteSystem.regionListQuery.done( function() {
 			for(var regionId in voteSystem.regionList) {
 				if(!voteSystem.regionList.hasOwnProperty(regionId)) continue;
 				
@@ -1153,24 +1153,27 @@ voteSystem.loadSetRegionRegionList = function(params) {
 					text: voteSystem.regionList[regionId].displayName
 				}));
 			}
-		}
+		});
+		
+		voteSystem.regionListQuery.fail( function() {
+			if ( localStorage.getObject("regionList")) {
+				voteSystem.regionList = localStorage.getObject("regionList");
+				for(var regionId in voteSystem.regionList) {
+					if(!voteSystem.regionList.hasOwnProperty(regionId)) continue;
+					
+					$("#regions").append($("<option>", {
+						value: voteSystem.regionList[regionId].regionId,
+						text: voteSystem.regionList[regionId].displayName
+					}));
+				}
+			}
+		});
 	});
 };
 
 voteSystem.loadApplicationPartyList = function(params) {
-	voteSystem.partyListQuery.done( function() {
-		for(var partyId in voteSystem.partyList) {
-			if(!voteSystem.partyList.hasOwnProperty(partyId)) continue;
-			
-			$("#parties").append($("<option>", {
-				value: voteSystem.partyList[partyId].partyId,
-				text: voteSystem.partyList[partyId].displayName
-			}));
-		}
-	});
-	voteSystem.partyListQuery.fail( function() {
-		if ( localStorage.getObject("partyList")) {
-			voteSystem.partyList = localStorage.getObject("partyList");
+	voteSystem.pageLoaded.done( function() {
+		voteSystem.partyListQuery.done( function() {
 			for(var partyId in voteSystem.partyList) {
 				if(!voteSystem.partyList.hasOwnProperty(partyId)) continue;
 				
@@ -1179,7 +1182,21 @@ voteSystem.loadApplicationPartyList = function(params) {
 					text: voteSystem.partyList[partyId].displayName
 				}));
 			}
-		}
+		});
+		
+		voteSystem.partyListQuery.fail( function() {
+			if ( localStorage.getObject("partyList")) {
+				voteSystem.partyList = localStorage.getObject("partyList");
+				for(var partyId in voteSystem.partyList) {
+					if(!voteSystem.partyList.hasOwnProperty(partyId)) continue;
+					
+					$("#parties").append($("<option>", {
+						value: voteSystem.partyList[partyId].partyId,
+						text: voteSystem.partyList[partyId].displayName
+					}));
+				}
+			}
+		});
 	});
 };
 
@@ -1366,6 +1383,8 @@ voteSystem.configurePrinting = function() {
 };
 
 voteSystem.initializeMap = function() {
+	if(voteSystem.map != null) return;
+
 	var mapOptions = {
 		center: new google.maps.LatLng(58.5673, 24.7990),
 		zoom: 7,
@@ -1444,23 +1463,25 @@ voteSystem.addMarkerToRegion = function(regionId) {
 	});
 };
 
-
-voteSystem.initialise = function() {
+voteSystem.preinit = function() {
 	voteSystem.setupWebsocket();
 	voteSystem.queryRegions();
 	voteSystem.queryStatus();
 	voteSystem.queryParties();
 	voteSystem.queryCandidates();
-	imageLoader.initialise();
+};
 
-	voteSystem.initializeMap();
+voteSystem.initialise = function() {
+	voteSystem.pageLoaded.resolve();
+
+	imageLoader.initialise();
 
 	$(".menuitem").click( function() {
 		voteSystem.setActiveMenuItem(this);
 	});
 	
 	voteSystem.setTabActivateCB("tab_voting", function(tabElement) {
-		voteSystem.refreshVotingList();			
+		voteSystem.refreshVotingList();
 	});	
 	
 	voteSystem.initialiseSortingMethods(voteSystem.regionSortMethods, "regionSortMethodQueue", voteSystem.resortRegionView);
@@ -1479,6 +1500,10 @@ voteSystem.initialise = function() {
 	
 	voteSystem.setTabActivateCB("tab_stats_parties", function(tabElement, parameters) {
 		voteSystem.loadPartyView(parameters);
+	});
+	
+	voteSystem.setTabActivateCB("tab_stats_map", function(tabElement, parameters) {
+		voteSystem.initializeMap();
 	});
 
 	voteSystem.setTabActivateCB("tab_mydata", function() {
@@ -1809,6 +1834,7 @@ voteSystem.initialise = function() {
 	voteSystem.configurePrinting();
 };
 
+voteSystem.preinit();
 
 $(document).ready(function() {
 	voteSystem.initialise();
