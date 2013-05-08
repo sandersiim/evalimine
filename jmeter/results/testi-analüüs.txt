@@ -1,1 +1,22 @@
-blabla, kõik on vist päris hästi.
+Jõudlustestide analüüs
+Kurivaim e-valimised
+
+	Jõudlustestis simuleeritakse 20 kasutajat, kellest igaüks teostab iga 10 sekundi
+järel mingi seisundit mittemuutva toimingu veebilehel(va sisse/välja logimine). Erinevad teostatavad toimingud on:
+
+1. Homepage - Avalehe laadimine.
+2. Candidate list - Kõikide kandidaatide info päring serverilt. (andmebaasist)
+3. Party list - Parteide info päring serverilt. (andmebaasist)
+4. Region list - Piirkondade info päring serverilt. (andmebaasist)
+5. User status - Kasutaja staatuse päring serverilt (sisse logitud/mitte).
+6. Log in - Kasutaja sisse logimise päring serverile.
+7. Log out - Kasutaja välja logimise päring serverile.
+8. Region stats tab - Kasutaja avab statistika vaate piirkondade järgi.
+9. Candidates stats tab - Kasutaja avab statistika vaate kandidaatide järgi.
+10. Parties stats tab - Kasutaja avab statistika vaate parteide järgi.
+11. Map stats tab - Kasutaja avab kaardi peal kuvatava statistika vaate.
+
+	Testi tulemus on väga positiivne. Sellise koormuse all saavad kõik 20 kasutajad süsteemi kasutada
+ilma vigadeta ja liigsete ooteaegadeta. Iga kasutaja esimene päring veebilehele võtab küll pisut aega (~3 s),
+kuid edaspidi on keskmised ooteajad ~0.2 s, ehk praktiliselt momentaalsed. Esimene pikk ooteaeg on ilmselt
+seotud WebSocketi ühenduse tekitamisega.
