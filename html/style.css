@@ -558,7 +558,7 @@ h3.errorMessage {
 	width: 25px;
 	height: 25px;
 	float: left;
-	background: #cccccc;
+	background-image: url('./images/staticon_party.png');
 }
 
 .regionForStats .regionCandidateStats {
@@ -566,7 +566,7 @@ h3.errorMessage {
 	width: 25px;
 	height: 25px;
 	float: left;
-	background: #cccccc;
+	background-image: url('./images/staticon_candidate.png');
 }
 
 .candidateForStats {
