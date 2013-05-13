@@ -7,7 +7,8 @@
 /* jshint -W098 */ /* don't whine about arguments that are never used - it's better than just omitting them */
 /* jshint -W035 */ /* allow empty blocks - for some unimplemented/commented stuff */
 /* jshint -W004 */ /* no 'already defined' errors - JSHint wrongly handles for(var ...), so gives invalid warnings */
-/* jshint strict: false */
+
+(function() { "use strict";
 
 Storage.prototype.setObject = function(key, value) {
 	this.setItem(key, JSON.stringify(value));
@@ -1396,7 +1397,7 @@ voteSystem.doPhotoUpload = function(file) {
 			}
 		});
 	}
-}
+};
 
 //hints from: http://tjvantoll.com/2012/06/15/detecting-print-requests-with-javascript/
 voteSystem.configurePrinting = function() {
@@ -1423,7 +1424,7 @@ voteSystem.configurePrinting = function() {
 };
 
 voteSystem.initializeMap = function() {
-	if(voteSystem.map != null) return;
+	if(voteSystem.map !== null) return;
 
 	var mapOptions = {
 		center: new google.maps.LatLng(58.5673, 24.7990),
@@ -1604,9 +1605,11 @@ voteSystem.initialise = function() {
 		var queryData = {oldPassword:$("#oldPassword").val(), newPassword:$("#newPassword").val(), newPasswordRepeat:$("#newPasswordConfirmation").val()};
 		var errorMessage = "";
 		
-		if (queryData.oldPassword === "") {
-			errorMessage += "Vana salasõna on sisestamata. "; 
-			$("#oldPassword").addClass("invalidInput");
+		if($("#oldPasswordBlock").css("display") != "none") {
+			if (queryData.oldPassword === "") {
+				errorMessage += "Vana salasõna on sisestamata. "; 
+				$("#oldPassword").addClass("invalidInput");
+			}
 		}
 		
 		if (queryData.newPassword === "") {
@@ -1879,3 +1882,5 @@ voteSystem.preinit();
 $(document).ready(function() {
 	voteSystem.initialise();
 });
+
+})();

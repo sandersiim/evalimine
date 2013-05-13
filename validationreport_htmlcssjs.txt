@@ -1,0 +1,34 @@
+HTML-i ja CSS-i valideerimise kohta pole eriti midagi öelda. Need said juba sedaviisi kirjutatud, et lõpus kontrollides oli vad üks '&' asendada '&amp;'-ga ning CSS-is mõnel brauseri-spetsiifilisel atribuudil '-' eest ära jäänud.
+
+Javascripti testimiseks kasutasin JSHint vahendit. See on praktiliselt sama, kui JSLint, kuid tundub olevat veidi rohkemate võimalustega. Selles on samuti võimalik kommentaaride kaudu ükskõik mis kontrolli välja lülitada. Nimekiri selle soovitustest, mida ei järginud (esimene rida on kommentaarijupp, millega panin JSHint-i seda lubama):
+
+/* jslint curly: false */
+Luban enda jaoks koodi stiilis "if(test > 1) return;", ehk if/else/while/for sisu ei pea alati olema ümbritsetud {} sulgudega.
+
+/* jslint eqeq: true */
+Luban kahekordsed võrdusmärgid (välja arvatud 0, null, või ""-ga võrdlemisel). Nimelt kahekordsed võrdusmärgid lubavad automaatseid teisendusi, näiteks "4" == 4 on tõene. Mina selles mingit probleemi ei näe, et selliseid võrdlusi saab kasutada. Kui juba mingi nullist erineva väärtusega võrrelda, siis on ülimalt ebatõenäoline, et see mingi teisendatud aga teisemõttelise väärtusega klapib.
+
+/* jshint -W069 */
+Luban kasutada objekt["atribuut"] süntaksit, kuna kohati on see palju loogilisem, näiteks juhtudel, kus objekt on kasutusel pigem "map" tüüpi andmestruktuurina ja selle atribuudid tunduvad loogilisemana just võtmetena, mitte muutujate nimedena.
+
+/* jshint -W089 */
+See lubab ära jätta "for(var a in b)" seest sisseehitatud atribuutide filtri. Tegelikult ma kasutan sellist filtrit, aga mul on see veidi teisel kujul ning JSHint ei tuvasta seda.
+
+/* jshint -W083 */
+Luban anonüümsete funktsioonide definitsioonid silmuste (loopide) sees, sest paaril korral on vaja ligi pääseda just selle silmuse isendi skoobile, mis anonüümse funktsiooni väljaspool defineerimisel läheks kaduma.
+
+/* jshint -W098 */
+Luban argumendid, mida ei kasutata. Minu arvates on iseenesestmõistetav kirjutada välja kõik argumendid, mis mingi tagasikutse kaudu välisest koodist antakse, isegi kui neid hetkel ei kasuta, est siis on selgelt näha, mis andmed minu jaoks kättesaadavad on.
+
+/* jshint -W035 */
+Luban tühjad blokid - testimise käigus tekib sellist olukorda tihti, et miski on välja kommenteeritud, on tobe neid vigadeks lugeda või ainult valideerimise ajaks muuta.
+
+/* jshint -W004 */
+Kaotan ära teate "x is already defined", sest JSHint ei tunne ära, et näiteks "for(var a in b)" tekitab muutuja a selle for-tsükli sisu skoopi, mitte kogu teda ümbritseva osa skoopi.
+
+Tehtud muudatused koodile:
+* Laadimise animatsiooni JS koodi kirjutasin puhtalt ümber, et vastaks JSHint nõuetele.
+* Lisasin puuduvaid semikooloneid.
+* 0/null/""-ga võrdlemised tegin kolme võrdusmärgi süntaksit kasutades.
+* Kaotasin ühe sisemiselt eval-i kasutava koodijupi ja asendasin selle funktsiooni parameetriks andmisega.
+* Lisasin sisseehitatud atribuutide filtri silmuste "for(var a in b)" sisse.

@@ -1,0 +1,13 @@
+Suurem osa Google Page Speed testis kontrollitavatest asjadest tegin ära kohe, kui projektiga olin alustanud ehk juba 2. nädalal (cache, gzip jms). Seega on raske välja tuua enne-pärast muutusi.
+
+Alles jäänud "probleemidest" suurem osa on põhjustatud Google Maps API poolt kasutatavatest failidest. Nende "probleemide" kohta, mis viitavad meie enda failidele ning mida otsustasin mitte "parandada", lühike ülevaade:
+
+"Defer parsing of Javascript" - proovisin erinevaid meetodeid Javascripti järk-järgult laadida, kuid Google'i enda "Critical Path Explorer" näitab, et vaikimisi saab veebilehitseja sellega ise palju paremini hakkama, ning laadimine läheb selle tõttu just aeglasemaks, kuna brauserid oskavad üksteisest sõltuvaid komponente juba osaliselt läbi töödelda korraga.
+
+"Inline Small CSS" - koodi elegantsuse mõttes ei hakanud print režiimi CSS faili HTMLi sisse panema. Samuti oli eraldatus ka üks nõue praktikumitööle.
+
+"Optimize images" - siin pakub Google, kui palju ruumi saaks piltidel säästa, kui nad viia kõige optimaalsemasse režiimi (ilmselt proovib erinevaid GIF/PNG8/PNG24 variante läbi). Ei näinud vajalikuks seetõttu hakata erinevate pildiformaatidega mängima - suuruste vahed tegelikult üsna väiksed.
+
+"Minify Javascript" - reaalsetes arenduskeskkondades on ilmselt mingid automaatsed vahendid selle tegemiseks, aga ise mõtlesin, et pole mõtet mitut erinevat versiooni samast failist hallata.
+
+Kui just server hetkel uimaselt ei vasta, siis peaks PageSpeed test andma hetkeseisuga 92 punkti. Mõned nendest punktidest on tegelikult maha läinud Google Maps API tõttu.

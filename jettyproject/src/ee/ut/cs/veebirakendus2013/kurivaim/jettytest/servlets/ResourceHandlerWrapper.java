@@ -10,6 +10,9 @@ public class ResourceHandlerWrapper extends ResourceHandler {
 		if ( mimeType != null && mimeType.equals("text/html") ) {
 			mimeType = "text/html; charset=UTF-8";
 		}
+		else if( mimeType != null && mimeType.equals("application/octet-stream")) {
+			mimeType = "application/octet-stream; charset=UTF-8";
+		}
 		
 		super.doResponseHeaders(response, resource, mimeType);
     }
