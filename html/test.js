@@ -332,6 +332,7 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 			
 			$("#changePasswordErrorMessage").text("");
 			$("#candidacyUploadImg").attr("src", "./images/scary_face.png");
+			$("#applicationErrorMessage").text("");
 		}
 		else {
 			$("#menu_mydata").text("Logi sisse");
@@ -817,7 +818,7 @@ voteSystem.placeTextAsSpanInElement = function(element, spanText) {
 	return spanElement;
 };
 
-voteSystem.addLineToCandidateView = function(listElement, template, candidateName, partyName, partyKeyword, regionName, voteCount) {
+voteSystem.addLineToCandidateView = function(listElement, template, candidateName, candidateIdForImage, partyName, partyKeyword, regionName, voteCount) {
 	var element = template.clone();
 	
 	element.get().id = "";
@@ -826,6 +827,10 @@ voteSystem.addLineToCandidateView = function(listElement, template, candidateNam
 	var regionWrapper = voteSystem.placeTextAsSpanInElement(element.find(".regionName"), regionName);
 	element.find(".voteCount").text(voteCount);
 	element.find(".partyLogo").attr("src", "./images/parties/party_" + partyKeyword + "_small.png");
+	
+	if(candidateIdForImage !== 0) {
+		element.find(".candidatePhoto").attr("src", "./userimg/candidate_" + candidateIdForImage + ".jpg");
+	}
 	
 	listElement.append(element);
 	
@@ -907,8 +912,9 @@ voteSystem.resortCandidateView = function() {
 		var partyName = voteSystem.partyList[info.partyId].displayName;
 		var partyKeyword = voteSystem.partyList[info.partyId].keyword;
 		var regionName = voteSystem.regionList[info.regionId].displayName;
+		var candidateIdForPhoto = (info.hasPhoto > 0) ? info.candidateId : 0;
 		
-		voteSystem.addLineToCandidateView(listElement, template, info.firstName + " " + info.lastName, partyName, partyKeyword, regionName, info.voteCount);
+		voteSystem.addLineToCandidateView(listElement, template, info.firstName + " " + info.lastName, candidateIdForPhoto, partyName, partyKeyword, regionName, info.voteCount);
 	}
 };
 
@@ -1365,8 +1371,10 @@ voteSystem.updateCandidateStats = function(info) {
 	voteSystem.refreshCandidateViewData();
 };
 
+voteSystem.ws = null;
+
 voteSystem.setupWebsocket = function() {
-	var ws = $.websocket("ws://" + window.location.hostname + ":8081/test", {
+	voteSystem.ws = $.websocket("ws://" + window.location.hostname + ":8081/test", {
 		open: function() {},
 		close: function() {},
 		events: {
@@ -1375,6 +1383,18 @@ voteSystem.setupWebsocket = function() {
 			}
 		}
 	}, "vote-broadcaster");
+	
+	setTimeout(voteSystem.pingServer, 60000);
+};
+
+voteSystem.pingServer = function() {
+	if(voteSystem.ws !== null) {
+		voteSystem.ws._send("PING");
+	}
+
+	voteSystem.jsonQuery("sessionid", {}, false, function(data) { } );
+	
+	setTimeout(voteSystem.pingServer, 60000);
 };
 
 voteSystem.doPhotoUpload = function(file) {
