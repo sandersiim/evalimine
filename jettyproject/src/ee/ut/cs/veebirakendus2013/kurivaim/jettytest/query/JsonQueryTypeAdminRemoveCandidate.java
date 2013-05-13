@@ -1,5 +1,6 @@
 package ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query;
 
+import java.io.File;
 import java.sql.SQLException;
 
 import ee.ut.cs.veebirakendus2013.kurivaim.jettytest.mysql.MysqlConnectionHandler;
@@ -48,6 +49,12 @@ public class JsonQueryTypeAdminRemoveCandidate implements JsonQueryInterface {
 					else if(resultDelete == 0) throw new IllegalStateException("No rows deleted.");
 					
 					sqlHandler.getConnection().commit();
+					
+					File candidatePhotoPath = new File("../html/userimg/candidate_" + candidateId + ".jpg");
+					
+					if(candidatePhotoPath.exists()) {
+						candidatePhotoPath.delete();
+					}
 					
 					querySucceeded = true;
 				}

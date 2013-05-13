@@ -623,6 +623,10 @@ voteSystem.refreshVotingList = function() {
 				element.find(".voteCancelForm").css("display", "none");
 				listElement.append(element);
 			}
+			
+			if(info.hasPhoto > 0) {
+				element.find(".photoImg").attr("src", "./userimg/candidate_" + info.candidateId + ".jpg");
+			}
 		}	
 		voteSystem.hideLoader();
 	};
@@ -1242,6 +1246,13 @@ voteSystem.refreshMyDataInfo = function() {
 				}			
 			}
 			if ( voteSystem.userInfo.candidateInfo) {
+				if(voteSystem.userInfo.candidateInfo.hasPhoto > 0) {
+					$("#myDataPhotoImg").attr("src", "./userimg/candidate_" + voteSystem.userInfo.candidateInfo.candidateId + ".jpg");
+				}
+				else {
+					$("#myDataPhotoImg").attr("src", "./images/scary_face.png");
+				}
+			
 				voteSystem.removeClassFromElement($("#myDataName").parent()[0],"displayNone");				
 				$("#myDataName").text(voteSystem.userInfo.candidateInfo["firstName"]+" "+voteSystem.userInfo.candidateInfo["lastName"]);
 				voteSystem.addClassToElement($("#myDataApplication")[0],"greenText");
@@ -1357,6 +1368,35 @@ voteSystem.setupWebsocket = function() {
 		}
 	}, "vote-broadcaster");
 };
+
+voteSystem.doPhotoUpload = function(file) {
+	if(!window.FormData) return;
+	
+	var formData = new FormData();
+	
+	if (file.type != "image/jpeg") {
+		$("#applicationErrorMessage").text("Pole JPG fail.");
+	}
+	else if(file.size > 262144) {
+		$("#applicationErrorMessage").text("Fail on suurem kui 256KB.");
+	}
+	else {
+		$("#applicationErrorMessage").text("Pilti laetakse üles, palun oodake...");
+		
+		formData.append("imageFile", file);
+		
+		$.ajax("./dyn/photo", {type: "POST", data: formData, processData: false, contentType: false, dataType: "json"}).done(function(data) {
+			if(data.statusCode == 10) {
+				$("#applicationErrorMessage").text("Pilt edukalt saadetud.");
+				$("#candidacyUploadImg").attr("src", "./userimg/user_" + voteSystem.userInfo.userInfo.userId + ".jpg");
+			}
+			else {
+				$("#applicationErrorMessage").text("Pildi saatmine ebaõnnestus.");
+				$("#hiddenLog").append(JSON.stringify(data) + "<br />");
+			}
+		});
+	}
+}
 
 //hints from: http://tjvantoll.com/2012/06/15/detecting-print-requests-with-javascript/
 voteSystem.configurePrinting = function() {
@@ -1785,7 +1825,7 @@ voteSystem.initialise = function() {
 
 	$("#uploaderDragDrop").on("drop", function(event) {
 		if(event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length > 0) {
-			//fileUpload(event.dataTransfer.files[0]);
+			voteSystem.doPhotoUpload(event.dataTransfer.files[0]);
 		}
 		
 		return false;
@@ -1817,7 +1857,7 @@ voteSystem.initialise = function() {
 	
 	$("#uploaderFile").change(function(event) {
 		if(this.files.length > 0) {
-			//fileUpload(this.files[0]);
+			voteSystem.doPhotoUpload(this.files[0]);
 		}
 	});
 	

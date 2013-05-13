@@ -60,7 +60,7 @@ public class JsonQueryTypePhoto implements JsonQueryInterface {
 							return new JsonResponseTypeStatus(5, "photoAction", "Photo upload failed - dimensions must be at least 100x100.");
 						}
 						else {
-							File destinationName = new File("../html/userimg/" + userId + ".jpg");
+							File destinationName = new File("../html/userimg/user_" + userId + ".jpg");
 							
 							if(destinationName.exists()) {
 								destinationName.delete();

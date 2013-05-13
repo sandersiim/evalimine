@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `ev_candidates` (
   `voteCount` int(11) NOT NULL DEFAULT '0',
   `firstName` varchar(63) NOT NULL,
   `lastName` varchar(63) NOT NULL,
+  `hasPhoto` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=45 ;
 
@@ -61,32 +62,32 @@ CREATE TABLE IF NOT EXISTS `ev_candidates` (
 -- Dumping data for table `ev_candidates`
 --
 
-INSERT INTO `ev_candidates` (`id`, `userId`, `regionId`, `partyId`, `voteCount`, `firstName`, `lastName`) VALUES
-(10, 1001, 2, 4, 144, 'Augustus', 'Caesar'),
-(11, 1002, 3, 2, 69, 'Gaius', 'Acilius'),
-(12, 1003, 4, 3, 81, 'Aemilia', 'Scaura'),
-(13, 1004, 5, 3, 78, 'Sextus', 'Calpurnius'),
-(14, 1005, 6, 4, 142, 'Arusanius', 'Messius'),
-(15, 1006, 7, 3, 93, 'Titus', 'Quinctius'),
-(16, 1007, 8, 5, 11, 'Gaius', 'Longinus'),
-(17, 1008, 9, 1, 13, 'Dionysus', 'Cato'),
-(18, 1009, 10, 2, 49, 'Flavius', 'Sosipater'),
-(19, 1010, 11, 4, 172, 'Marcus', 'Aurelius'),
-(20, 1011, 12, 1, 143, 'Julius', 'Caesar'),
-(21, 1012, 13, 3, 123, 'Sokrates', 'Philosophicae'),
-(22, 1013, 14, 5, 13, 'Hugues', 'de Payens'),
-(23, 1014, 6, 1, 138, 'Maximus', 'Meridius'),
-(24, 1020, 1, 2, 35, 'Lampus', 'Maximus'),
-(25, 1015, 2, 2, 101, 'Isidorus', 'Ispalensis'),
-(26, 1016, 2, 1, 49, 'Spurius', 'Tricipitinus'),
-(27, 1017, 3, 2, 105, 'Macrobius', 'Ambrosius'),
-(28, 1018, 4, 3, 68, 'Gnaeus', 'Octavius'),
-(29, 1019, 5, 3, 34, 'Paulus', 'Orosius'),
-(30, 1030, 1, 3, 31, 'Esteticus', 'Lipicus'),
-(31, 1031, 7, 1, 55, 'Pioneerus', 'Roppus'),
-(32, 1032, 10, 5, 12, 'Marcus', 'Cicero'),
-(33, 1033, 3, 4, 29, 'Paslicus', 'Samblic'),
-(44, 1023, 15, 5, 33, 'Aplus', 'Peetus');
+INSERT INTO `ev_candidates` (`id`, `userId`, `regionId`, `partyId`, `voteCount`, `firstName`, `lastName`, `hasPhoto`) VALUES
+(10, 1001, 2, 4, 144, 'Augustus', 'Caesar', 0),
+(11, 1002, 3, 2, 69, 'Gaius', 'Acilius', 0),
+(12, 1003, 4, 3, 81, 'Aemilia', 'Scaura', 0),
+(13, 1004, 5, 3, 78, 'Sextus', 'Calpurnius', 0),
+(14, 1005, 6, 4, 142, 'Arusanius', 'Messius', 0),
+(15, 1006, 7, 3, 93, 'Titus', 'Quinctius', 0),
+(16, 1007, 8, 5, 11, 'Gaius', 'Longinus', 0),
+(17, 1008, 9, 1, 13, 'Dionysus', 'Cato', 0),
+(18, 1009, 10, 2, 49, 'Flavius', 'Sosipater', 0),
+(19, 1010, 11, 4, 172, 'Marcus', 'Aurelius', 0),
+(20, 1011, 12, 1, 143, 'Julius', 'Caesar', 0),
+(21, 1012, 13, 3, 123, 'Sokrates', 'Philosophicae', 0),
+(22, 1013, 14, 5, 13, 'Hugues', 'de Payens', 0),
+(23, 1014, 6, 1, 138, 'Maximus', 'Meridius', 0),
+(24, 1020, 1, 2, 35, 'Lampus', 'Maximus', 0),
+(25, 1015, 2, 2, 101, 'Isidorus', 'Ispalensis', 0),
+(26, 1016, 2, 1, 49, 'Spurius', 'Tricipitinus', 0),
+(27, 1017, 3, 2, 105, 'Macrobius', 'Ambrosius', 0),
+(28, 1018, 4, 3, 68, 'Gnaeus', 'Octavius', 0),
+(29, 1019, 5, 3, 34, 'Paulus', 'Orosius', 0),
+(30, 1030, 1, 3, 31, 'Esteticus', 'Lipicus', 0),
+(31, 1031, 7, 1, 55, 'Pioneerus', 'Roppus', 0),
+(32, 1032, 10, 5, 12, 'Marcus', 'Cicero', 0),
+(33, 1033, 3, 4, 29, 'Paslicus', 'Samblic', 0),
+(44, 1023, 15, 5, 33, 'Aplus', 'Peetus', 0);
 
 -- --------------------------------------------------------
 

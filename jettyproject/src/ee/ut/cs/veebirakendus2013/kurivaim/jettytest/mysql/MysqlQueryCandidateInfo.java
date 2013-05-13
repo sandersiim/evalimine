@@ -16,6 +16,7 @@ public class MysqlQueryCandidateInfo {
 	private int voteCount;
 	private String firstName;
 	private String lastName;
+	private boolean hasPhoto;
 	
 	private transient final MysqlConnectionHandler sqlHandler;
 	
@@ -128,6 +129,7 @@ public class MysqlQueryCandidateInfo {
 		voteCount = results.getInt("voteCount");
 		firstName = results.getString("firstName");
 		lastName = results.getString("lastName");
+		hasPhoto = results.getBoolean("hasPhoto");
 		
 		return this;
 	}
@@ -162,5 +164,9 @@ public class MysqlQueryCandidateInfo {
 	
 	public String getLastName() {
 		return lastName;
+	}
+	
+	public boolean getHasPhoto() {
+		return hasPhoto;
 	}
 }

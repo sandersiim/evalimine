@@ -1,5 +1,6 @@
 package ee.ut.cs.veebirakendus2013.kurivaim.jettytest.query;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -46,16 +47,19 @@ public class JsonQueryTypeApplication implements JsonQueryInterface {
 				else {
 					int affected = -1;
 					
+					File userPhotoPath = new File("../html/userimg/user_" + userInfo.getUserId() + ".jpg");
+					
 					try {
 						PreparedStatement statement = sqlHandler.getConnection().prepareStatement(
-								"INSERT INTO ev_candidates (userId, regionId, partyId, firstName, lastName) SELECT ?, ?, ?, ?, ? FROM ev_parties WHERE id = ?");
+								"INSERT INTO ev_candidates (userId, regionId, partyId, firstName, lastName, hasPhoto) SELECT ?, ?, ?, ?, ?, ? FROM ev_parties WHERE id = ?");
 						
 						statement.setInt(1, userInfo.getUserId());
 						statement.setInt(2, userInfo.getVoteRegionId());
 						statement.setInt(3, partyId);
 						statement.setString(4, firstName);
 						statement.setString(5, lastName);
-						statement.setInt(6, partyId);
+						statement.setInt(6, userPhotoPath.exists() ? 1 : 0);
+						statement.setInt(7, partyId);
 						affected = statement.executeUpdate();
 					}
 					catch(SQLException e) {
@@ -72,6 +76,16 @@ public class JsonQueryTypeApplication implements JsonQueryInterface {
 						String cardFirstName = queryInfo.getSessionStringParameter("firstName"), cardLastName = queryInfo.getSessionStringParameter("lastName");
 						
 						MysqlQueryCandidateInfo newCandidateInfo = queryInfo.getLoggedInCandidateInfo();
+						
+						File candidatePhotoPath = new File("../html/userimg/candidate_" + newCandidateInfo.getCandidateId() + ".jpg");
+						
+						if(userPhotoPath.exists()) {
+							if(candidatePhotoPath.exists()) {
+								candidatePhotoPath.delete();
+							}
+							
+							userPhotoPath.renameTo(candidatePhotoPath);
+						}
 						
 						queryInfo.doLiveBroadcast(new JsonResponseTypeCandidate(newCandidateInfo));
 						

@@ -143,4 +143,8 @@ public class MysqlQueryPartyInfo {
 	public int getVoteCount() {
 		return voteCount;
 	}
+	
+	public String getColor() {
+		return color;
+	}
 }
