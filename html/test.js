@@ -331,6 +331,7 @@ voteSystem.setLoggedInStatus = function(isLoggedIn) {
 			}
 			
 			$("#changePasswordErrorMessage").text("");
+			$("#candidacyUploadImg").attr("src", "./images/scary_face.png");
 		}
 		else {
 			$("#menu_mydata").text("Logi sisse");
