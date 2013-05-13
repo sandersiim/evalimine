@@ -1,4 +1,4 @@
-/* global Storage, $, google, alert, InfoBox */
+/* global Storage, $, google, alert, InfoBox, jQuery */
 /* jslint curly: false */ /* can do "if() then;" without braces */
 /* jslint eqeq: true */ /* allow double equals */
 /* jshint -W069 */ /* don't whine about not using dot notation - dot notation makes less sense in places where JSHint suggests it */
