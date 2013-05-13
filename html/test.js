@@ -583,13 +583,16 @@ voteSystem.refreshVotingList = function() {
 			voteSystem.partyListQuery.done(function() {
 				if(voteSystem.partyList[info.partyId]) {
 					element.find(".partyName").text(voteSystem.partyList[info.partyId].displayName);
+					element.find(".partyLogoImg").attr("src", "./images/parties/party_" + voteSystem.partyList[info.partyId].keyword + "_medium.png");
 				}
 			});
 			voteSystem.partyListQuery.fail(function() {
 				if (localStorage.getObject("partyList")) {
 					voteSystem.partyList = localStorage.getObject("partyList");
+					
 					if(voteSystem.partyList[info.partyId]) {
 						element.find(".partyName").text(voteSystem.partyList[info.partyId].displayName);
+						element.find(".partyLogoImg").attr("src", "./images/parties/party_" + voteSystem.partyList[info.partyId].keyword + "_medium.png");
 					}
 				}
 			});
@@ -814,7 +817,7 @@ voteSystem.placeTextAsSpanInElement = function(element, spanText) {
 	return spanElement;
 };
 
-voteSystem.addLineToCandidateView = function(listElement, template, candidateName, partyName, regionName, voteCount) {
+voteSystem.addLineToCandidateView = function(listElement, template, candidateName, partyName, partyKeyword, regionName, voteCount) {
 	var element = template.clone();
 	
 	element.get().id = "";
@@ -822,6 +825,7 @@ voteSystem.addLineToCandidateView = function(listElement, template, candidateNam
 	var partyWrapper = voteSystem.placeTextAsSpanInElement(element.find(".partyName"), partyName);
 	var regionWrapper = voteSystem.placeTextAsSpanInElement(element.find(".regionName"), regionName);
 	element.find(".voteCount").text(voteCount);
+	element.find(".partyLogo").attr("src", "./images/parties/party_" + partyKeyword + "_small.png");
 	
 	listElement.append(element);
 	
@@ -901,9 +905,10 @@ voteSystem.resortCandidateView = function() {
 	for(var i = 0; i < voteSystem.filteredCandidateList.length; i++) {
 		var info = voteSystem.filteredCandidateList[i];
 		var partyName = voteSystem.partyList[info.partyId].displayName;
+		var partyKeyword = voteSystem.partyList[info.partyId].keyword;
 		var regionName = voteSystem.regionList[info.regionId].displayName;
 		
-		voteSystem.addLineToCandidateView(listElement, template, info.firstName + " " + info.lastName, partyName, regionName, info.voteCount);
+		voteSystem.addLineToCandidateView(listElement, template, info.firstName + " " + info.lastName, partyName, partyKeyword, regionName, info.voteCount);
 	}
 };
 
@@ -1004,6 +1009,7 @@ voteSystem.addLineToPartyView = function(listElement, template, partyName, keywo
 	element.find(".candidatesLink").attr("href", "#tab_stats_candidates-" + regionKeyword + "-" + keyword);
 	element.find(".voteCount").text(voteCount + " häält");
 	element.find(".votePercentage").text(votePercentage);
+	element.find(".logo").attr("src", "./images/parties/party_" + keyword + ".png");
 	
 	listElement.append(element);
 };
