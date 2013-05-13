@@ -1513,6 +1513,8 @@ voteSystem.preinit = function() {
 };
 
 voteSystem.initialise = function() {
+	jQuery.event.props.push("dataTransfer");
+	
 	voteSystem.pageLoaded.resolve();
 
 	imageLoader.initialise();
