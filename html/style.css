@@ -704,6 +704,10 @@ h3.errorMessage {
 	float: right;
 }
 
+#partyViewParams {
+	float: right;
+}
+
 #regionViewFilter , #candidateViewRegionFilter, #candidateViewPartyFilter, #candidateViewNameFilter, #partyViewRegionFilter {
 	width: 170px;
 }

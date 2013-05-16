@@ -686,7 +686,7 @@ voteSystem.regionSortMethods["sortRegionName_Desc"] = function(a, b) { return -v
 voteSystem.regionSortMethods["sortRegionCandidateCount_Desc"] = function(a, b) { return -voteSystem.regionSortMethods["sortRegionCandidateCount_Asc"](a, b); };
 voteSystem.regionSortMethods["sortCandidateVoterCount_Desc"] = function(a, b) { return -voteSystem.regionSortMethods["sortCandidateVoterCount_Asc"](a, b); };
 
-voteSystem.regionSortMethodQueue = ["sortRegionName_Asc"];
+voteSystem.regionSortMethodQueue = ["sortRegionName_Desc"];
 
 voteSystem.currentRegionList = null;
 
@@ -1082,7 +1082,8 @@ voteSystem.loadPartyView = function(params) {
 		if(params != voteSystem.partyViewState) {
 			var paramList = params.split("-");
 			var findRegionId = voteSystem.regionFromKeyword(paramList[0]);
-			
+			$("#partyViewRegionFilter").val(paramList[0]);
+
 			var queryData = {regionId: findRegionId, orderId: 4};
 			
 			voteSystem.partyViewState = params;
